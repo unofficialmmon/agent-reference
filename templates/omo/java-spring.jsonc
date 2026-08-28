@@ -1,0 +1,12 @@
+{
+  "$schema": "https://unpkg.com/oh-my-opencode-slim@latest/oh-my-opencode-slim.schema.json",
+  "agents": {
+    "fixer": {
+      "skills": [
+        "java-style",
+        "spring-boot",
+        "maven-build"
+      ]
+    }
+  }
+}

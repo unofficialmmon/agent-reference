@@ -1,0 +1,30 @@
+# Third-party notices
+
+agent-reference contains pinned third-party Agent Skill snapshots. Third-party content remains under its upstream license; repository-authored files are covered by the root LICENSE unless otherwise stated.
+
+Exact revisions, paths, file hashes, trust classification, known issues, and operational-risk review are recorded in `catalog/skills.lock.json`.
+
+## Included upstream sources
+
+- Anthropic `anthropics/skills` — Apache-2.0; license text in `catalog/LICENSES/anthropic-skills-Apache-2.0.txt` and preserved Skill files.
+- Cloudflare `cloudflare/skills` — Apache-2.0; `catalog/LICENSES/cloudflare-skills-Apache-2.0.txt`.
+- MariaDB `MariaDB/skills` — MIT; `catalog/LICENSES/mariadb-skills-MIT.txt`.
+- Redis `redis/agent-skills` — MIT; `catalog/LICENSES/redis-agent-skills-MIT.txt`.
+- Supabase `supabase/agent-skills` — MIT; `catalog/LICENSES/supabase-agent-skills-MIT.txt`.
+- HashiCorp `hashicorp/agent-skills` — MPL-2.0; `catalog/LICENSES/hashicorp-agent-skills-MPL-2.0.txt`.
+- Anthony Fu `antfu/skills` — MIT; `catalog/LICENSES/antfu-skills-MIT.txt`.
+- VueUse `vueuse/skills` — MIT; `catalog/LICENSES/vueuse-skills-MIT.txt`.
+- Antoine van der Lee Swift Concurrency / SwiftUI Skills — MIT; corresponding files under `catalog/LICENSES/`.
+- Mario Zechner `badlogic/pi-skills` — MIT; `catalog/LICENSES/badlogic-pi-skills-MIT.txt`.
+- Vercel `vercel/next.js` Next.js Skill snapshot — MIT; `catalog/LICENSES/vercel-nextjs-MIT.txt`.
+- Vercel Labs `vercel-labs/agent-skills` — upstream repository declared MIT at review time, but the vendored Skill directories did not carry a top-level license file. See `catalog/LICENSES/vercel-labs-agent-skills-LICENSE-EVIDENCE.md` and verify upstream before downstream redistribution where standalone license evidence is required.
+- GitHub `github/awesome-copilot` — MIT; selected community-contributed Skills are included only after source/spec/reference review; `catalog/LICENSES/github-awesome-copilot-MIT.txt`.
+- Jesse Vincent / `obra/superpowers` — MIT; selected self-contained Skill snapshot only; `catalog/LICENSES/obra-superpowers-MIT.txt`.
+
+## Derived/local content
+
+The Spring Boot, Spring Security, Maven, MyBatis, MyBatis Dynamic SQL, and MyBatis Generator Skills were curated in the prior pi-dev-kit from official documentation and are marked `official-doc-derived` in the lockfile. Their retained snapshot license is in `catalog/LICENSES/pi-dev-kit-derived-MIT.txt`.
+
+`api-contract`, `generated-code`, and `java-style` are repository-authored/local-derived Skills and are covered by the root LICENSE.
+
+This notice is attribution metadata, not legal advice. Consumers remain responsible for satisfying the licenses applicable to the content they redistribute or modify.

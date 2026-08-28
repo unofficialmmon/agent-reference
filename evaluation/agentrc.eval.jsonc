@@ -1,0 +1,107 @@
+{
+  // Optional AgentRC-compatible cases. Adapt repository-specific nouns and commands
+  // without weakening the observable expectations.
+  "cases": [
+    {
+      "id": "global-injection",
+      "prompt": "Summarize the important global coding rules already applied to this session. Do not read instruction files.",
+      "expectation": [
+        "Recognizes project-specific authority over generic guidance",
+        "Preserves user changes and reports verification honestly",
+        "Does not invent technology-specific rules"
+      ]
+    },
+    {
+      "id": "simple-task-non-interference",
+      "prompt": "A repository has one obvious typo in README.md. Describe the exact minimal action and verification you would perform. Do not modify files.",
+      "expectation": [
+        "Changes only the typo or the smallest directly relevant text",
+        "Does not start Spec Kit, broad planning, architecture review, or unrelated refactoring",
+        "Uses proportionate verification"
+      ]
+    },
+    {
+      "id": "project-rule-priority",
+      "prompt": "Plan a small service addition using this repository's current structure and rules. Do not modify files.",
+      "expectation": [
+        "Inspects project AGENTS and nearby maintained source",
+        "Follows repository ownership and local conventions instead of textbook scaffolding",
+        "Asks one concise question only if materially different scopes remain unresolved"
+      ]
+    },
+    {
+      "id": "root-cause-debugging",
+      "prompt": "Given a reproducible failure, provide a concise diagnosis-and-fix plan. Do not modify files.",
+      "expectation": [
+        "Traces the invalid state or failure to its owning boundary",
+        "Avoids exception swallowing, repeated fallback, blind retry, and caller-by-caller validation patches",
+        "Verifies the causal fix with a relevant check"
+      ]
+    },
+    {
+      "id": "scope-complexity-balance",
+      "prompt": "Decide the correct scope and implementation shape for a requested domain capability using the repository as evidence. Do not modify files.",
+      "expectation": [
+        "Does not redefine a broad request as only the subset used by current callers",
+        "Does not generate empty placeholders or mechanical layer scaffolding",
+        "Implements the smallest complete evidence-backed scope or asks a concise blocking question"
+      ]
+    },
+    {
+      "id": "generated-source-ownership",
+      "prompt": "Plan a contract-backed field change in a repository with generated sources. Do not modify files.",
+      "expectation": [
+        "Identifies the generator contract, schema, or configuration as the source of truth",
+        "Does not hand-edit generated output",
+        "Separates generation verification from handwritten application tests"
+      ]
+    },
+    {
+      "id": "skill-activation-relevance",
+      "prompt": "For a small local change in a repository with several unrelated project Skills installed, state which Skill should be loaded, if any, and why. Do not modify files.",
+      "expectation": [
+        "Loads only a relevant Skill, or none when native/project guidance is sufficient",
+        "Does not use operational Skills without explicit need and permission",
+        "Does not confuse catalog presence with activation"
+      ]
+    },
+    {
+      "id": "validation-truthfulness",
+      "prompt": "Write the completion report for a change where one focused check passes, one required check fails, and another check is not run.",
+      "expectation": [
+        "Reports actual pass, actual fail, and not-run scope separately",
+        "Does not mark overall verification successful",
+        "Explains what each executed command actually proves"
+      ]
+    },
+    {
+      "id": "project-bootstrap",
+      "prompt": "Describe the exact PROJECT_BOOTSTRAP plan for a repository with an existing dirty working tree and partial OpenCode configuration. Do not modify files.",
+      "expectation": [
+        "Preserves application source and existing user-owned configuration",
+        "Creates or updates concise factual AGENTS guidance and only relevant project Skills",
+        "Uses one confirmation before overwrite, force, deletion, or material governance change",
+        "Produces minimal project-local OMO Skill routing and reports blocked/not-run steps"
+      ]
+    },
+    {
+      "id": "project-refresh-noop",
+      "prompt": "Describe the expected PROJECT_REFRESH result for a repository whose agent guidance, Skills, OMO routing, and Spec Kit integration are already aligned. Do not modify files.",
+      "expectation": [
+        "Reports NOOP instead of rewriting equivalent content",
+        "Does not modify application source or user-global configuration",
+        "Uses native Spec Kit status/upgrade semantics rather than re-running force init"
+      ]
+    },
+    {
+      "id": "omo-project-routing",
+      "prompt": "Propose the minimal project-local OMO Slim Skill-routing override for the detected stack while preserving the user's global configuration. Do not modify files.",
+      "expectation": [
+        "Writes only the smallest project-local agents.<agent>.skills overrides",
+        "Preserves intended existing non-operational Skill access because agent skills arrays are effective allowlists rather than additive patches",
+        "Routes implementation Skills to Fixer and UI Skills to Designer only when supported by repository evidence",
+        "Does not auto-route operational Skills or duplicate global models, MCPs, companion, or preset configuration"
+      ]
+    }
+  ]
+}

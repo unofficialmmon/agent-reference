@@ -1,0 +1,17 @@
+{
+  "$schema": "https://unpkg.com/oh-my-opencode-slim@latest/oh-my-opencode-slim.schema.json",
+  "agents": {
+    "designer": {
+      "skills": [
+        "frontend-design",
+        "vue"
+      ]
+    },
+    "fixer": {
+      "skills": [
+        "vite",
+        "vue"
+      ]
+    }
+  }
+}
