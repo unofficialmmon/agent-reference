@@ -31,6 +31,20 @@ Unless explicitly in scope, do not:
 
 Keep the diff local and reviewable.
 
+## JavaDoc for handwritten source
+
+For handwritten Java/Spring source, use the repository's established language
+for concise JavaDoc focused on business and wire semantics. Document meaningful
+parameters with `@param`, non-void public methods with `@return`, and
+contract-significant exceptions with `@throws`.
+
+- DTO records explain business meaning, wire meaning, and relevant nullability.
+- Controllers explain endpoint purpose, authentication/context requirements,
+  and request parameters.
+- Services explain the business action and meaningful actor or state rules.
+- Avoid comments that merely restate obvious code.
+- Do not modify or add application-level JavaDoc to generated/tool-owned source.
+
 ## Line wrapping
 
 Treat line length as a readability boundary, not a target.
