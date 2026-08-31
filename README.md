@@ -56,7 +56,11 @@ A smoke PASS proves only the exercised surface; it does not certify every Skill,
 
 ### Observed local smoke evidence
 
-A prior local run on OpenCode `1.18.24` with OMO Slim `2.2.17` observed global rule injection, non-interference on a typo-only edit, project-rule priority, and project-local Skill discovery. Those observations predate the Simple Memory/plugin-stack transition and are limited compatibility evidence only. Re-run relevant smoke checks after changing host versions or selected references/plugins.
+A prior local run on OpenCode `1.18.24` with OMO Slim `2.2.17` observed global rule injection, non-interference on a typo-only edit, project-rule priority, and project-local Skill discovery. Those observations predate the Simple Memory/plugin-stack transition and remain limited compatibility evidence.
+
+A later plugin-setup smoke on macOS arm64/zsh with OpenCode `1.18.25`, Bun `1.3.11`, Node `22.23.1`, and OMO Slim `2.2.17` verified cc-safety-net `2.3.0`, Simple Memory `1.1.1` in manual mode, TokenScope `1.8.1`, and Notifier `0.2.8` under the bounded setup policy. `opencode-pty` `0.3.6` remained blocked because the published release could not be safely promoted past the Bun-native/Node-host loader risk; Snip and VibeGuard remained on hold. No project `.opencode/` artifacts or deprecated History state were created. See `evaluation/README.md` for the exact smoke evidence and limitations.
+
+Re-run relevant smoke checks after changing host versions or selected references/plugins.
 
 ## Layout
 

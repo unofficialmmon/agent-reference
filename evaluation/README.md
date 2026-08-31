@@ -28,6 +28,33 @@ If the user relies on runtime `/preset` switching, add one optional routing chec
 
 Record host version, OMO version, model, repository state, and observed result. A single smoke is compatibility evidence, not full certification.
 
+### Plugin-stack smoke
+
+Run after `prompts/OPENCODE_PLUGIN_SETUP.md` changes the user environment or after a material OpenCode/runtime upgrade:
+
+1. **Resolved configuration** — start a fresh OpenCode process and confirm the effective configuration resolves without plugin-load errors.
+2. **Safety Net** — use upstream diagnostics where available; confirm a representative safe Git command is allowed and a representative destructive command shape is blocked without damaging repository state.
+3. **Simple Memory** — in a clean temporary directory, exercise `remember -> exact recall -> update -> exact recall -> forget`; confirm the test does not create deprecated History state or unexpected project artifacts.
+4. **TokenScope** — run its normal report/command and confirm report output goes to the expected temporary/runtime location rather than dirtying the project. Record optional catalog/metadata fetch failures separately from the core report result.
+5. **Notifier** — test the platform notification command/path. Distinguish command success from independently observing visual desktop delivery.
+6. **Pilot/Hold discipline** — leave PTY blocked when the published release cannot be shown compatible with the active runtime/loader, and leave Hold candidates uninstalled unless their blocking risks were explicitly re-verified as resolved.
+
+Record exact versions and the selected package/release. Do not convert a blocked pilot into a failure of the baseline stack.
+
+#### Observed plugin-stack evidence — 2026-08-31
+
+One macOS arm64/zsh run with OpenCode `1.18.25`, Bun `1.3.11`, Node `22.23.1`, and OMO Slim `2.2.17` observed:
+
+- cc-safety-net `2.3.0` preserved and verified by its OpenCode doctor; safe Git remained usable and `git reset --hard` was blocked;
+- Simple Memory `1.1.1` installed in manual mode and passed `remember -> recall -> update -> recall -> forget` in a cleaned temporary directory;
+- TokenScope `1.8.1` preserved and `/tokenscope` completed with its report written to an OS temporary path; the smoke session could not fetch the optional Skill catalog;
+- Notifier `0.2.8` preserved with noisy lifecycle/completion events disabled; the native macOS notification command succeeded, while visual desktop delivery was not independently observed;
+- `opencode-pty` `0.3.6` remained `BLOCKED` because the published release could not be safely promoted past the Bun-native/Node-host loader risk in that environment;
+- Snip and VibeGuard remained `HOLD`;
+- no project `.opencode/` artifacts or deprecated `.opencode/history/` state were created.
+
+This is compatibility evidence for that exact environment and date only. It is not a permanent certification of future OpenCode, OMO Slim, Bun/Node, or plugin releases.
+
 ### Behavioral regression
 
 Use the cases in `agentrc.eval.jsonc` as a small reusable rubric. They cover:
@@ -68,6 +95,7 @@ Non-interference: PASS | FAIL | NOT RUN
 Project precedence: PASS | FAIL | NOT RUN
 Skill discovery: PASS | FAIL | NOT RUN
 OMO routing: PASS | FAIL | NOT RUN
+Plugin stack: PASS | PARTIAL | FAIL | NOT RUN
 Behavioral cases: PASS | PARTIAL | FAIL | NOT RUN
 Known limitations:
 ```
