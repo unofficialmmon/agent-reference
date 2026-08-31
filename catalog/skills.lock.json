@@ -253,7 +253,7 @@
       "licenseEvidence": "local authored content derived from user-owned project materials",
       "placement": "catalog",
       "files": {
-        "SKILL.md": "sha256:df8316930a20df8e1b776bbd427d01d9e1d29b0a2ff568c25d5c725d9c7d41be"
+        "SKILL.md": "sha256:22811b0cc3683dc8a57af3102fefb8f3f1ce54d5d6fc708a6f6e6bf716dfc8e9"
       },
       "review": {
         "installHooks": false,

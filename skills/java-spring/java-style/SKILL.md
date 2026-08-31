@@ -95,6 +95,15 @@ Keep project annotation order. A reasonable fallback for classes is:
 
 Do not add, remove, or semantically change annotations as formatting-only work.
 
+## JavaDoc
+
+For handwritten Java/Spring source where the project language requires documentation:
+
+- Begin the JavaDoc with a concise Korean summary sentence.
+- Document meaningful parameters with `@param`, non-void public methods with `@return`, and contract-significant exceptions with `@throws`.
+- Document DTO records in terms of business meaning, wire representation, and nullability; controllers in terms of endpoint, authentication, and request meaning; and services in terms of business action, actor, and state semantics.
+- Explain business or wire contracts rather than restating obvious code. Exclude generated and other tool-owned source.
+
 ## Constructor and Lombok safety
 
 Prefer Lombok `@RequiredArgsConstructor` with required `final` dependencies for straightforward dependency injection. Replace an explicit constructor with it only when the constructor merely assigns those dependencies and generated-constructor behavior is equivalent.
