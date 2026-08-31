@@ -95,6 +95,8 @@ Avoid:
 - unnecessary provider/hook/registry/plugin extension points;
 - premature frameworkization.
 
+Inject `Clock` only when project consistency or genuine time-testability justifies it; do not add it by default.
+
 Accept small local duplication when the shared concept is not yet stable. Extract after a repeated semantic pattern and ownership boundary are clear.
 
 Prefer one concrete implementation when only one real implementation exists. Add interfaces, registries, factories, adapters, or plugins when they solve actual variation, isolation, ownership, or testing needs—not hypothetical ones.
@@ -139,6 +141,8 @@ For unfamiliar or high-impact technology, validate on a realistic bounded use ca
 Consider performance early for known hot paths, high data volume, network/disk access, memory pressure, or strict latency requirements.
 
 Avoid premature optimization. Optimize from a requirement or measurement, protect correctness with tests, and keep unusual optimized code localized and documented.
+
+When performance-review scope is unspecified, default to source-code review. Do not run profilers, load tests, or microbenchmarks without authorization.
 
 ## 10. Contracts and generated code
 

@@ -23,6 +23,7 @@ Unless explicitly in scope, do not:
 - change API paths, signatures, DTO meaning, serialized names, exception flow, or logging semantics;
 - convert loops to streams or streams to loops merely for style;
 - introduce helpers or abstractions solely to satisfy formatting preferences;
+- extract a simple helper used once when keeping the logic inline is clearer;
 - convert an existing DTO class to a record;
 - reorder a large established class only for cosmetic consistency;
 - format unrelated files;
@@ -96,7 +97,7 @@ Do not add, remove, or semantically change annotations as formatting-only work.
 
 ## Constructor and Lombok safety
 
-Replace an explicit constructor with `@RequiredArgsConstructor` only when it merely assigns required `final` dependencies and generated-constructor behavior is equivalent.
+Prefer Lombok `@RequiredArgsConstructor` with required `final` dependencies for straightforward dependency injection. Replace an explicit constructor with it only when the constructor merely assigns those dependencies and generated-constructor behavior is equivalent.
 
 Keep an explicit constructor when it contains or depends on:
 
@@ -107,6 +108,8 @@ Keep an explicit constructor when it contains or depends on:
 - any behavior beyond direct assignment.
 
 Do not assume constructor-parameter annotations are copied by Lombok unless project configuration guarantees it.
+
+Avoid nullable compatibility constructors unless an actual caller contract requires them.
 
 Avoid broad class-level Lombok mutability such as `@Data` or `@Setter` unless that mutability is intentionally part of the design.
 
@@ -126,6 +129,8 @@ When repository convention does not say otherwise, order enum content as:
 4. methods.
 
 Do not reorder constants when order has semantic, serialization, test, or external-contract meaning.
+
+For simple string/DB-code enums, prefer a `code` field with `getCode()` and `fromCode(String)`; use `dbCode` or generic value names only when an external contract requires them.
 
 ## Conditions
 

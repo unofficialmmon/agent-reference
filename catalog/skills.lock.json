@@ -247,13 +247,13 @@
       "source": "user Development Formatting and Linting Guide",
       "sourceType": "local-derived",
       "upstreamPath": null,
-      "revision": "agent-reference-2026-08-28",
-      "reviewed": "2026-08-28",
+      "revision": "agent-reference-2026-08-31",
+      "reviewed": "2026-08-31",
       "license": "MIT",
       "licenseEvidence": "local authored content derived from user-owned project materials",
       "placement": "catalog",
       "files": {
-        "SKILL.md": "sha256:d02aabea5554bba6bc54ca38472232a800600199db00eb0690c7cbbf26bca02b"
+        "SKILL.md": "sha256:df8316930a20df8e1b776bbd427d01d9e1d29b0a2ff568c25d5c725d9c7d41be"
       },
       "review": {
         "installHooks": false,
