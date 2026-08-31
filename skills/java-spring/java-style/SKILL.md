@@ -97,9 +97,9 @@ Do not add, remove, or semantically change annotations as formatting-only work.
 
 ## JavaDoc
 
-For handwritten Java/Spring source where the project language requires documentation:
+For handwritten Java/Spring source where the repository or project language requires documentation:
 
-- Begin the JavaDoc with a concise Korean summary sentence.
+- Begin the JavaDoc with a concise summary in the repository or project's language; use Korean only when that language or its conventions call for it.
 - Document meaningful parameters with `@param`, non-void public methods with `@return`, and contract-significant exceptions with `@throws`.
 - Document DTO records in terms of business meaning, wire representation, and nullability; controllers in terms of endpoint, authentication, and request meaning; and services in terms of business action, actor, and state semantics.
 - Explain business or wire contracts rather than restating obvious code. Exclude generated and other tool-owned source.
