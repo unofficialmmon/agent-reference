@@ -9,7 +9,7 @@ OpenCode        harness, AGENTS.md, native Skill discovery
 OMO Slim        orchestration
 Spec Kit        explicit specification workflow
 agent-reference shared reference source
-APM             later: multi-project distribution only
+APM             distributes selected Skills/prompts to projects
 ```
 
 ## Core rule
@@ -65,6 +65,11 @@ agent-reference/
 ├── CHANGELOG.md
 ├── LICENSE
 ├── NOTICE
+├── apm.yml                       APM producer metadata
+├── .apm/                         APM producer layout
+│   └── prompts/                  synchronized packaging mirrors
+│       ├── apm-setup.prompt.md
+│       └── agent-sync.prompt.md
 ├── global/
 │   ├── AGENTS.md                 small OpenCode global router
 │   ├── ENGINEERING.md            conditional engineering reference
@@ -85,7 +90,9 @@ agent-reference/
 │   ├── PROJECT_REFRESH.md
 │   ├── PROJECT_AUDIT.md
 │   ├── CODEBASE_ONBOARD.md
-│   └── CHANGE_AUDIT.md
+│   ├── CHANGE_AUDIT.md
+│   ├── APM_SETUP.md
+│   └── AGENT_SYNC.md
 ├── skills/
 │   ├── core/
 │   ├── engineering/
@@ -209,6 +216,8 @@ The prompt set is intentionally small and explicit. `prompts/README.md` provides
 - `PROJECT_AUDIT.md` — read-only health check of agent-facing configuration.
 - `CODEBASE_ONBOARD.md` — read-only map of an unfamiliar repository.
 - `CHANGE_AUDIT.md` — read-only acceptance audit of a working-tree change.
+- `APM_SETUP.md` — initial APM adoption and selected-content deployment.
+- `AGENT_SYNC.md` — routine APM dependency and agent-configuration sync.
 
 Prompts coordinate native tools; they do not create a hidden runtime. Read-only prompts must remain read-only. Bootstrap/refresh prompts must stop for one concise confirmation before force, overwrite, deletion, or material governance changes.
 
@@ -264,8 +273,11 @@ Do not collapse these into a single word such as "verified".
 
 Reviewed upstream snapshots are kept byte-for-byte unchanged. Upgrade by replacing the whole snapshot with a reviewed revision and updating hashes, source metadata, known issues, and license evidence together. Repository-authored Skills are explicitly marked `local-derived`.
 
-## APM later
+## APM distribution
 
-APM is deferred, not rejected. Once the content is stable, APM can distribute selected references and Skills across multiple projects while `agent-reference` remains the source of truth.
+APM distributes selected Skills and prompts across multiple projects while
+`agent-reference` remains the source of truth. APM owns generated target output;
+the `.apm/prompts/` files are packaging mirrors of canonical prompts under
+`prompts/`.
 
 Do not build another installer or package manager in this repository.

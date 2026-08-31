@@ -7,6 +7,7 @@
 - Added `evaluation/README.md` with a minimal static-vs-behavioral UAT model and a non-mutating `evaluation/agentrc.eval.jsonc` as optional cross-agent judge input.
 - Added zero-dependency maintainer-only `tools/audit.py` and `tools/README.md` for deterministic Skill/lock/template/prompt/license/link/eval checks, with machine-readable JSON output.
 - Added `prompts/README.md` with copy-paste one-line entry requests for bootstrap, refresh, audit, onboarding, and change audit.
+- Added APM producer metadata and synchronized `.apm/prompts/` packaging mirrors for `apm-setup` and the routine `agent-sync` prompt.
 - Added `templates/omo/` with project-local OMO Slim Skill-routing examples for Java/Spring, Java/Spring/MyBatis, MyBatis+MBG, React/Vite, Next.js/React, Vue/Vite, Nuxt, and React Native plus a conditional routing guide.
 
 - Added five bounded convenience prompts:

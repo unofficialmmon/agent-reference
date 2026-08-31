@@ -78,7 +78,7 @@ Keep reusable prompts under `prompts/` as plain Markdown. They may coordinate ex
 - A convenience prompt must not bypass a destructive or overwrite confirmation merely to remain one-shot; require one concise checkpoint when an existing dirty/managed path is at risk.
 - `PROJECT_AUDIT.md`, `CODEBASE_ONBOARD.md`, and `CHANGE_AUDIT.md` are read-only by default; do not let convenience prompts silently become mutation workflows.
 - Keep the prompt set small. Prefer an upstream Skill or Spec Kit command when it already owns a task-specific workflow.
-- Keep APM concerns separate: prompts define desired setup behavior; APM may distribute them later.
+- Keep canonical reusable prompts under `prompts/`. `.apm/prompts/` contains synchronized APM packaging mirrors, not a second source of truth; generated target output is native APM-owned.
 
 ## Validation before release
 

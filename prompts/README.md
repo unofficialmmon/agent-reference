@@ -13,6 +13,22 @@ Do not modify application source during bootstrap.
 
 Expected scope: repository facts, project `AGENTS.md`, selected project-local Skills, minimal project-local OMO Slim Skill routing, Spec Kit setup/health, configuration validation.
 
+## Microsoft APM setup
+
+```text
+Read /path/to/agent-reference/prompts/APM_SETUP.md and execute it completely for the current repository.
+```
+
+Command: `apm-setup` — Set up Microsoft APM and migrate this project to agent-reference APM management. Configuration/deployment-only; do not modify application source.
+
+## Routine agent-reference APM sync
+
+```text
+Read /path/to/agent-reference/prompts/AGENT_SYNC.md and execute it completely for the current repository.
+```
+
+Command: `agent-sync` — Update agent-reference APM dependencies and reconcile project agent configuration. Run only after `apm-setup` has completed; do not install APM or perform first-time migration.
+
 ## Existing repository after stack/architecture changes
 
 ```text
@@ -45,7 +61,8 @@ Do not modify files.
 
 ## Selection rule
 
-- First adoption: `PROJECT_BOOTSTRAP`.
+- New repository bootstrap: `PROJECT_BOOTSTRAP`; existing repository APM adoption: `APM_SETUP`.
+- Existing APM dependency maintenance: `AGENT_SYNC`.
 - Already configured but stale: `PROJECT_REFRESH`.
 - Unsure whether setup is healthy: `PROJECT_AUDIT` before mutating anything.
 - Do not chain all prompts by default. Choose the narrowest one that matches the task.
