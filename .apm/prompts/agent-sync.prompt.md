@@ -79,6 +79,34 @@ do not invent a dependency, Skill, route, schema, or migration. Preserve
 application source, tests, schemas, migrations, generated application output,
 and unrelated configuration.
 
+### Private GitHub source transport and package commands
+
+When the adopted GitHub source is private, Git may be able to clone it through
+an SSH host alias while APM's virtual-file HTTPS/raw download path cannot
+resolve or use that alias. The supported dependency is one whole-repository SSH
+source, restricted to the project's evidence-backed Skills:
+
+```yaml
+dependencies:
+  - git: ssh://git@github.com/unofficialmmon/agent-reference.git
+    ref: main
+    skills:
+      - <project-specific-skill-id>
+```
+
+Do not convert this to separate per-file virtual dependencies or guessed
+HTTPS/raw URLs, and do not record local aliases or credentials. Preserve the
+existing SSH configuration and authentication. The package's
+`.apm/prompts/apm-setup.prompt.md` and `.apm/prompts/agent-sync.prompt.md` are
+APM package content and their generated command deployment belongs under
+`.opencode/commands/`. The lock file and generated deployment/command output
+are APM-owned; never edit, copy, or reconstruct them by hand.
+
+If a dependency update or command deployment cannot clone, fetch, or resolve
+the source through its supported transport, report `BLOCKED`, preserve the last
+healthy deployment, and do not hide the transport failure with a fallback or
+partial deployment.
+
 ## Version and dependency update procedure
 
 Run the installed CLI as-is:
@@ -100,6 +128,10 @@ Do not manually copy Skills, edit generated lockfiles, or edit generated APM
 deployments. If the supported update is unavailable, unsafe, or fails,
 preserve the prior healthy deployment and manual Skills, report the affected
 work `BLOCKED` or `FAIL`, and do not improvise a replacement.
+
+This sync does not run `apm install`. If a supported repair or deployment
+operation is explicitly permitted by the current APM version, perform its
+documented dry-run first and only continue when that dry-run succeeds.
 
 Run this separately from `apm outdated` and separately from any update:
 
@@ -179,6 +211,8 @@ Also validate with explicit `PASS`, `FAIL`, `BLOCKED`, or `NOT RUN` labels:
 - no application source, tests, schemas, migrations, generated output, or
   unrelated project configuration changed;
 - `apm outdated` and the separate `apm audit` result.
+- package-provided prompt deployment into `.opencode/commands/`, with generated
+  output treated as APM-owned.
 
 If a prerequisite or unavailable tool prevents a check, mark it `BLOCKED` or
 `NOT RUN`; never report it as passed. Review the final diff and status without

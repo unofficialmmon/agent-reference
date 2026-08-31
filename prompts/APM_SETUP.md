@@ -107,6 +107,37 @@ formatting or ordering. The APM-generated lock file must be produced by APM,
 not hand-authored. Do not manage the whole `agent-reference` catalog: include
 only the evidence-backed, explicitly selected Skills.
 
+### Private GitHub source transport
+
+When the reviewed GitHub source is private, Git may be able to clone it through
+an SSH host alias while APM's virtual-file HTTPS/raw download path cannot
+resolve or use that alias. In that case, use one whole-repository SSH
+dependency, with the project-specific subset of Skills, in the installed APM
+schema:
+
+```yaml
+dependencies:
+  - git: ssh://git@github.com/unofficialmmon/agent-reference.git
+    ref: main
+    skills:
+      - <project-specific-skill-id>
+```
+
+Replace the placeholder with only Skills justified by project evidence. Do not
+work around this transport limitation with separate per-file virtual
+dependencies, guessed HTTPS/raw URLs, local aliases, or embedded credentials.
+Use the user's existing SSH configuration and authentication without recording
+its private details in project files.
+
+The package-provided `.apm/prompts/apm-setup.prompt.md` and
+`.apm/prompts/agent-sync.prompt.md` must be deployed by APM into the project's
+`.opencode/commands/` so that `/apm-setup` and `/agent-sync` are available.
+Treat the generated lock file and generated deployment/command output as
+APM-owned: never hand-edit, manually copy, or reconstruct them. If the source
+cannot be cloned, fetched, or resolved through the supported transport, report
+the operation `BLOCKED` and do not mask the failure with a different source or
+partial deployment.
+
 ## Mutation checkpoint
 
 Before the first write, show a concise checkpoint naming every planned APM
@@ -123,14 +154,17 @@ existing same-ID Skill. If there is no conflict, proceed after recording the
 checkpoint.
 
 Use the installed APM version's supported dry-run form for the proposed
-install; do not invent flags. Review its result, then run the normal:
+install; do not invent flags. A dry-run is mandatory and must complete before
+the normal install. Review its result, then run the normal:
 
 ```bash
 apm install
 ```
 
-If dry-run or normal installation fails, preserve the old manual Skills and
-existing files; do not delete or partially reconstruct them to force success.
+If dry-run or normal installation fails, including a source transport or
+authentication failure, preserve the old manual Skills and existing files;
+report the affected operation `BLOCKED` rather than masking the failure, and do
+not delete or partially reconstruct them to force success.
 
 ## Manual Skill migration and routing boundaries
 
@@ -193,6 +227,8 @@ labels:
 - that no application source, tests, schemas, migrations, generated output,
   upstream Skill snapshot, or unrelated configuration changed;
 - `/agent-sync` availability and the exact unavailable message when required.
+- the package-provided prompts' APM deployment into `.opencode/commands/`, with
+  generated output treated as APM-owned.
 
 Review the final diff and status. Never turn a skipped, unavailable, or failed
 check into a warning-free success claim.
