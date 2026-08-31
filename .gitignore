@@ -1,3 +1,5 @@
+# OpenCode machine-local runtime state
+.opencode/memory/
 
 # APM dependencies
 apm_modules/

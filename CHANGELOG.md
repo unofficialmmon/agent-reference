@@ -4,13 +4,14 @@
 
 ### Added
 
+- Added `global/MEMORY.md` as the Simple Memory-backed persistent handoff protocol, using exact branch/worktree handoff recall, repository-state reconciliation, sparse durable memory, single-writer OMO guidance, and explicit secret/privacy boundaries.
+- Added `prompts/OPENCODE_PLUGIN_SETUP.md` as a one-prompt, environment-aware setup/reconciliation workflow that re-verifies official upstreams before installing the recommended OpenCode plugin stack and records smoke tests/rollback.
 - Added `evaluation/README.md` with a minimal static-vs-behavioral UAT model and a non-mutating `evaluation/agentrc.eval.jsonc` as optional cross-agent judge input.
 - Added zero-dependency maintainer-only `tools/audit.py` and `tools/README.md` for deterministic Skill/lock/template/prompt/license/link/eval checks, with machine-readable JSON output.
-- Added `prompts/README.md` with copy-paste one-line entry requests for bootstrap, refresh, audit, onboarding, and change audit.
+- Added `prompts/README.md` with copy-paste one-line entry requests for plugin setup, bootstrap, refresh, audit, onboarding, and change audit.
 - Added APM producer metadata and synchronized `.apm/prompts/` packaging mirrors for `apm-setup` and the routine `agent-sync` prompt.
 - Added `templates/omo/` with project-local OMO Slim Skill-routing examples for Java/Spring, Java/Spring/MyBatis, MyBatis+MBG, React/Vite, Next.js/React, Vue/Vite, Nuxt, and React Native plus a conditional routing guide.
-
-- Added five bounded convenience prompts:
+- Added five bounded project convenience prompts:
   - `PROJECT_BOOTSTRAP.md` for initial project setup;
   - `PROJECT_REFRESH.md` for configuration reconciliation after repository change;
   - `PROJECT_AUDIT.md` for read-only agent-configuration review;
@@ -24,8 +25,10 @@
 
 ### Improved
 
-- Changed work-history handling from opt-in/existing-directory gated to lazy default-on for qualifying project work: global routing now loads `HISTORY.md` at handoff time and creates/updates `.opencode/history/` on the first qualifying change unless the user or project rules explicitly opt out or override the location.
-- Documented project-local OMO Slim configuration as an auto-loaded trust boundary that can alter agent behavior, tool access, and Skill access; bootstrap, refresh, audit, and evaluation guidance now require explicit review and allowlist-preserving composition.
+- Replaced the active file-journal History protocol with explicit Simple Memory handoff routing. `global/HISTORY.md` and the repository's `.opencode/history/` state are retired; Simple Memory is intentionally used with `autoLoad: false` and `autoSave: false`, and current Git/source/configuration remain authoritative.
+- Defined a compatibility-aware plugin policy: Simple Memory, cc-safety-net, TokenScope, and Notifier start as baseline candidates; `opencode-pty` is a compatibility-gated pilot; `opencode-snip` and `opencode-vibeguard` remain hold candidates until their relevant upstream risks are resolved or explicitly re-approved.
+- Split the static audit into the stable `tools/audit.py` policy entry point and preserved `tools/_audit_core.py` implementation so current required/deprecated artifact policy can evolve without rewriting the validated Skill/hash/OMO/link checks.
+- Documented project-local OMO Slim configuration as an auto-loaded trust boundary that can alter agent behavior, tool access, and Skill access; bootstrap, refresh, audit, and evaluation guidance require explicit review and allowlist-preserving composition.
 - Changed OMO stack examples to root `agents.<agent>.skills` overrides, reducing named-preset coupling while preserving user-owned models/MCPs. Documented that runtime `/preset` switching uses separate merge behavior and requires its own routing smoke check when used.
 - Clarified that OMO agent `skills` arrays are effective allowlists, so bootstrap/refresh must preserve deliberate existing entries rather than assuming additive merge behavior.
 - Normalized `activationGuidance` across all 40 Skill lock entries so project-stack, conditional, workflow-gate, and operational selection are machine-readable.
@@ -33,7 +36,6 @@
 - Extended `PROJECT_BOOTSTRAP.md` and `PROJECT_REFRESH.md` to configure only minimal project-local OMO Slim Skill routing while preserving global models, variants, MCPs, companion settings, prompts, and unrelated permissions.
 - Extended `PROJECT_AUDIT.md` to detect stale/missing routed Skill IDs, operational Skill leakage, global-config duplication, JSONC precedence issues, and OMO doctor/schema failures.
 - Added OMO routing quality rules: existing config format is preserved, templates are evidence-based examples rather than profiles, Orchestrator/global policy is inherited by default, and OpenCode restart is required before behavioral smoke testing.
-
 - Re-audited the pack against current OpenCode Skill/rule discovery, Spec Kit integration management, awesome-copilot, and Superpowers guidance.
 - Made bootstrap and refresh resolve catalog/Skill paths from the containing `agent-reference` root and fail safely when that source is unavailable.
 - Required complete-directory, byte-preserving Skill copies so references, scripts, assets, and license files are not dropped.
@@ -54,4 +56,4 @@
 
 ### Deferred
 
-- APM-based multi-project distribution remains intentionally deferred until the reference content and onboarding process are stable in real use.
+- Additional APM-based distribution beyond the existing bounded prompt package remains intentionally conservative until the reference content and onboarding process are stable in real use.

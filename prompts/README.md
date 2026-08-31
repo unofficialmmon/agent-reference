@@ -4,6 +4,15 @@ These are explicit, bounded entry points. They coordinate existing OpenCode, OMO
 
 Use the prompt file from the reference source rather than copying its body into every repository.
 
+## OpenCode plugin environment setup or reconciliation
+
+```text
+Read /path/to/agent-reference/prompts/OPENCODE_PLUGIN_SETUP.md and execute it completely for my current OpenCode environment.
+Preserve unrelated OpenCode and OMO Slim configuration.
+```
+
+Expected scope: current environment inventory, official-upstream re-verification, compatibility-aware installation/reconciliation of the recommended plugin stack, smoke tests, and rollback notes. This prompt may change user-level OpenCode configuration; it does not modify application source.
+
 ## New or newly adopted repository
 
 ```text
@@ -61,6 +70,7 @@ Do not modify files.
 
 ## Selection rule
 
+- User-level OpenCode plugin stack setup/reconciliation: `OPENCODE_PLUGIN_SETUP`.
 - New repository bootstrap: `PROJECT_BOOTSTRAP`; existing repository APM adoption: `APM_SETUP`.
 - Existing APM dependency maintenance: `AGENT_SYNC`.
 - Already configured but stale: `PROJECT_REFRESH`.

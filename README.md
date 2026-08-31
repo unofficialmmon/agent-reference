@@ -23,10 +23,18 @@ The default global active Skill count is **zero**. Install only the Skills relev
 Apply the pack incrementally.
 
 1. Diff/merge `global/AGENTS.md` into `~/.config/opencode/AGENTS.md`; never overwrite an existing personal file blindly.
-2. Copy `global/ENGINEERING.md` and `global/HISTORY.md` only after checking for existing files with those names.
-3. Start with zero global Skills. Install technology Skills project-locally unless they are genuinely useful across most repositories.
-4. Create/refine the project `AGENTS.md` manually or explicitly run `prompts/PROJECT_BOOTSTRAP.md`. Bootstrap can also install selected project Skills and create the minimal project-local OMO Slim Skill-routing override.
-5. Restart OpenCode after Skill/routing changes before checking discovery.
+2. Copy `global/ENGINEERING.md` and `global/MEMORY.md` only after checking for existing files with those names.
+3. For the recommended user-level plugin stack, explicitly run `prompts/OPENCODE_PLUGIN_SETUP.md`. It inventories the current environment and re-verifies official upstream compatibility before changing OpenCode configuration.
+4. Start with zero global Skills. Install technology Skills project-locally unless they are genuinely useful across most repositories.
+5. Create/refine the project `AGENTS.md` manually or explicitly run `prompts/PROJECT_BOOTSTRAP.md`. Bootstrap can also install selected project Skills and create the minimal project-local OMO Slim Skill-routing override.
+6. Restart OpenCode after plugin/Skill/routing changes before checking discovery and behavior.
+
+Example plugin setup request:
+
+```text
+Read /path/to/agent-reference/prompts/OPENCODE_PLUGIN_SETUP.md and execute it completely for my current OpenCode environment.
+Preserve unrelated OpenCode and OMO Slim configuration.
+```
 
 Example bootstrap request:
 
@@ -35,26 +43,20 @@ Read /path/to/agent-reference/prompts/PROJECT_BOOTSTRAP.md and execute it for th
 Do not modify application source during bootstrap.
 ```
 
-Run three small smoke checks before relying on the setup:
+Run small smoke checks before relying on the setup:
 
 ```text
 1. Injection: summarize currently injected global rules without reading files.
 2. Non-interference: perform one typo-only/mechanical change and confirm no planning ceremony or unrelated edit.
 3. Project priority: request a small project-specific implementation and confirm project ownership/conventions override generic guidance.
+4. Resume: after one qualifying task has written a Simple Memory handoff, open a fresh session and ask to continue; confirm exact handoff recall is reconciled with current Git/source state.
 ```
 
-Optionally install one selected non-operational Skill project-locally and invoke it explicitly to confirm discovery. A smoke PASS proves basic loading/behavior only; it does not certify every Skill, model, or future host version.
+A smoke PASS proves only the exercised surface; it does not certify every Skill, plugin, model, host version, or future release.
 
 ### Observed local smoke evidence
 
-A prior local run on OpenCode `1.18.24` with OMO Slim `2.2.17` observed:
-
-- global rule injection;
-- non-interference on a typo-only edit;
-- project-rule priority and clarification before inventing an unsupported domain;
-- discovery/loading of the project-local `java-style` Skill.
-
-These observations are limited compatibility evidence, not certification of every prompt, Skill, model, or repository. Re-run the small smoke sequence after changing host versions or the selected reference set.
+A prior local run on OpenCode `1.18.24` with OMO Slim `2.2.17` observed global rule injection, non-interference on a typo-only edit, project-rule priority, and project-local Skill discovery. Those observations predate the Simple Memory/plugin-stack transition and are limited compatibility evidence only. Re-run relevant smoke checks after changing host versions or selected references/plugins.
 
 ## Layout
 
@@ -68,24 +70,24 @@ agent-reference/
 ├── apm.yml                       APM producer metadata
 ├── .apm/                         APM producer layout
 │   └── prompts/                  synchronized packaging mirrors
-│       ├── apm-setup.prompt.md
-│       └── agent-sync.prompt.md
 ├── global/
 │   ├── AGENTS.md                 small OpenCode global router
 │   ├── ENGINEERING.md            conditional engineering reference
-│   └── HISTORY.md                lazy-loaded qualifying-work history protocol
+│   └── MEMORY.md                 Simple Memory-backed persistent handoff protocol
 ├── project/
 │   └── AGENTS.template.md        factual project entry-point template
 ├── evaluation/
 │   ├── README.md                 static-vs-behavioral evaluation guide
 │   └── agentrc.eval.jsonc        optional cross-agent AgentRC cases
 ├── tools/
-│   ├── audit.py                  deterministic maintainer-only static audit
+│   ├── audit.py                  deterministic maintainer audit entry point
+│   ├── _audit_core.py            preserved static audit implementation
 │   └── README.md
 ├── templates/
 │   └── omo/                      project-local OMO Skill-routing examples
 ├── prompts/
 │   ├── README.md                 copy-paste entry-point index
+│   ├── OPENCODE_PLUGIN_SETUP.md  compatibility-aware user environment setup
 │   ├── PROJECT_BOOTSTRAP.md
 │   ├── PROJECT_REFRESH.md
 │   ├── PROJECT_AUDIT.md
@@ -118,14 +120,30 @@ Recommended OpenCode global files:
 ~/.config/opencode/
 ├── AGENTS.md
 ├── ENGINEERING.md
-└── HISTORY.md
+└── MEMORY.md
 ```
 
 - `AGENTS.md` is the short router, priority, scope, safety, and validation baseline.
 - `ENGINEERING.md` is conditional. Load it for architecture/design review, unclear root-cause debugging, refactoring, meaningful cross-boundary work, security/reliability/performance decisions, and structural review—not for every small edit.
-- `HISTORY.md` is lazy-loaded rather than startup-loaded. After qualifying project work it updates `.opencode/history/` by default and creates the minimal history structure on the first qualifying update unless the user or project rules opt out or override the location.
+- `MEMORY.md` is lazy-loaded for explicit resume/continue requests and qualifying handoff updates. It uses Simple Memory as persistent storage while treating Git/source/configuration/tests as the actual source of truth.
 
-Do not duplicate these documents into every repository.
+The retired file-based work journal under `.opencode/history/` is no longer part of the active protocol. Do not recreate it when Simple Memory is unavailable; report persistent handoff as blocked instead.
+
+Simple Memory runtime data under `.opencode/memory/` is machine-local by default and should not be committed unless a repository has an explicit reviewed reason. Never ignore the whole `.opencode/` directory because trackable commands, Skills, and project configuration may live there.
+
+## Recommended OpenCode plugin setup
+
+`prompts/OPENCODE_PLUGIN_SETUP.md` is the single reproducible entry point for installing/reconciling the user-level plugin stack after environment changes. It intentionally rechecks current official repositories, releases, compatibility issues, OpenCode API generation, OMO Slim behavior, and existing configuration before mutation.
+
+Current policy starts from:
+
+- baseline candidates: Simple Memory, cc-safety-net, TokenScope, OpenCode Notifier;
+- pilot candidate: `opencode-pty`, only when the current OpenCode/runtime/platform are supported;
+- hold candidates: `opencode-snip` and `opencode-vibeguard` until their relevant compatibility/safety risks are resolved or explicitly re-approved.
+
+The policy is not a permanent version lock. A current regression may downgrade a baseline candidate, and a previously held candidate should be promoted only when upstream evidence demonstrates that the blocking issue is actually fixed in a published compatible release.
+
+Simple Memory is configured in explicit/manual mode (`autoLoad: false`, `autoSave: false`). `global/MEMORY.md` owns when the agent reads or writes handoff state. This avoids relying on automatic context injection or automatic conversation persistence.
 
 ## Skill catalog
 
@@ -191,26 +209,17 @@ Keep user-level OMO Slim configuration generic (models, variants, MCPs, companio
 
 Because project-local OMO configuration is auto-loaded and can change agent behavior, tools, and Skill access, treat `.opencode/oh-my-opencode-slim.json[c]` as trusted executable configuration. Review it before opening an unfamiliar repository with OMO Slim.
 
-`templates/omo/` contains reviewed **examples**, not blindly installable profiles:
+`templates/omo/` contains reviewed **examples**, not blindly installable profiles. They use root `agents.<agent>.skills` overrides so project stack routing stays separate from user-owned models, variants, MCPs, and companion settings. Runtime `/preset` switching has separate merge behavior, so projects that depend on preset switching must verify routing after a switch or deliberately maintain preset-local routing.
 
-- `ROUTING.md` — evidence-based agent/stack candidate map;
-- `java-spring.jsonc`;
-- `java-spring-mybatis.jsonc`;
-- `java-spring-mybatis-mbg.jsonc`;
-- `react-vite.jsonc`;
-- `nextjs-react.jsonc`;
-- `vue-vite.jsonc`;
-- `nuxt.jsonc`;
-- `react-native.jsonc`.
+Default routing principle: leave Orchestrator, Explorer, Librarian, and Oracle alone unless the repository has a concrete reason to override them; route proven implementation Skills to Fixer and proven UI Skills to Designer. Operational Skills are never automatic.
 
-The examples use root `agents.<agent>.skills` overrides rather than a named preset so project stack routing stays separate from user-owned models, variants, MCPs, and companion settings. At startup, current OMO config-file merging gives root agent entries precedence over the selected preset. Runtime `/preset` switching has separate merge behavior, so projects that depend on preset switching must verify routing after a switch or deliberately maintain preset-local routing. If a project already has an OMO config, merge into its existing format rather than creating a competing `.json`/`.jsonc` pair.
-
-Default routing principle: leave Orchestrator, Explorer, Librarian, and Oracle alone unless the repository has a concrete reason to override them; route proven implementation Skills to Fixer and proven UI Skills to Designer. Use preset-local routing only for a deliberate preset-specific difference. Operational Skills are never automatic.
+For persistent memory, `global/MEMORY.md` recommends a single-writer model: the coordinating Orchestrator updates durable handoff state after verifying subagent discoveries against current repository evidence.
 
 ## Convenience prompts
 
-The prompt set is intentionally small and explicit. `prompts/README.md` provides copy-paste entry requests so users do not need to remember the exact wording:
+The prompt set is intentionally small and explicit. `prompts/README.md` provides copy-paste entry requests:
 
+- `OPENCODE_PLUGIN_SETUP.md` — user-level OpenCode plugin inventory, official-upstream re-verification, installation/reconciliation, smoke tests, and rollback.
 - `PROJECT_BOOTSTRAP.md` — onboarding and initial project agent setup.
 - `PROJECT_REFRESH.md` — reconcile stale project guidance, selected Skills, and Spec Kit integration.
 - `PROJECT_AUDIT.md` — read-only health check of agent-facing configuration.
@@ -219,65 +228,4 @@ The prompt set is intentionally small and explicit. `prompts/README.md` provides
 - `APM_SETUP.md` — initial APM adoption and selected-content deployment.
 - `AGENT_SYNC.md` — routine APM dependency and agent-configuration sync.
 
-Prompts coordinate native tools; they do not create a hidden runtime. Read-only prompts must remain read-only. Bootstrap/refresh prompts must stop for one concise confirmation before force, overwrite, deletion, or material governance changes.
-
-## Project `AGENTS.md`
-
-Start from `project/AGENTS.template.md`, then replace placeholders with repository facts:
-
-- purpose, stack, modules, and authoritative docs;
-- ownership and allowed dependency direction;
-- writable/read-only/generated boundaries;
-- API/DB/IPC/auth contracts;
-- real validation commands;
-- project-specific hazards and exceptions.
-
-Do not copy generic framework documentation or global engineering philosophy into the project file; select the relevant Skill instead. Qualifying work history is handled by the global `HISTORY.md` protocol under `.opencode/history/`; mention it in a project `AGENTS.md` only when the project needs to opt out or override the default location/behavior.
-
-## Spec Kit
-
-Spec Kit remains an independent upstream project. Use its OpenCode integration only for work intentionally following specification-driven development.
-
-- Use native `specify integration status`/`upgrade` for existing projects.
-- Treat `specify init --here --force` as initial setup or fallback recovery, not the normal refresh path.
-- Do not start Spec Kit automatically for unrelated routine fixes.
-- Do not recreate Spec Kit commands, templates, or governance workflows in this repository.
-
-
-## Evaluation and static audit
-
-Run the deterministic repository audit before packaging:
-
-```bash
-python3 tools/audit.py
-```
-
-This zero-dependency Python audit validates catalog/lock integrity, Skill metadata, OMO templates, routing boundaries, prompt mutation boundaries, required license material, authored Markdown links, and evaluation-case shape. It does **not** prove OpenCode or OMO runtime behavior.
-
-Use `evaluation/README.md` for the minimal host UAT: injection, non-interference, project precedence, root-cause behavior, scope, generated ownership, Skill relevance, validation truthfulness, one-shot bootstrap, and refresh/no-op. `evaluation/agentrc.eval.jsonc` is an optional external judge input; AgentRC results are cross-agent evidence, not OpenCode/OMO certification.
-
-## Provenance vocabulary
-
-`catalog/skills.lock.json` keeps separate claims:
-
-- `sourceTrust`
-- `integrity`
-- `hostCompatibility`
-- `behaviorStatus`
-- `activationGuidance`
-- `operationalRisk`
-- `knownIssues`
-- `redistributionStatus`
-
-Do not collapse these into a single word such as "verified".
-
-Reviewed upstream snapshots are kept byte-for-byte unchanged. Upgrade by replacing the whole snapshot with a reviewed revision and updating hashes, source metadata, known issues, and license evidence together. Repository-authored Skills are explicitly marked `local-derived`.
-
-## APM distribution
-
-APM distributes selected Skills and prompts across multiple projects while
-`agent-reference` remains the source of truth. APM owns generated target output;
-the `.apm/prompts/` files are packaging mirrors of canonical prompts under
-`prompts/`.
-
-Do not build another installer or package manager in this repository.
+Choose the narrowest prompt that matches the task. Project bootstrap/refresh must not silently mutate user-level plugin/model/MCP configuration; plugin environment setup is a separate explicit action.

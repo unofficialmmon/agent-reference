@@ -40,7 +40,7 @@ Before adding another local Skill, check whether a maintained upstream/vendor Sk
 ## Document quality
 
 - Give each reference or prompt one clear responsibility.
-- State whether a prompt is read-only, configuration-only, or allowed to modify source.
+- State whether a prompt is read-only, configuration-only, environment-configuration, or allowed to modify source.
 - Use concrete stop conditions, mutation checkpoints, and output requirements instead of vague completeness language.
 - Remove duplicated guidance when OpenCode, OMO Slim, Spec Kit, an upstream Skill, or another document already owns it.
 - Keep global references compact and preserve safety/ownership boundaries when compressing prose.
@@ -51,12 +51,13 @@ Keep `global/AGENTS.md` short. It routes to references; it must not become anoth
 
 Keep `global/ENGINEERING.md` compact and principle-oriented. Do not add long technology-specific sections; put those in Skills or project rules.
 
-Keep `global/HISTORY.md` lazy-loaded rather than startup-loaded. Qualifying repository work should update `.opencode/history/` by default, creating it on the first qualifying update unless the user or project rules explicitly opt out or override the location.
+Keep `global/MEMORY.md` lazy-loaded rather than startup-loaded. It defines explicit Simple Memory-backed resume/handoff behavior, not an automatic context injector or a work journal. Persistent memory must remain subordinate to current repository state, use a compact branch/worktree handoff, avoid secrets, and prefer a single coordinating writer when OMO Slim delegates work.
+
+Do not reintroduce the legacy `global/HISTORY.md` or `.opencode/history/` protocol. Past changelog references to that retired system remain historical records.
 
 ## Project template
 
 `project/AGENTS.template.md` must contain project facts, authorities, ownership, contracts, validation commands, and project-specific hazards only. Do not duplicate generic framework documentation or global engineering philosophy into every project.
-
 
 ## OMO Slim templates
 
@@ -75,6 +76,7 @@ Keep reusable prompts under `prompts/` as plain Markdown. They may coordinate ex
 - Prefer one bounded prompt for repetitive setup tasks over duplicating the same checklist across project `AGENTS.md` files.
 - Delegate to upstream/native tool workflows when they already exist instead of rewriting them.
 - Project bootstrap/refresh prompts must preserve dirty user work, avoid application-source edits unless explicitly in scope, and report blocked/not-run steps rather than masking them.
+- Environment setup prompts such as `OPENCODE_PLUGIN_SETUP.md` may modify user-level OpenCode configuration only within their declared scope; they must inventory the current environment first, preserve unrelated settings, re-verify upstream compatibility, define rollback, and treat incompatible plugins as blocked/held instead of changing unrelated host versions.
 - A convenience prompt must not bypass a destructive or overwrite confirmation merely to remain one-shot; require one concise checkpoint when an existing dirty/managed path is at risk.
 - `PROJECT_AUDIT.md`, `CODEBASE_ONBOARD.md`, and `CHANGE_AUDIT.md` are read-only by default; do not let convenience prompts silently become mutation workflows.
 - Keep the prompt set small. Prefer an upstream Skill or Spec Kit command when it already owns a task-specific workflow.
@@ -104,6 +106,7 @@ Before packaging a revision:
 10. check that README installation guidance is non-destructive;
 11. run an OpenCode discovery/trigger smoke test when OpenCode is available; otherwise report it as not run;
 12. confirm workflow-style Skills and prompts have explicit activation boundaries and do not silently replace OMO Slim or Spec Kit behavior;
-13. distinguish deterministic static PASS from OpenCode/OMO behavioral PASS and update evaluation evidence honestly.
+13. confirm active global guidance references `MEMORY.md`, does not route to retired History files, and does not require committing `.opencode/memory/` runtime data;
+14. distinguish deterministic static PASS from OpenCode/OMO behavioral PASS and update evaluation evidence honestly.
 
-Do not add a custom installer, manifest engine, migration system, or agent runtime to solve distribution. Distribution is expected to be handled later by APM or another established package manager.
+Do not add a custom installer, manifest engine, migration system, or agent runtime to solve distribution. Reproducible environment setup belongs in bounded prompts and established package/config mechanisms rather than a new runtime.
