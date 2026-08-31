@@ -51,7 +51,7 @@ Keep `global/AGENTS.md` short. It routes to references; it must not become anoth
 
 Keep `global/ENGINEERING.md` compact and principle-oriented. Do not add long technology-specific sections; put those in Skills or project rules.
 
-Keep `global/HISTORY.md` opt-in and inactive at startup.
+Keep `global/HISTORY.md` lazy-loaded rather than startup-loaded. Qualifying repository work should update `.opencode/history/` by default, creating it on the first qualifying update unless the user or project rules explicitly opt out or override the location.
 
 ## Project template
 

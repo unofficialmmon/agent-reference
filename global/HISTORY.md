@@ -1,20 +1,23 @@
 # Work History Reference
 
-Optional rules for projects that keep AI handoff history. History is inactive by default.
+Default handoff rules for qualifying OpenCode project work. History is lazy-loaded after relevant work rather than preloaded at startup.
 
 ## Activation
 
-Read or update history only when:
+History is active by default for qualifying project work unless the user or project `AGENTS.md` explicitly opts out or overrides the history location.
 
-- the user asks to view, resume, continue, update, summarize, or use history; or
-- project `AGENTS.md` explicitly requires a history update after qualifying work.
+Also read history when the user asks to view, resume, continue, update, summarize, or use prior work history.
 
-History is active only when the project already contains `.ai/history/opencode/`. Do not create it automatically without explicit user intent.
+The default project history root is `.opencode/history/`.
+
+- After qualifying work, create `.opencode/history/` and the minimal required files when they do not exist yet.
+- For a read-only history/resume request, if `.opencode/history/` does not exist, report that no project history exists; do not create empty history merely to satisfy the read.
+- A project `AGENTS.md` may explicitly disable history or define a different project-local history location.
 
 ## Layout
 
 ```text
-.ai/history/opencode/
+.opencode/history/
   current.md
   README.md
   work/
@@ -48,18 +51,19 @@ Never scan all history by default.
 
 ## Update policy
 
-Update only after qualifying tasks when history is active, unless the user opts out.
+Update after qualifying tasks unless the user or project rules opt out.
 
 Qualifying work includes file edits, implementation, debugging, refactoring, API/DB/auth/security/build/deploy/config changes, multi-step design/doc restructuring, and useful commit candidates.
 
 Do not update for simple Q&A, explanation-only work, read-only inspection, short snippets, one-off comparisons, or recommendations.
 
-Update minimally:
+On the first qualifying update, create only the minimal history structure needed for the handoff. Update minimally:
 
 1. `current.md`;
 2. affected `work/<area>/index.md` when its summary changed;
 3. current weekly file;
-4. daily index only when useful/already maintained.
+4. `README.md` only when local routing/format notes are actually needed;
+5. daily index only when useful/already maintained.
 
 Record only handoff facts: goal, status, key decisions, changed files, validation result, remaining TODO, unverified boundaries, and useful commit candidate.
 

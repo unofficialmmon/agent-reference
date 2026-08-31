@@ -23,6 +23,7 @@
 
 ### Improved
 
+- Changed work-history handling from opt-in/existing-directory gated to lazy default-on for qualifying project work: global routing now loads `HISTORY.md` at handoff time and creates/updates `.opencode/history/` on the first qualifying change unless the user or project rules explicitly opt out or override the location.
 - Documented project-local OMO Slim configuration as an auto-loaded trust boundary that can alter agent behavior, tool access, and Skill access; bootstrap, refresh, audit, and evaluation guidance now require explicit review and allowlist-preserving composition.
 - Changed OMO stack examples to root `agents.<agent>.skills` overrides, reducing named-preset coupling while preserving user-owned models/MCPs. Documented that runtime `/preset` switching uses separate merge behavior and requires its own routing smoke check when used.
 - Clarified that OMO agent `skills` arrays are effective allowlists, so bootstrap/refresh must preserve deliberate existing entries rather than assuming additive merge behavior.

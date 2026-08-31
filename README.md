@@ -68,7 +68,7 @@ agent-reference/
 ├── global/
 │   ├── AGENTS.md                 small OpenCode global router
 │   ├── ENGINEERING.md            conditional engineering reference
-│   └── HISTORY.md                opt-in work-history protocol
+│   └── HISTORY.md                lazy-loaded qualifying-work history protocol
 ├── project/
 │   └── AGENTS.template.md        factual project entry-point template
 ├── evaluation/
@@ -116,7 +116,7 @@ Recommended OpenCode global files:
 
 - `AGENTS.md` is the short router, priority, scope, safety, and validation baseline.
 - `ENGINEERING.md` is conditional. Load it for architecture/design review, unclear root-cause debugging, refactoring, meaningful cross-boundary work, security/reliability/performance decisions, and structural review—not for every small edit.
-- `HISTORY.md` is opt-in and inactive by default.
+- `HISTORY.md` is lazy-loaded rather than startup-loaded. After qualifying project work it updates `.opencode/history/` by default and creates the minimal history structure on the first qualifying update unless the user or project rules opt out or override the location.
 
 Do not duplicate these documents into every repository.
 
@@ -223,7 +223,7 @@ Start from `project/AGENTS.template.md`, then replace placeholders with reposito
 - real validation commands;
 - project-specific hazards and exceptions.
 
-Do not copy generic framework documentation or global engineering philosophy into the project file; select the relevant Skill instead.
+Do not copy generic framework documentation or global engineering philosophy into the project file; select the relevant Skill instead. Qualifying work history is handled by the global `HISTORY.md` protocol under `.opencode/history/`; mention it in a project `AGENTS.md` only when the project needs to opt out or override the default location/behavior.
 
 ## Spec Kit
 
