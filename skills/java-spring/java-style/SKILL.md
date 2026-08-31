@@ -130,7 +130,7 @@ When repository convention does not say otherwise, order enum content as:
 
 Do not reorder constants when order has semantic, serialization, test, or external-contract meaning.
 
-For simple string/DB-code enums, prefer a `code` field with `getCode()` and `fromCode(String)`; use `dbCode` or generic value names only when an external contract requires them.
+For simple string/DB-code enums, prefer a `code` field with `getCode()` and `fromCode(String)`;
 
 ## Conditions
 
