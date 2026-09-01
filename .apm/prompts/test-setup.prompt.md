@@ -1,24 +1,22 @@
-# `test-setup`
+---
+description: Establish or reconcile a small, trustworthy testing portfolio through real end-to-end Critical Journeys.
+---
 
-**Description:** Establish a small, trustworthy testing portfolio from static/unit evidence through real end-to-end Critical Journeys
+# test-setup
 
-Prepare the current repository with a practical, maintainable testing environment that provides trustworthy evidence from isolated logic through the real end-to-end system boundary.
+Prepare the current repository with a practical, maintainable automated testing environment.
 
-This is a testing-infrastructure and test-portfolio setup task. It may modify test source, test dependencies, test profiles/source sets, test fixtures, test orchestration, test scripts, CI test configuration, and the project-specific Testing section of `AGENTS.md` when required. Do not change production business behavior merely to make tests pass.
-
-The goal is **not** maximum test count, maximum line coverage, or one separate suite per testing label.
+The goal is not maximum test count, arbitrary coverage percentages, or one separate suite for every testing label.
 
 The goal is:
 
 > Establish every testing responsibility applicable to the architecture with small, representative executable evidence, and finish with at least one real Critical Journey through the actual system boundary when E2E is applicable.
 
-## Scope
+This is a repository mutation task. It may modify test source, test dependencies, test profiles/source sets, fixtures, orchestration, test scripts, CI test configuration, and the project-specific Testing section of `AGENTS.md` when required. Do not change production business behavior merely to make tests pass.
 
-This prompt is self-contained testing setup guidance. Project facts remain authoritative, and existing repository testing tools should be reused when they already provide the required evidence.
+## Authority and safety
 
-## Safety and authority
-
-Use this order:
+Use this priority:
 
 1. explicit user instruction;
 2. project-root `AGENTS.md`;
@@ -27,23 +25,13 @@ Use this order:
 5. project-local conventions and selected Skills;
 6. this prompt and generic testing guidance.
 
-Start with:
+Start with `git status --short` and preserve dirty user work and unrelated changes.
 
-```bash
-git status --short
-```
+Do not reset, clean, stash, overwrite unrelated files, replace a healthy testing stack without evidence, or commit/push unless explicitly requested.
 
-Preserve dirty user work and unrelated changes.
+Before materially replacing an existing framework, orchestration topology, dirty test/config file, or maintained CI test path, preserve the current mechanism unless repository evidence justifies replacement.
 
-Do not reset, clean, stash, or overwrite existing test infrastructure merely to obtain a uniform layout.
-
-Before materially replacing an existing test framework, existing orchestration topology, overlapping dirty test/config files, or a maintained CI test path, show one concise mutation checkpoint and preserve the current mechanism unless repository evidence justifies replacement.
-
-Do not commit or push unless explicitly requested.
-
----
-
-# 1. Understand the project before choosing tools
+## 1. Inspect the current project
 
 Inspect only enough maintained material to establish:
 
@@ -64,29 +52,13 @@ Inspect only enough maintained material to establish:
 - current CI test stages;
 - existing fixtures/seeds and local prerequisites.
 
-Classify existing tests by what they actually execute, not by filename or directory name alone.
+Classify existing tests by what they actually execute, not by filename or directory name alone. Do not assume names such as `*IT`, `*E2E`, `integration/`, or `e2e/` prove the boundary.
 
-Do not assume `*IT`, `*E2E`, `integration/`, or `e2e/` accurately describes the boundary without inspecting it.
+Produce a concise architecture/test topology before adding infrastructure.
 
-Produce a concise architecture/test topology before writing new infrastructure.
+## 2. Separate testing responsibilities from coverage goals
 
-Example only:
-
-```text
-Client
-  |
-Gateway
-  |
-  +--> Core --> MariaDB
-  |
-  +--> Cargo --> Redis
-```
-
----
-
-# 2. Use two dimensions: responsibilities and coverage goals
-
-Testing **responsibilities** describe the boundary from which evidence is obtained:
+Testing responsibilities describe the boundary from which evidence is obtained:
 
 - Static
 - Unit
@@ -96,7 +68,7 @@ Testing **responsibilities** describe the boundary from which evidence is obtain
 - System
 - E2E
 
-Coverage **goals** describe the risk to protect, for example:
+Coverage goals describe the risk being protected, for example:
 
 - Endpoint Completeness
 - Critical Journey Coverage
@@ -104,186 +76,121 @@ Coverage **goals** describe the risk to protect, for example:
 - Schema/Data Fidelity
 - Security Boundary
 
-Do not conflate these dimensions.
+Do not conflate these dimensions. One executable test may provide evidence for more than one responsibility or coverage goal.
 
-A single executable test may provide evidence for more than one testing responsibility or coverage goal.
+## 3. Responsibility definitions
 
----
+### Static
 
-# 3. Define the testing responsibilities
+Question: Is the code structurally valid?
 
-## Static
+Use the repository's actual format, lint, compile, typecheck, build, and static-analysis commands. Static validation is a quality gate, not behavioral proof.
 
-Question:
+### Unit
 
-> Is the code structurally valid?
+Question: Does an isolated piece of business/domain logic behave correctly?
 
-Use the repository's actual format/lint/compile/typecheck/build/static-analysis commands.
+Prefer Unit tests for business rules, calculations, validation, state transitions, pure transformations, and important infrastructure-free edge cases.
 
-Static validation is a quality gate, not behavioral proof.
+Do not unit-test trivial framework behavior or getters/setters merely to increase coverage.
 
-## Unit
+### Integration
 
-Question:
+Question: Does an important technical boundary work against the real dependency whose semantics matter?
 
-> Does an isolated piece of business/domain logic behave correctly?
+Typical examples include repository to database, cache adapter to Redis, producer/consumer to broker, persistence/query mapping, filesystem integration, transactions, and infrastructure-specific serialization.
 
-Prefer Unit tests for:
+Prefer disposable real infrastructure where practical. Do not replace meaningful persistence/infrastructure evidence with mocks merely because mocks are faster.
 
-- business rules;
-- calculations;
-- validation;
-- state transitions;
-- pure transformations;
-- important edge cases that do not require infrastructure.
+### Contract
 
-Do not unit-test trivial framework behavior or simple getters/setters solely to increase coverage.
+Question: Do independently evolving components still honor their compatibility boundary?
 
-## Integration
+Typical boundaries include HTTP/OpenAPI, gRPC, event/message schemas, and service producer/consumer wire formats.
 
-Question:
+Contract responsibility is applicable when an independently evolving compatibility boundary exists. A dedicated Pact or Spring Cloud Contract suite is not automatically required.
 
-> Does an important technical boundary work against the real dependency whose semantics matter?
+Existing maintained schema validation, focused producer/consumer boundary tests, or another executable compatibility mechanism may satisfy the responsibility when it can detect the incompatibility being claimed.
 
-Typical examples:
+For independently deployed or versioned producers and consumers, prefer explicit contract validation that can fail before full-system E2E.
 
-- repository ↔ real database;
-- cache adapter ↔ Redis;
-- producer/consumer ↔ broker;
-- filesystem integration;
-- persistence/query mapping;
-- infrastructure-specific serialization/transactions.
+### Component
 
-Prefer disposable real infrastructure where practical.
+Question: Does one deployable application work as a complete component?
 
-Do not replace meaningful persistence/infrastructure evidence with mocks merely because mocks are faster.
-
-## Contract
-
-Question:
-
-> Do independently evolving components still honor their compatibility boundary?
-
-Examples:
-
-- HTTP/OpenAPI;
-- gRPC;
-- event/message schemas;
-- service producer/consumer wire formats.
-
-Contract **responsibility** is applicable when an independently evolving compatibility boundary exists.
-
-A dedicated contract **framework** is not automatically required.
-
-Existing maintained schema validation, focused producer/consumer boundary tests, or another executable compatibility mechanism may satisfy the responsibility when it can detect the claimed incompatibility.
-
-For independently deployed or versioned producers/consumers, prefer explicit contract validation that can fail before full-system E2E.
-
-## Component
-
-Question:
-
-> Does one deployable application work as a complete component?
-
-For a server this may include:
-
-- actual application bootstrap;
-- controller/HTTP boundary;
-- security/filter chain when relevant;
-- serialization;
-- service/domain behavior;
-- persistence;
-- real disposable infrastructure when relevant.
+For a server this may include actual application bootstrap, HTTP/controller boundary, security/filter chain, serialization, service/domain behavior, persistence, and real disposable infrastructure where relevant.
 
 Remote services may be stubbed when the component is intentionally tested in isolation.
 
-## System
+### System
 
-Question:
+Question: Do real backend deployables collaborate correctly?
 
-> Do real backend deployables collaborate correctly?
+Exercise the actual services required to prove the collaboration. Keep System tests to a small number of high-value cross-service flows.
 
-Exercise the actual services needed to prove the collaboration being claimed.
+### E2E
 
-System tests should normally cover only a small number of high-value cross-service flows.
+Question: Can a real client/business Critical Journey enter through the actual system boundary and reach a meaningful final outcome?
 
-## E2E
+For backend-only systems, API E2E through the public Gateway/API is valid when the request traverses the real production-like backend path.
 
-Question:
-
-> Can a real client/business Critical Journey enter through the actual system boundary and reach a meaningful final outcome?
-
-For backend-only systems, API E2E through the public Gateway/API is valid when it traverses the real production-like backend path.
-
-For systems with a browser/mobile client, E2E may extend to the UI when that client boundary is part of the required acceptance evidence.
+For systems with a real browser/mobile client, E2E may extend to that UI when the client boundary is part of required acceptance evidence.
 
 E2E must remain intentionally small and representative.
 
----
-
-# 4. Do not create one suite per label by default
+## 4. Do not create one suite per label
 
 Each applicable testing responsibility must have:
 
-1. a clear responsibility;
+1. a clear responsibility; and
 2. representative executable evidence.
 
-A separate test suite is **not required** when an existing test provides the same boundary evidence without reducing diagnosability.
+A separate test suite is not required when an existing test provides the same boundary evidence without reducing diagnosability.
 
 Evidence may satisfy more than one responsibility.
 
-For example, a request that:
+For example, one request that enters the real public Gateway, traverses real Core/Cargo services, and verifies meaningful final state may provide both System and backend E2E evidence.
 
-- enters the real public Gateway;
-- traverses real Core/Cargo services; and
-- verifies the meaningful final state
+Classify a test by its primary purpose, not by JUnit, REST Assured, Testcontainers, Docker, folder name, or class suffix.
 
-may provide both **System** and **backend E2E** evidence.
+Do not duplicate the same scenario solely to create separate System and E2E labels.
 
-Classify the test by its **primary purpose**, not by JUnit, REST Assured, Testcontainers, Docker, folder name, or class suffix.
-
-Do not duplicate the same scenario solely to create separate `System` and `E2E` labels.
-
----
-
-# 5. Separate Endpoint Completeness from E2E Critical Journeys
+## 5. Separate Endpoint Completeness from E2E Critical Journeys
 
 Endpoint completeness and E2E journey coverage are separate goals.
 
-## Endpoint Completeness
+### Endpoint Completeness
 
-Endpoint completeness verifies the maintained API surface at the **lowest-cost layer that actually exercises the contract being claimed**.
+Endpoint completeness verifies the maintained API surface at the lowest-cost layer that actually exercises the contract being claimed.
 
-Do not treat a mocked service-method Unit test as proof that an HTTP method/path/status/request/response contract works.
+Do not treat a mocked service-method Unit test as proof that HTTP method/path/status/request/response behavior works.
 
 When the user or project rules explicitly require all-API validation:
 
 1. build an endpoint inventory from the maintained API authority plus current routing/source;
-2. account for every maintained method + path;
-3. identify relevant request shape, response shape, status behavior, auth boundary, and compatibility-sensitive error behavior;
+2. account for every maintained method and path;
+3. identify relevant request shape, response shape, status behavior, auth boundary, and compatibility-sensitive errors;
 4. cover every endpoint at an appropriate lower-cost meaningful layer;
-5. record intentional exclusions/deprecated/internal endpoints explicitly.
+5. record intentional exclusions, deprecated endpoints, and internal-only endpoints explicitly.
 
-Do **not** force every endpoint into E2E.
+Do not force every endpoint into E2E.
 
-## Critical Journey Coverage
+### Critical Journey Coverage
 
 E2E verifies a small number of representative real workflows.
 
-Choose Critical Journeys based on business risk and real system topology, for example:
+Choose Critical Journeys based on business risk and actual topology, for example:
 
-- authenticate → primary business action → verify final state;
-- create → retrieve → verify persistence/cross-service result;
+- authenticate -> primary business action -> verify final state;
+- create -> retrieve -> verify persistence/cross-service result;
 - one important authorization failure;
-- one other materially critical workflow when justified.
+- another materially critical workflow only when justified.
 
 Do not copy the endpoint inventory into the E2E suite.
 
----
+## 6. Assess existing evidence before implementation
 
-# 6. Assess current evidence before implementing
-
-Create a matrix such as:
+Build an evidence matrix:
 
 | Responsibility | Purpose | Existing evidence | Status | Missing risk |
 |---|---|---|---|---|
@@ -295,112 +202,67 @@ Create a matrix such as:
 | System | service collaboration | `<test>` | ... | ... |
 | E2E | Critical Journey | `<test>` | ... | ... |
 
-Use `N/A` only when the architecture genuinely has no such boundary.
+Use `N/A` only when the architecture genuinely has no such boundary. Do not mark a missing or inconvenient responsibility `N/A` simply to avoid building it.
 
-Do not mark a missing or inconvenient test layer `N/A` simply to avoid building it.
+A large number of test files does not imply READY.
 
-A large number of test files does not imply `READY`.
-
----
-
-# 7. READY has a strict evidence requirement
+## 7. READY requires fresh execution evidence
 
 A testing responsibility is `READY` only when:
 
 1. its responsibility is explicitly defined;
 2. at least one representative executable test provides the required evidence; and
-3. that test has actually run successfully in the **current repository state**.
+3. that test has actually run successfully in the current repository state.
 
-Use the following distinctions honestly:
+Use these states honestly:
 
-- `READY` — representative evidence ran successfully now;
-- `PARTIAL` — useful evidence exists but does not fully prove the responsibility;
-- `MISSING` — required responsibility has no meaningful evidence;
-- `BLOCKED` — evidence cannot currently run because of a concrete blocker;
-- `NOT RUN` — test/evidence exists but was not executed now;
-- `N/A` — the architecture genuinely has no such boundary.
+- `READY` - representative evidence ran successfully now;
+- `PARTIAL` - useful evidence exists but does not fully prove the responsibility;
+- `MISSING` - required responsibility has no meaningful evidence;
+- `BLOCKED` - evidence cannot run because of a concrete blocker;
+- `NOT RUN` - evidence exists but was not executed now;
+- `N/A` - the architecture genuinely has no such boundary.
 
 `testCompile PASS` is not `test PASS`.
 
-Successful dependency resolution, application startup, test discovery, or compilation is not successful behavioral execution unless that is the actual claim being made.
+Dependency resolution, application startup, test discovery, or compilation is not successful behavioral execution unless that is the actual claim being made.
 
----
+## 8. Build the smallest representative portfolio
 
-# 8. Design the smallest representative portfolio
+Use detailed cases at lower-cost layers and representative collaboration/journeys at higher layers.
 
-Build broad responsibility coverage with minimal duplication.
+- Unit: important logic branches and edge cases.
+- Integration: infrastructure semantics most likely to regress, such as custom SQL, mappings, transactions, cache, broker, and adapters.
+- Contract: compatibility-sensitive producer/consumer boundaries.
+- Component: representative service-level flows proving one deployable boots and handles meaningful requests.
+- System: representative multi-service collaboration flows only.
+- E2E: representative Critical Journeys only.
 
-## Unit
+Do not reimplement the same business permutation at every layer.
 
-Use detailed cases for important logic branches and edge conditions.
+## 9. Java/Spring default tool policy
 
-## Integration
+For Java/Spring repositories, reuse the existing project stack first.
 
-Cover infrastructure semantics most likely to regress, especially:
+When compatible and missing, use this small default candidate set:
 
-- custom SQL/query behavior;
-- persistence mappings;
-- transactions;
-- cache behavior;
-- broker behavior;
-- infrastructure-specific adapters.
+### JUnit 5
 
-## Contract
+Use as the primary runner/test structure. Reuse the project's current assertion library, commonly AssertJ or JUnit assertions.
 
-Protect compatibility-sensitive producer/consumer boundaries. Do not add Pact/Spring Cloud Contract merely to have a "Contract" folder.
+### REST Assured
 
-## Component
-
-Use representative service-level flows proving the deployable actually boots and handles meaningful requests through its important internal boundaries.
-
-## System
-
-Keep only representative multi-service collaboration flows.
-
-## E2E
-
-Keep only representative Critical Journeys.
-
-The same business permutation should not be reimplemented at every layer.
-
----
-
-# 9. Java / Spring default tool policy
-
-For Java/Spring repositories, prefer the existing project stack first.
-
-When compatible and missing, use the following small core as the default candidate set:
-
-## JUnit 5
-
-Primary runner/test structure.
-
-Reuse the project's existing assertion library, commonly AssertJ or JUnit assertions.
-
-## REST Assured
-
-Prefer for real HTTP evidence at:
-
-- Component;
-- System;
-- backend/API E2E.
+Prefer for real HTTP evidence at Component, System, and backend/API E2E layers.
 
 Do not use REST Assured merely to make a Unit test appear higher-fidelity.
 
-## Testcontainers
+### Testcontainers
 
-Prefer for disposable real infrastructure such as:
+Prefer for disposable real infrastructure such as MariaDB/PostgreSQL, Redis, Kafka/RabbitMQ, and other infrastructure whose real semantics matter.
 
-- MariaDB/PostgreSQL;
-- Redis;
-- Kafka/RabbitMQ;
-- other infrastructure whose real semantics matter.
+Testcontainers may also orchestrate service containers when that is simpler and more reproducible than another topology mechanism. Do not containerize every component automatically.
 
-Testcontainers may also orchestrate service containers when that is simpler and more reproducible than another topology mechanism.
-
-Do not containerize every component automatically.
-
-## Supporting tools
+### Supporting tools
 
 Use only when project evidence supports them:
 
@@ -412,32 +274,15 @@ Use only when project evidence supports them:
 
 When the claimed evidence includes the real HTTP server boundary, prefer actual HTTP on a real/random port over MockMvc-only evidence.
 
-## Dedicated contract frameworks
+### Dedicated contract frameworks
 
-Spring Cloud Contract or Pact are conditional.
-
-Before adding one, inspect:
-
-- existing OpenAPI/schema authority;
-- producer/consumer independence;
-- deployment/versioning model;
-- existing contract/boundary evidence;
-- whether a dedicated framework would materially catch incompatibility earlier.
+Spring Cloud Contract and Pact are conditional. Before adding one, inspect the existing OpenAPI/schema authority, producer/consumer independence, deployment/versioning model, existing boundary evidence, and whether a dedicated framework catches incompatibility materially earlier.
 
 Do not add both without a concrete requirement.
 
----
+## 10. Database synchronization and test-data policy
 
-# 10. Database synchronization policy
-
-Use the project's **canonical repository schema authority** as the default test source of truth.
-
-This may be:
-
-- Flyway migrations;
-- Liquibase changelogs;
-- maintained DDL/schema files;
-- another repository-owned schema authority.
+Use the project's canonical repository schema authority as the default test source of truth. This may be Flyway migrations, Liquibase changelogs, maintained DDL/schema files, or another repository-owned schema authority.
 
 Policy:
 
@@ -446,124 +291,70 @@ Policy:
 3. database dumps/backups are for schema-drift investigation, compatibility/migration validation, or recovery when no maintained canonical schema exists;
 4. do not use a developer's shared database dump as the default E2E fixture;
 5. mutation System/E2E must use a disposable or explicitly isolated database;
-6. do not silently treat a shared staging/production-like database as disposable test state.
+6. do not silently treat shared staging/production-like state as disposable test data.
 
-If local-only authentication/bootstrap seed material is required:
+If local-only authentication/bootstrap seed material is required, document how to obtain or generate it, where it belongs, and the exact test command that consumes it. Do not claim clean-checkout reproducibility while a required prerequisite remains undocumented.
 
-- identify it as a prerequisite;
-- document how to obtain or generate it;
-- document where it belongs;
-- document the exact test command that consumes it;
-- do not claim clean-checkout reproducibility while the prerequisite remains undocumented.
+Prefer small explicit fixtures created by the test or deterministic repository-owned seeds. Avoid arbitrary developer-local rows, test-order dependencies, mutable shared staging data, huge opaque dumps as the normal path, uncontrolled wall-clock time, and hidden machine-specific files.
 
-Project-specific image-build/schema/seed commands belong in the project's maintained Testing documentation, not in this generic prompt.
+## 11. Authentication and security evidence
 
----
+When authentication/authorization is a meaningful boundary, cover detailed combinations at the lowest appropriate layer and retain only representative real-boundary evidence at higher layers.
 
-# 11. Test data and isolation
+Representative higher-level cases normally include valid authentication, missing/invalid authentication, and one important authorization restriction when relevant.
 
-Prefer small explicit fixtures created by the test or deterministic repository-owned seeds.
+## 12. Choose one maintainable System/E2E orchestration model
 
-Avoid dependencies on:
+Use the simplest reproducible mechanism matching the current architecture.
 
-- arbitrary developer-local rows;
-- test execution order;
-- mutable shared staging data;
-- huge opaque dumps as the normal path;
-- uncontrolled wall-clock time;
-- hidden machine-specific files.
+Prefer Testcontainers when disposable infrastructure, lifecycle/network control, and per-run isolation fit naturally.
 
-Use fixture builders/factories only where they materially improve clarity.
+Prefer an existing maintained Docker Compose topology when many real services already start together there and reproducing it in Testcontainers would create a second topology source.
 
-Do not build a large internal testing framework for a small portfolio.
-
----
-
-# 12. Authentication and security evidence
-
-When auth/security is a meaningful boundary, cover it at the lowest appropriate level and retain representative real-boundary evidence.
-
-Representative higher-level evidence normally includes only high-value cases such as:
-
-- valid authentication;
-- missing/invalid authentication;
-- one important authorization restriction.
-
-Detailed permission combinations should generally live in lower-cost focused tests rather than being multiplied through E2E.
-
----
-
-# 13. Choose one maintainable System/E2E orchestration model
-
-Use the simplest reproducible mechanism that matches current architecture.
-
-## Testcontainers
-
-Prefer when:
-
-- disposable infrastructure is important;
-- service images already exist or are natural build artifacts;
-- lifecycle/network control from the test runner is practical;
-- per-run isolation is useful.
-
-## Docker Compose
-
-Prefer an existing maintained Compose topology when many real services already start together there and duplicating it in Testcontainers would create a second topology source.
-
-## Existing project-native mechanism
-
-Prefer an existing healthy harness over introducing a parallel mechanism.
+Prefer an existing healthy project-native harness over introducing a parallel mechanism.
 
 Do not maintain equivalent service topology independently in Testcontainers, Compose, and shell scripts without a concrete reason.
 
----
+## 13. Record clean-checkout prerequisites
 
-# 14. Record clean-checkout prerequisites and commands
+Document the prerequisites required to reproduce System/E2E from a clean checkout, including as applicable:
 
-The final testing environment must clearly document what is required to reproduce System/E2E from a clean checkout.
-
-Record, when applicable:
-
-- required application/package builds;
-- required Docker image build/tag commands;
-- canonical schema/migration application;
+- application/package builds;
+- Docker image build/tag commands;
+- schema/migration application;
 - deterministic seed/bootstrap inputs;
 - local-only auth fixtures and how to obtain/generate them;
 - service host mappings;
-- required environment variables without embedding secrets in documentation;
+- required environment variables without embedding secrets;
 - exact test profile/command;
 - required Docker/runtime tooling.
 
-Do not hide a required manual prerequisite behind an unexplained failure.
+Do not hide required manual prerequisites behind unexplained failures.
 
----
+## 14. Expose clear project-native commands
 
-# 15. Expose clear project-native commands
+Use the repository's natural build system and established conventions.
 
-Use the repository's natural build system and existing conventions.
-
-The final project should make the applicable evidence discoverable, for example conceptually:
+Make applicable evidence discoverable conceptually as:
 
 ```text
-Static       -> <real command>
-Unit         -> <real command>
-Integration  -> <real command>
-Contract     -> <real command/evidence>
-Component    -> <real command/evidence>
-System       -> <real command/evidence>
-E2E          -> <real command/evidence>
+Static          -> <real command>
+Unit            -> <real command>
+Integration     -> <real command>
+Contract        -> <real command/evidence>
+Component       -> <real command/evidence>
+System          -> <real command/evidence>
+E2E             -> <real command/evidence>
 Full acceptance -> <real command or documented sequence>
 ```
 
-Do not create a different Maven/Gradle profile for every responsibility when shared commands/source sets provide clearer evidence.
+Do not create a different Maven/Gradle profile for every responsibility when shared commands/source sets are clearer.
 
 A responsibility may point to the same command/test as another responsibility when the same executable evidence genuinely proves both.
 
----
+## 15. Establish the normal AI coding test cycle
 
-# 16. Establish the normal AI coding test cycle
-
-Future implementation work should use a risk-based cycle:
+Future implementation work should use this risk-based cycle:
 
 ```text
 Understand change
@@ -581,181 +372,98 @@ Run required static/build gates
 Run System/E2E when the changed risk crosses those boundaries
 ```
 
-Examples are guidance, not mandatory mappings:
+Do not blindly run every expensive layer after every mechanical edit. Do not skip higher-level evidence when the changed risk actually crosses those boundaries.
 
-- business-rule change -> focused Unit + required static/build;
-- SQL/MyBatis/persistence change -> relevant Unit + real Integration + static/build;
-- service API compatibility change -> Contract evidence + affected lower layers + Component as needed;
-- Gateway/auth/routing change -> Component + representative System/backend-E2E evidence;
-- cross-service business workflow change -> affected lower layers + System + relevant Critical Journey E2E.
+## 16. CI policy
 
-Do not blindly run every expensive layer after every mechanical edit.
+Inspect existing CI before changing it. Do not create an unnecessarily complex matrix.
 
-Do not skip high-level acceptance evidence when the change actually affects the real system path.
-
----
-
-# 17. CI integration
-
-Inspect existing CI before changing it.
-
-If this task is expected to leave the testing environment CI-ready and the repository already has maintained CI, integrate the new commands minimally.
-
-Prefer staged feedback rather than an oversized matrix:
+Prefer staged feedback when useful:
 
 - Fast: Static + Unit;
-- Boundary: relevant Integration/Contract/Component;
-- Acceptance: representative System/E2E.
+- Boundary: Integration + Contract + Component;
+- Acceptance: System + E2E.
 
-Adapt stages/frequency to actual execution cost and repository rules.
+Adapt execution frequency to actual runtime and repository needs. Do not silently weaken existing mandatory CI checks.
 
-Do not weaken existing mandatory checks.
+## 17. Flaky test policy
 
-If CI ownership or environment prerequisites cannot be resolved safely, leave CI unchanged and report the setup as locally executable with CI integration `BLOCKED` or `NOT RUN` rather than guessing.
+Treat a flaky test as a test-system defect.
 
----
+Do not normalize blind retries, arbitrary sleeps, ignored failures, or permanent quarantine of important scenarios without investigation.
 
-# 18. Flaky-test policy
+When timing/eventual consistency is intrinsic, prefer bounded condition-based waiting over fixed sleep where practical.
 
-Treat flakiness as a testing-system defect.
+## 18. Update project documentation
 
-Do not normalize:
+After successful setup, add or refine a concise `Testing` section in project `AGENTS.md` using only facts that actually exist.
 
-- arbitrary sleeps;
-- blind retries;
-- ignored failures;
-- order dependence;
-- permanent quarantine of critical scenarios without root-cause tracking.
+Record:
 
-When eventual consistency/timing is intrinsic, prefer bounded condition-based waiting over fixed sleeps.
+- Static evidence;
+- Unit evidence;
+- Integration real boundaries and evidence;
+- Contract authority/evidence or a real `N/A` reason;
+- Component deployables/evidence;
+- System topology/evidence;
+- E2E Critical Journeys/evidence;
+- Endpoint completeness scope when required;
+- schema/test-data authority;
+- System/E2E prerequisites;
+- actual commands.
 
-Do not hide unstable tests behind success wording.
+If the same executable test provides evidence for multiple responsibilities, record the factual overlap instead of inventing duplicate suites.
 
----
+Do not copy this entire generic prompt into `AGENTS.md`.
 
-# 19. Update project testing documentation
+## 19. Validate the setup itself
 
-After the setup is working, update the project `AGENTS.md` with only durable project-specific testing facts.
+Run representative evidence for each applicable responsibility where the environment permits.
 
-Do not copy this prompt wholesale into the project.
+Report each independently as `READY`, `PARTIAL`, `MISSING`, `BLOCKED`, `NOT RUN`, or `N/A` using the strict READY rule above.
 
-Recommended shape:
+At minimum also run relevant repository static/build checks and `git diff --check` where Git is available.
 
-```md
-## Testing
+Do not claim the full testing environment complete while an applicable E2E Critical Journey remains unimplemented or unexecuted successfully.
 
-### Topology and responsibilities
+## Completion criteria
 
-- Static — `<responsibility/evidence>`
-- Unit — `<responsibility/evidence>`
-- Integration — `<real boundaries/evidence>`
-- Contract — `<contract authority/evidence or N/A reason>`
-- Component — `<deployables/evidence>`
-- System — `<topology/evidence>`
-- E2E — `<Critical Journeys/evidence>`
+The setup is complete when:
 
-### Coverage goals
+1. architecture and testing boundaries are understood and documented;
+2. every applicable responsibility has a clear purpose and executable evidence;
+3. a separate suite is created only when it adds evidence or diagnosability;
+4. lower layers contain detailed logic/infrastructure cases while higher layers remain representative;
+5. Endpoint Completeness and E2E Critical Journey coverage are treated separately;
+6. service contracts have an appropriate executable compatibility mechanism when applicable;
+7. schema/test-data authority is explicit and reproducible;
+8. System/E2E mutation uses disposable or explicitly isolated data;
+9. required local prerequisites are documented with exact commands;
+10. project-native test commands are documented;
+11. at least one real Critical Journey passes through the actual system boundary when E2E is applicable;
+12. actual fresh execution results support every `READY` claim;
+13. excessive duplicate tests have not been introduced;
+14. existing project conventions and user-owned work remain preserved.
 
-- Endpoint completeness: `<scope/authority or not required>`
-- Critical Journeys: `<small representative list>`
-- Schema/data authority: `<path/mechanism>`
-- Security boundary: `<important evidence>`
+## Final report
 
-### Commands and prerequisites
+Keep the final report concise and include:
 
-- Static: `<command>`
-- Unit: `<command>`
-- Integration: `<command>`
-- Contract: `<command/evidence>`
-- Component: `<command/evidence>`
-- System: `<command/evidence>`
-- E2E: `<command/evidence>`
-- Full acceptance: `<command or sequence>`
-- Prerequisites: `<image/seed/runtime/local-only requirements>`
-
-### Selection rule
-
-Use the lowest-cost test that proves the changed risk. Do not duplicate the same assertion at every layer. Endpoint completeness and E2E Critical Journeys are separate goals.
-```
-
-Only document commands/evidence that actually exist.
-
----
-
-# 20. Validate the setup itself
-
-Do not stop after creating dependencies, source sets, or test files.
-
-Execute representative evidence for every applicable responsibility where the environment permits it.
-
-Report independently:
-
-```text
-Static       READY / PARTIAL / MISSING / BLOCKED / NOT RUN / N/A
-Unit         READY / PARTIAL / MISSING / BLOCKED / NOT RUN / N/A
-Integration  READY / PARTIAL / MISSING / BLOCKED / NOT RUN / N/A
-Contract     READY / PARTIAL / MISSING / BLOCKED / NOT RUN / N/A
-Component    READY / PARTIAL / MISSING / BLOCKED / NOT RUN / N/A
-System       READY / PARTIAL / MISSING / BLOCKED / NOT RUN / N/A
-E2E          READY / PARTIAL / MISSING / BLOCKED / NOT RUN / N/A
-```
-
-Remember:
-
-> A responsibility is READY only when its purpose is explicit, representative executable evidence exists, and that evidence ran successfully in the current repository state.
-
-If one executed test provides both System and backend E2E evidence, it may make both responsibilities READY when it genuinely proves both. Do not create a duplicate solely for the table.
-
-If the user required full API validation, also report endpoint inventory coverage separately from E2E Critical Journey coverage.
-
----
-
-# Completion criteria
-
-The setup is complete when, for the actual architecture:
-
-1. testing responsibilities and coverage goals are documented separately;
-2. every applicable responsibility has clear executable evidence, without forcing unnecessary separate suites;
-3. detailed logic is protected at low cost;
-4. infrastructure-sensitive behavior uses real disposable dependencies where meaningful;
-5. independently evolving contracts have meaningful compatibility evidence;
-6. important deployables have Component-level evidence where useful;
-7. multi-service collaboration has representative System evidence where applicable;
-8. at least one real Critical Journey reaches the actual system boundary and passes when E2E is applicable;
-9. endpoint completeness, when required, is tracked independently from E2E journeys;
-10. canonical repository schema authority is used by default for test databases;
-11. mutation System/E2E uses disposable or explicitly isolated data;
-12. local-only prerequisites are documented with reproducible commands;
-13. the portfolio avoids redundant copies of the same scenario across labels;
-14. project-native commands are documented;
-15. actual execution results are reported honestly using the READY rule;
-16. production behavior and unrelated user work were not changed merely to satisfy the testing setup.
-
-Do not describe the testing environment as complete while an applicable E2E path is still unimplemented or unexecuted unless the user explicitly scoped E2E out.
-
----
-
-# Final report
-
-Report only:
-
-1. detected architecture and deployables;
-2. previous evidence matrix;
+1. detected architecture/deployables;
+2. previous testing state;
 3. resulting responsibility/evidence matrix;
-4. coverage goals, including endpoint completeness separately from Critical Journeys;
-5. tools reused and tools added;
-6. representative tests/evidence created;
-7. database/schema/seed strategy;
-8. System/E2E orchestration and any evidence shared between them;
-9. commands and clean-checkout prerequisites established;
-10. `AGENTS.md`/CI changes;
-11. actual validation executed;
-12. `READY`, `PARTIAL`, `MISSING`, `BLOCKED`, `NOT RUN`, or `N/A` items;
+4. tools reused and tools added;
+5. representative tests created or reused by responsibility;
+6. Endpoint Completeness scope if requested;
+7. Contract mechanism;
+8. System topology;
+9. E2E Critical Journey(s);
+10. schema/test-data authority and prerequisites;
+11. commands established;
+12. `AGENTS.md` and CI changes;
 13. files changed;
-14. remaining material testing risks.
+14. actual validation status for Static, Unit, Integration, Contract, Component, System, and E2E;
+15. remaining `PARTIAL`, `MISSING`, `BLOCKED`, `NOT RUN`, or `N/A` items;
+16. remaining material testing risks.
 
-Keep the final report concise.
-
-The target is not "many tests."
-
-The target is a small, trustworthy portfolio that covers the full applicable path from isolated logic to a real Critical Journey.
+The target is not many tests. The target is a small, trustworthy test portfolio covering the full path from isolated logic to a real end-to-end Critical Journey.
