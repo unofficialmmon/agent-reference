@@ -80,6 +80,23 @@ If this repository uses Spec Kit:
 - current project contracts/source and explicit user requirements still remain authoritative;
 - do not start Spec Kit automatically for unrelated routine fixes.
 
+## Testing
+
+Record only the testing topology, executable evidence, commands, and prerequisites that actually exist in this project.
+
+- Static evidence: `<command/scope>`
+- Unit evidence: `<command/scope>`
+- Integration evidence: `<real boundaries and command/evidence>`
+- Contract evidence: `<authority/command/evidence or N/A reason>`
+- Component evidence: `<deployables and command/evidence>`
+- System evidence: `<multi-service topology and command/evidence>`
+- E2E Critical Journeys: `<small representative list and command/evidence>`
+- Endpoint completeness: `<API authority/scope/command or not required>`
+- Schema/test-data authority: `<migrations/DDL/seed paths>`
+- System/E2E prerequisites: `<images, local-only seeds, runtime requirements>`
+
+If the same executable test provides evidence for more than one responsibility, record the factual overlap rather than creating an artificial duplicate suite.
+
 ## Validation
 
 Use the repository's real commands. Replace this table with the project commands that actually exist.

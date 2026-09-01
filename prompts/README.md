@@ -38,6 +38,14 @@ Read /path/to/agent-reference/prompts/AGENT_SYNC.md and execute it completely fo
 
 Command: `agent-sync` — Update agent-reference APM dependencies and reconcile project agent configuration. Run only after `apm-setup` has completed; do not install APM or perform first-time migration.
 
+## Test environment setup
+
+```text
+Read /path/to/agent-reference/prompts/TEST_SETUP.md and execute it completely for the current repository.
+```
+
+Command: `test-setup` — Establish or reconcile a small, trustworthy testing portfolio from Static/Unit through representative System/E2E evidence. It may modify test infrastructure, tests, test CI configuration, and the project Testing section; it must not change production behavior merely to make tests pass.
+
 ## Existing repository after stack/architecture changes
 
 ```text
@@ -73,6 +81,7 @@ Do not modify files.
 - User-level OpenCode plugin stack setup/reconciliation: `OPENCODE_PLUGIN_SETUP`.
 - New repository bootstrap: `PROJECT_BOOTSTRAP`; existing repository APM adoption: `APM_SETUP`.
 - Existing APM dependency maintenance: `AGENT_SYNC`.
+- Testing portfolio/infrastructure setup: `TEST_SETUP`.
 - Already configured but stale: `PROJECT_REFRESH`.
 - Unsure whether setup is healthy: `PROJECT_AUDIT` before mutating anything.
 - Do not chain all prompts by default. Choose the narrowest one that matches the task.
