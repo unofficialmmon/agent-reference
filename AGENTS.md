@@ -1,6 +1,6 @@
 # agent-reference maintenance rules
 
-This repository is a static source collection for OpenCode references, bounded convenience prompts, Skills, and maintainer-only validation artifacts. It is not a runtime, installer, workflow engine, or orchestration layer.
+This repository is a static source collection for OpenCode references, bounded convenience prompts, Skills, APM producer artifacts, and maintainer-only validation artifacts. It is not a runtime, installer, workflow engine, or orchestration layer.
 
 ## Priority
 
@@ -26,6 +26,24 @@ A Skill being present under `skills/` means it is available for selection, not g
 - Keep technology Skills grouped by domain.
 - Keep Skills with deployment, credentials, browser automation, process execution, local-server automation, profiling, destructive operations, or significant tool dependencies under `skills/operational/`.
 - Do not move an operational Skill into an ordinary technology group merely because it is popular or official.
+
+## APM producer packaging
+
+The reviewed catalog and the APM producer surface have separate responsibilities:
+
+- `skills/<category>/<id>/` is the canonical reviewed Skill source and remains the authority for provenance/hash review.
+- `.apm/skills/<id>/` is an exact byte-for-byte distribution mirror for APM-selectable non-operational Skills.
+- `.apm/prompts/` contains synchronized APM packaging mirrors for package-provided commands.
+
+Never edit an `.apm/skills/` mirror independently. Update the canonical Skill and lock metadata first, then update the packaging mirror to exactly match the complete canonical directory, including references, assets, scripts, and licenses.
+
+Every non-operational canonical Skill must be exposed through `.apm/skills/` unless a future explicit packaging policy records a narrower exception. Every `skills/operational/` ID must remain absent from `.apm/skills/`; operational catalog presence is never package-level installation permission.
+
+Do not use symlinks for APM Skill mirrors. Packaging must contain real files and preserve exact bytes.
+
+The package exposing a Skill is not activation. Consumer manifests must select only project-relevant IDs through APM's supported `dependencies.apm[*].skills` mechanism; do not normalize consumers to `all` or wildcard selection.
+
+For the default OpenCode target, APM-deployed Skills live under project `.agents/skills/`. Validate the effective OpenCode discovery winner as well as physical deployment: a higher-precedence same-ID global/user Skill can shadow the APM copy. Byte-identical shadowing may be reported and preserved; divergent shadowing is a blocked runtime mismatch and must not be resolved by silently deleting user/global content.
 
 ## Local Skills
 
@@ -82,6 +100,7 @@ Keep reusable prompts under `prompts/` as plain Markdown. They may coordinate ex
 - `PROJECT_AUDIT.md`, `CODEBASE_ONBOARD.md`, and `CHANGE_AUDIT.md` are read-only by default; do not let convenience prompts silently become mutation workflows.
 - Keep the prompt set small. Prefer an upstream Skill or Spec Kit command when it already owns a task-specific workflow.
 - Keep canonical reusable prompts under `prompts/`. `.apm/prompts/` contains synchronized APM packaging mirrors, not a second source of truth; generated target output is native APM-owned.
+- APM setup/sync examples must use the installed APM schema, including `dependencies.apm` for package dependencies, and must distinguish package primitive availability from catalog presence.
 
 ## Validation before release
 
@@ -105,10 +124,14 @@ Before packaging a revision:
 8. review prompt mutability, stop conditions, command validity, OMO routing boundaries, and responsibility overlap;
 9. parse/validate OMO JSONC examples and confirm every referenced Skill ID exists in the catalog or OMO built-ins as intended;
 10. check that README installation guidance is non-destructive;
-11. run an OpenCode discovery/trigger smoke test when OpenCode is available; otherwise report it as not run;
-12. confirm workflow-style Skills and prompts have explicit activation boundaries and do not silently replace OMO Slim or Spec Kit behavior;
-13. confirm active memory guidance uses `opencode-mem`, treats memory as contextual evidence, and does not require `.opencode/history/` or `.opencode/memory/` runtime state;
-14. confirm plugin-stack evaluation distinguishes OpenCode runtime plugins from standalone companions and requires actual behavior evidence rather than config presence;
-15. distinguish deterministic static PASS from OpenCode/OMO behavioral PASS and update evaluation evidence honestly.
+11. verify `.apm/skills/` contains exactly the non-operational catalog IDs and that every mirrored file inventory/hash matches its canonical `skills/` directory;
+12. verify no operational Skill is exposed through `.apm/skills/` and no APM Skill mirror contains symlinks;
+13. verify canonical APM setup/sync prompts remain byte-identical to their `.apm/prompts/` mirrors;
+14. when APM is available, smoke-test one selected Skill deployment to the OpenCode target root and verify effective discovery precedence; otherwise report the package behavior as not run;
+15. run an OpenCode discovery/trigger smoke test when OpenCode is available; otherwise report it as not run;
+16. confirm workflow-style Skills and prompts have explicit activation boundaries and do not silently replace OMO Slim or Spec Kit behavior;
+17. confirm active memory guidance uses `opencode-mem`, treats memory as contextual evidence, and does not require `.opencode/history/` or `.opencode/memory/` runtime state;
+18. confirm plugin-stack evaluation distinguishes OpenCode runtime plugins from standalone companions and requires actual behavior evidence rather than config presence;
+19. distinguish deterministic static PASS from APM/OpenCode/OMO behavioral PASS and update evaluation evidence honestly.
 
-Do not add a custom installer, manifest engine, migration system, or agent runtime to solve distribution. Reproducible environment setup belongs in bounded prompts and established package/config mechanisms rather than a new runtime.
+Do not add a custom installer, manifest engine, migration system, or agent runtime to solve distribution. Reproducible distribution belongs in established APM primitives and bounded configuration prompts.

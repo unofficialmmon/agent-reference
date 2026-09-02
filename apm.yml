@@ -1,6 +1,6 @@
 name: agent-reference
-version: 0.1.0
-description: Curated OpenCode references, Skills, and bounded convenience prompts.
+version: 0.2.0
+description: Curated OpenCode references, deployable safe Skills, and bounded convenience prompts.
 license: MIT
 targets:
   - opencode

@@ -9,7 +9,7 @@ OpenCode        harness, AGENTS.md, native Skill discovery
 OMO Slim        orchestration
 Spec Kit        explicit specification workflow
 agent-reference shared reference source
-APM             distributes selected Skills/prompts to projects
+APM             distributes selected safe Skills and package prompts to projects
 ```
 
 ## Core rule
@@ -18,15 +18,17 @@ APM             distributes selected Skills/prompts to projects
 
 The default global active Skill count is **zero**. Install only the Skills relevant to a real project or an explicit task. This keeps ambient metadata small and prevents unrelated technology or methodology guidance from influencing work.
 
+The reviewed catalog lives under `skills/`. APM exposes the non-operational subset through exact mirrors under `.apm/skills/`; exposing an ID makes it selectable by APM but does not activate it in any consumer repository.
+
 ## Quick start
 
 Apply the pack incrementally.
 
 1. Diff/merge `global/AGENTS.md` into `~/.config/opencode/AGENTS.md`; never overwrite an existing personal file blindly.
 2. Copy `global/ENGINEERING.md` and `global/MEMORY.md` only after checking for existing files with those names.
-3. For the recommended user-level tooling stack, explicitly run `prompts/OPENCODE_PLUGIN_SETUP.md`. It inventories the current environment and re-verifies official upstream compatibility before changing OpenCode/tool configuration.
-4. Start with zero global Skills. Install technology Skills project-locally unless they are genuinely useful across most repositories.
-5. Create/refine the project `AGENTS.md` manually or explicitly run `prompts/PROJECT_BOOTSTRAP.md`. Bootstrap can also install selected project Skills and create the minimal project-local OMO Slim Skill-routing override.
+3. For the recommended user-level tooling stack, explicitly run `prompts/OPENCODE_PLUGIN_SETUP.md`.
+4. Start with zero global Skills. Use APM to select only project-relevant non-operational Skills; manual copying is a fallback, not the preferred package workflow.
+5. Create/refine the project `AGENTS.md` manually or explicitly run `prompts/PROJECT_BOOTSTRAP.md`.
 6. Restart OpenCode after plugin/Skill/routing changes before checking discovery and behavior.
 
 Example tooling setup request:
@@ -34,13 +36,6 @@ Example tooling setup request:
 ```text
 Read /path/to/agent-reference/prompts/OPENCODE_PLUGIN_SETUP.md and execute it completely for my current OpenCode environment.
 Preserve unrelated OpenCode and OMO Slim configuration.
-```
-
-Example bootstrap request:
-
-```text
-Read /path/to/agent-reference/prompts/PROJECT_BOOTSTRAP.md and execute it for the current repository.
-Do not modify application source during bootstrap.
 ```
 
 Run small smoke checks before relying on the setup:
@@ -53,7 +48,7 @@ Run small smoke checks before relying on the setup:
 5. Memory authority: confirm recalled memory is treated as context and current Git/source/config/tests still win on conflict.
 ```
 
-A smoke PASS proves only the exercised surface; it does not certify every Skill, plugin, model, host version, or future release.
+A smoke PASS proves only the exercised surface; it does not certify every Skill, plugin, model, host version, package target, or future release.
 
 ### Observed current smoke evidence
 
@@ -72,7 +67,8 @@ agent-reference/
 ├── NOTICE
 ├── apm.yml                       APM producer metadata
 ├── .apm/                         APM producer layout
-│   └── prompts/                  synchronized packaging mirrors
+│   ├── prompts/                  synchronized command packaging mirrors
+│   └── skills/                   exact mirrors of non-operational catalog Skills
 ├── global/
 │   ├── AGENTS.md                 small OpenCode global router
 │   ├── ENGINEERING.md            conditional engineering reference
@@ -90,7 +86,7 @@ agent-reference/
 │   └── omo/                      project-local OMO Skill-routing examples
 ├── prompts/
 │   ├── README.md                 copy-paste entry-point index
-│   ├── OPENCODE_PLUGIN_SETUP.md  compatibility-aware user environment setup
+│   ├── OPENCODE_PLUGIN_SETUP.md
 │   ├── PROJECT_BOOTSTRAP.md
 │   ├── PROJECT_REFRESH.md
 │   ├── PROJECT_AUDIT.md
@@ -136,7 +132,7 @@ The retired file-based work journal under `.opencode/history/` and the retired S
 
 ## Recommended OpenCode tooling setup
 
-`prompts/OPENCODE_PLUGIN_SETUP.md` is the single reproducible entry point for installing/reconciling the user-level stack after environment changes. It rechecks current official repositories, stable releases, compatibility issues, OpenCode/OMO behavior, and existing configuration before mutation.
+`prompts/OPENCODE_PLUGIN_SETUP.md` is the reproducible entry point for installing/reconciling the user-level stack after environment changes. It rechecks current official repositories, stable releases, compatibility issues, OpenCode/OMO behavior, and existing configuration before mutation.
 
 Current role separation:
 
@@ -161,8 +157,6 @@ Policy states:
 - pilot: `opencode-pty`, only after current OpenCode/runtime/platform compatibility is proven;
 - not baseline/hold: DCP, `opencode-snip`, `opencode-vibeguard`, Morph Fast Apply, and `opencode-ignore` unless a later explicit evaluation changes the decision.
 
-The policy is not a permanent version lock. A current regression may downgrade an active candidate, and a held/pilot tool should be promoted only when upstream evidence and a runtime smoke prove the relevant boundary.
-
 ### Memory behavior
 
 `opencode-mem` normally auto-captures useful technical context after conversation turns when a session becomes idle and can inject relevant memories into later sessions. Users and agents should not need to say “remember this” after ordinary work.
@@ -179,9 +173,20 @@ Plannotator is a human review surface, not mandatory ceremony. Use local/manual 
 
 AgentsView replaces TokenScope in the recommended stack when standalone analytics is acceptable. Keep analytics outside OpenCode runtime hooks. Use local/loopback CLI/UI for session discovery, history, token usage, and cost/statistics; a permanently running daemon is not a baseline requirement.
 
-## Skill catalog
+## Skill catalog and APM distribution
 
-Skills remain source catalog content until copied to an OpenCode discovery root.
+`skills/<category>/<id>/` is the canonical reviewed source. `catalog/skills.lock.json` records provenance, hashes, activation guidance, operational risk, known issues, and redistribution evidence.
+
+`.apm/skills/<id>/` is the APM producer surface. It contains byte-identical mirrors of every **non-operational** catalog Skill. The current catalog contains 40 Skills: 31 non-operational IDs are APM-selectable and the 9 IDs under `skills/operational/` remain intentionally catalog-only.
+
+The maintainer audit fails if:
+
+- a non-operational canonical Skill is missing from `.apm/skills/`;
+- an operational or unknown ID appears there;
+- a mirror has a different file set or bytes from its canonical source;
+- a mirror uses symlinks.
+
+Do not edit `.apm/skills/` independently.
 
 ### Core
 
@@ -198,6 +203,14 @@ Skills remain source catalog content until copied to an OpenCode discovery root.
 - `mybatis-generator`
 - `java-style`
 
+### Database
+
+- `mariadb-features`
+- `mariadb-query-optimization`
+- `redis-connections`
+- `redis-core`
+- `supabase-postgres-best-practices`
+
 ### Engineering workflows
 
 These are explicit-use workflows, not ambient defaults:
@@ -206,36 +219,57 @@ These are explicit-use workflows, not ambient defaults:
 - `refactor-plan` — plan-only for multi-file refactors; waits for confirmation and contains stack-specific examples that must be adapted.
 - `verification-before-completion` — completion gate; fresh output is necessary, but the chosen instrument must actually cover the claim.
 
-See `catalog/skills.lock.json` for activation guidance, provenance, limitations, and risk metadata.
-
 ### Other technology groups
 
-The catalog also retains reviewed frontend/React/Vue, database, infrastructure, mobile, and vendor-maintained snapshots. Select them only for relevant projects.
+The catalog also retains reviewed frontend/React/Vue, infrastructure, mobile, and vendor-maintained snapshots. Select them only for relevant projects.
 
 ### Operational Skills
 
 `skills/operational/` may involve scripts, browser/profile access, local servers, MCP/tool dependencies, credentials, deployment, migrations, profiling, source rewriting, or resource creation/deletion.
 
-They require explicit selection and review. Where useful, configure OpenCode `permission.skill` as `ask` or `deny` for operational IDs. Presence in the catalog is never permission to execute their actions.
+They require explicit selection and review. They are **not** exposed through this package's `.apm/skills/` surface, so a normal `agent-reference` APM dependency cannot install them by Skill ID. This is intentional.
 
-## Installing selected Skills
+## Installing selected Skills with APM
 
-Project-local installation is the safer default:
+Project-local APM selection is the preferred distribution path for non-operational Skills.
 
-```bash
-mkdir -p <repo>/.opencode/skills
-cp -R skills/core/api-contract <repo>/.opencode/skills/api-contract
-cp -R skills/java-spring/spring-boot <repo>/.opencode/skills/spring-boot
+For a private SSH-backed dependency, a consumer manifest can use:
+
+```yaml
+dependencies:
+  apm:
+    - git: ssh://git@github.com/unofficialmmon/agent-reference.git
+      ref: main
+      skills:
+        - api-contract
+        - spring-boot
+        - mariadb-features
+        - mariadb-query-optimization
 ```
 
-Global installation is appropriate only for Skills used across most repositories:
+Then use the installed APM version's normal install/update flow. For the default OpenCode target, selected Skills are deployed under:
 
-```bash
-mkdir -p ~/.config/opencode/skills
-cp -R skills/core/generated-code ~/.config/opencode/skills/generated-code
+```text
+<project>/.agents/skills/<skill-id>/
 ```
 
-Before copying, inspect all visible OpenCode Skill roots for the same ID. Do not overwrite another version or edit a reviewed upstream snapshot in place.
+Do not use `all` or wildcard selection merely because the package exposes multiple safe Skills. Persist only IDs justified by the project.
+
+### Discovery precedence and same-ID global Skills
+
+Physical deployment is not sufficient validation. Current OpenCode discovery can allow a user-level `~/.config/opencode/skills/<id>` copy to take precedence over a project `.agents/skills/<id>` APM deployment.
+
+When the same ID exists in both places:
+
+- byte-identical content is `SHADOWED_IDENTICAL`; it may be preserved and is not a divergent duplicate;
+- different content is `SHADOWED_DIVERGENT`; the effective runtime Skill is not the pinned APM copy and must be treated as a blocked ownership/version conflict;
+- never delete or overwrite a user/global Skill merely to make project validation pass.
+
+Use `/apm-setup` for first adoption and `/agent-sync` for routine revision/Skill reconciliation; both prompts require effective discovery validation.
+
+### Manual fallback
+
+Manual copying is appropriate only when APM is unavailable or intentionally not adopted. Copy complete directories, preserve upstream bytes/licenses, and check all discovery roots for a same ID before writing.
 
 ## OMO Slim project-local routing
 
@@ -243,7 +277,7 @@ Keep user-level OMO Slim configuration generic (models, variants, MCPs, companio
 
 Because project-local OMO configuration is auto-loaded and can change agent behavior, tools, and Skill access, treat `.opencode/oh-my-opencode-slim.json[c]` as trusted executable configuration. Review it before opening an unfamiliar repository with OMO Slim.
 
-`templates/omo/` contains reviewed **examples**, not blindly installable profiles. They use root `agents.<agent>.skills` overrides so project stack routing stays separate from user-owned models, variants, MCPs, and companion settings. Runtime `/preset` switching has separate merge behavior, so projects that depend on preset switching must verify routing after a switch or deliberately maintain preset-local routing.
+`templates/omo/` contains reviewed examples, not blindly installable profiles. Runtime `/preset` switching has separate merge behavior, so projects that depend on preset switching must verify routing after a switch or deliberately maintain preset-local routing.
 
 Default routing principle: leave Orchestrator, Explorer, Librarian, and Oracle alone unless the repository has a concrete reason to override them; route proven implementation Skills to Fixer and proven UI Skills to Designer. Operational Skills are never automatic.
 
