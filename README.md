@@ -24,12 +24,12 @@ Apply the pack incrementally.
 
 1. Diff/merge `global/AGENTS.md` into `~/.config/opencode/AGENTS.md`; never overwrite an existing personal file blindly.
 2. Copy `global/ENGINEERING.md` and `global/MEMORY.md` only after checking for existing files with those names.
-3. For the recommended user-level plugin stack, explicitly run `prompts/OPENCODE_PLUGIN_SETUP.md`. It inventories the current environment and re-verifies official upstream compatibility before changing OpenCode configuration.
+3. For the recommended user-level tooling stack, explicitly run `prompts/OPENCODE_PLUGIN_SETUP.md`. It inventories the current environment and re-verifies official upstream compatibility before changing OpenCode/tool configuration.
 4. Start with zero global Skills. Install technology Skills project-locally unless they are genuinely useful across most repositories.
 5. Create/refine the project `AGENTS.md` manually or explicitly run `prompts/PROJECT_BOOTSTRAP.md`. Bootstrap can also install selected project Skills and create the minimal project-local OMO Slim Skill-routing override.
 6. Restart OpenCode after plugin/Skill/routing changes before checking discovery and behavior.
 
-Example plugin setup request:
+Example tooling setup request:
 
 ```text
 Read /path/to/agent-reference/prompts/OPENCODE_PLUGIN_SETUP.md and execute it completely for my current OpenCode environment.
@@ -49,18 +49,17 @@ Run small smoke checks before relying on the setup:
 1. Injection: summarize currently injected global rules without reading files.
 2. Non-interference: perform one typo-only/mechanical change and confirm no planning ceremony or unrelated edit.
 3. Project priority: request a small project-specific implementation and confirm project ownership/conventions override generic guidance.
-4. Resume: after one qualifying task has written a Simple Memory handoff, open a fresh session and ask to continue; confirm exact handoff recall is reconciled with current Git/source state.
+4. Memory continuity: allow a normal interactive session to auto-capture useful context, close it, then open a fresh session and confirm relevant memory can reappear without a mandatory manual handoff.
+5. Memory authority: confirm recalled memory is treated as context and current Git/source/config/tests still win on conflict.
 ```
 
 A smoke PASS proves only the exercised surface; it does not certify every Skill, plugin, model, host version, or future release.
 
-### Observed local smoke evidence
+### Observed current smoke evidence
 
-A prior local run on OpenCode `1.18.24` with OMO Slim `2.2.17` observed global rule injection, non-interference on a typo-only edit, project-rule priority, and project-local Skill discovery. Those observations predate the Simple Memory/plugin-stack transition and remain limited compatibility evidence.
+A validated macOS environment on 2026-09-02 observed OpenCode `1.18.26`, OMO Slim `2.2.18`, cc-safety-net `2.3.1`, RTK `0.46.0`, Notifier `0.2.8`, opencode-mem `2.25.0`, Plannotator `0.27.11`, and AgentsView `0.42.0` working together. OMO delegation, safety analysis, RTK integration, opencode-mem fresh-session persistence/automatic capture/auto-injection, Plannotator local approval feedback, and AgentsView OpenCode session discovery all passed. Simple Memory and TokenScope were removed from the active environment.
 
-A later plugin-setup smoke on macOS arm64/zsh with OpenCode `1.18.25`, Bun `1.3.11`, Node `22.23.1`, and OMO Slim `2.2.17` verified cc-safety-net `2.3.0`, Simple Memory `1.1.1` in manual mode, TokenScope `1.8.1`, and Notifier `0.2.8` under the bounded setup policy. `opencode-pty` `0.3.6` remained blocked because the published release could not be safely promoted past the Bun-native/Node-host loader risk; Snip and VibeGuard remained on hold. No project `.opencode/` artifacts or deprecated History state were created. See `evaluation/README.md` for the exact smoke evidence and limitations.
-
-Re-run relevant smoke checks after changing host versions or selected references/plugins.
+See `evaluation/README.md` for the exact evidence and limitations. Re-run relevant smoke checks after changing host versions or selected references/tools.
 
 ## Layout
 
@@ -77,7 +76,7 @@ agent-reference/
 ├── global/
 │   ├── AGENTS.md                 small OpenCode global router
 │   ├── ENGINEERING.md            conditional engineering reference
-│   └── MEMORY.md                 Simple Memory-backed persistent handoff protocol
+│   └── MEMORY.md                 opencode-mem continuity/authority policy
 ├── project/
 │   └── AGENTS.template.md        factual project entry-point template
 ├── evaluation/
@@ -129,25 +128,56 @@ Recommended OpenCode global files:
 
 - `AGENTS.md` is the short router, priority, scope, safety, and validation baseline.
 - `ENGINEERING.md` is conditional. Load it for architecture/design review, unclear root-cause debugging, refactoring, meaningful cross-boundary work, security/reliability/performance decisions, and structural review—not for every small edit.
-- `MEMORY.md` is lazy-loaded for explicit resume/continue requests and qualifying handoff updates. It uses Simple Memory as persistent storage while treating Git/source/configuration/tests as the actual source of truth.
+- `MEMORY.md` defines how automatically injected/recalled `opencode-mem` context is interpreted: repository evidence remains authoritative, routine work does not require a manual handoff, and manual memory operations are exceptional/on-demand.
 
-The retired file-based work journal under `.opencode/history/` is no longer part of the active protocol. Do not recreate it when Simple Memory is unavailable; report persistent handoff as blocked instead.
+The retired file-based work journal under `.opencode/history/` and the retired Simple Memory branch-handoff protocol are not part of the active system. Do not recreate them when persistent memory is unavailable; continue from current repository evidence.
 
-Simple Memory runtime data under `.opencode/memory/` is machine-local by default and should not be committed unless a repository has an explicit reviewed reason. Never ignore the whole `.opencode/` directory because trackable commands, Skills, and project configuration may live there.
+`opencode-mem` uses its own local storage (commonly under `~/.opencode-mem/data`) rather than project-local `.opencode/memory/`. Local storage and capture-provider privacy are separate boundaries: auto-capture can send relevant context to a configured remote provider. Never use memory as a secret store.
 
-## Recommended OpenCode plugin setup
+## Recommended OpenCode tooling setup
 
-`prompts/OPENCODE_PLUGIN_SETUP.md` is the single reproducible entry point for installing/reconciling the user-level plugin stack after environment changes. It intentionally rechecks current official repositories, releases, compatibility issues, OpenCode API generation, OMO Slim behavior, and existing configuration before mutation.
+`prompts/OPENCODE_PLUGIN_SETUP.md` is the single reproducible entry point for installing/reconciling the user-level stack after environment changes. It rechecks current official repositories, stable releases, compatibility issues, OpenCode/OMO behavior, and existing configuration before mutation.
 
-Current policy starts from:
+Current role separation:
 
-- baseline candidates: Simple Memory, cc-safety-net, TokenScope, OpenCode Notifier;
-- pilot candidate: `opencode-pty`, only when the current OpenCode/runtime/platform are supported;
-- hold candidates: `opencode-snip` and `opencode-vibeguard` until their relevant compatibility/safety risks are resolved or explicitly re-approved.
+```text
+OpenCode runtime
+├─ OMO Slim          orchestration / subagents
+├─ cc-safety-net     destructive-command guard
+├─ RTK               command-output/token optimization
+├─ opencode-mem      automatic persistent project memory
+├─ Notifier          notifications
+└─ Plannotator       human plan/document/code review
 
-The policy is not a permanent version lock. A current regression may downgrade a baseline candidate, and a previously held candidate should be promoted only when upstream evidence demonstrates that the blocking issue is actually fixed in a published compatible release.
+External companion
+└─ AgentsView        session/history/token/cost analytics
+```
 
-Simple Memory is configured in explicit/manual mode (`autoLoad: false`, `autoSave: false`). `global/MEMORY.md` owns when the agent reads or writes handoff state. This avoids relying on automatic context injection or automatic conversation persistence.
+Policy states:
+
+- active baseline: OMO Slim, cc-safety-net, RTK, OpenCode Notifier, opencode-mem, Plannotator;
+- external companion: AgentsView, kept outside the OpenCode plugin hook stack;
+- retired: Simple Memory and TokenScope;
+- pilot: `opencode-pty`, only after current OpenCode/runtime/platform compatibility is proven;
+- not baseline/hold: DCP, `opencode-snip`, `opencode-vibeguard`, Morph Fast Apply, and `opencode-ignore` unless a later explicit evaluation changes the decision.
+
+The policy is not a permanent version lock. A current regression may downgrade an active candidate, and a held/pilot tool should be promoted only when upstream evidence and a runtime smoke prove the relevant boundary.
+
+### Memory behavior
+
+`opencode-mem` normally auto-captures useful technical context after conversation turns when a session becomes idle and can inject relevant memories into later sessions. Users and agents should not need to say “remember this” after ordinary work.
+
+Manual memory is for immediate add/search/list/correction/migration needs. Stable rules belong in `AGENTS.md` or maintained project documentation, and stale memory never overrides current repository evidence.
+
+Do not create `.opencode-mem-project` automatically. Use it only when multiple nested repositories are intentionally one shared memory domain.
+
+### Plan/code review
+
+Plannotator is a human review surface, not mandatory ceremony. Use local/manual review for important plans, documents, or diffs when human approval/annotation materially helps; do not force it for trivial work. Remote sharing/network review features are opt-in.
+
+### Analytics
+
+AgentsView replaces TokenScope in the recommended stack when standalone analytics is acceptable. Keep analytics outside OpenCode runtime hooks. Use local/loopback CLI/UI for session discovery, history, token usage, and cost/statistics; a permanently running daemon is not a baseline requirement.
 
 ## Skill catalog
 
@@ -217,13 +247,13 @@ Because project-local OMO configuration is auto-loaded and can change agent beha
 
 Default routing principle: leave Orchestrator, Explorer, Librarian, and Oracle alone unless the repository has a concrete reason to override them; route proven implementation Skills to Fixer and proven UI Skills to Designer. Operational Skills are never automatic.
 
-For persistent memory, `global/MEMORY.md` recommends a single-writer model: the coordinating Orchestrator updates durable handoff state after verifying subagent discoveries against current repository evidence.
+Persistent memory does not require a separate OMO handoff writer. Subagents return discoveries through normal orchestration, the coordinating agent verifies material findings against the repository, and `opencode-mem` handles routine capture/injection.
 
 ## Convenience prompts
 
 The prompt set is intentionally small and explicit. `prompts/README.md` provides copy-paste entry requests:
 
-- `OPENCODE_PLUGIN_SETUP.md` — user-level OpenCode plugin inventory, official-upstream re-verification, installation/reconciliation, smoke tests, and rollback.
+- `OPENCODE_PLUGIN_SETUP.md` — user-level OpenCode/tool inventory, official-upstream re-verification, installation/reconciliation, smoke tests, migration, and rollback.
 - `PROJECT_BOOTSTRAP.md` — onboarding and initial project agent setup.
 - `PROJECT_REFRESH.md` — reconcile stale project guidance, selected Skills, and Spec Kit integration.
 - `PROJECT_AUDIT.md` — read-only health check of agent-facing configuration.
@@ -232,4 +262,4 @@ The prompt set is intentionally small and explicit. `prompts/README.md` provides
 - `APM_SETUP.md` — initial APM adoption and selected-content deployment.
 - `AGENT_SYNC.md` — routine APM dependency and agent-configuration sync.
 
-Choose the narrowest prompt that matches the task. Project bootstrap/refresh must not silently mutate user-level plugin/model/MCP configuration; plugin environment setup is a separate explicit action.
+Choose the narrowest prompt that matches the task. Project bootstrap/refresh must not silently mutate user-level plugin/model/MCP configuration; tooling environment setup is a separate explicit action.

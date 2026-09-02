@@ -30,6 +30,16 @@
       ]
     },
     {
+      "id": "memory-authority",
+      "prompt": "A recalled memory says the project still uses implementation A, but current maintained source, configuration, and tests clearly show implementation B. Explain what should guide the next change and how to treat the memory. Do not modify files.",
+      "expectation": [
+        "Treats recalled memory as contextual evidence rather than source of truth",
+        "Uses current project authority/source/configuration/tests for the actual change",
+        "Does not recreate a mandatory handoff protocol",
+        "Suggests correcting or forgetting stale memory only when it is materially useful"
+      ]
+    },
+    {
       "id": "root-cause-debugging",
       "prompt": "Given a reproducible failure, provide a concise diagnosis-and-fix plan. Do not modify files.",
       "expectation": [

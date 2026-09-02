@@ -51,9 +51,9 @@ Keep `global/AGENTS.md` short. It routes to references; it must not become anoth
 
 Keep `global/ENGINEERING.md` compact and principle-oriented. Do not add long technology-specific sections; put those in Skills or project rules.
 
-Keep `global/MEMORY.md` lazy-loaded rather than startup-loaded. It defines explicit Simple Memory-backed resume/handoff behavior, not an automatic context injector or a work journal. Persistent memory must remain subordinate to current repository state, use a compact branch/worktree handoff, avoid secrets, and prefer a single coordinating writer when OMO Slim delegates work.
+Keep `global/MEMORY.md` compact and aligned with `opencode-mem`. Automatic capture and relevant-memory injection are the normal path; the document defines authority, resume, privacy, scope, and exceptional manual-memory behavior rather than a mandatory handoff ceremony. Persistent memory must remain subordinate to current repository evidence.
 
-Do not reintroduce the legacy `global/HISTORY.md` or `.opencode/history/` protocol. Past changelog references to that retired system remain historical records.
+Do not reintroduce the legacy `global/HISTORY.md`, `.opencode/history/`, or Simple Memory branch-handoff protocol. Past changelog references to retired systems may remain as historical records, but active guidance must not route to them.
 
 ## Project template
 
@@ -76,7 +76,8 @@ Keep reusable prompts under `prompts/` as plain Markdown. They may coordinate ex
 - Prefer one bounded prompt for repetitive setup tasks over duplicating the same checklist across project `AGENTS.md` files.
 - Delegate to upstream/native tool workflows when they already exist instead of rewriting them.
 - Project bootstrap/refresh prompts must preserve dirty user work, avoid application-source edits unless explicitly in scope, and report blocked/not-run steps rather than masking them.
-- Environment setup prompts such as `OPENCODE_PLUGIN_SETUP.md` may modify user-level OpenCode configuration only within their declared scope; they must inventory the current environment first, preserve unrelated settings, re-verify upstream compatibility, define rollback, and treat incompatible plugins as blocked/held instead of changing unrelated host versions.
+- Environment setup prompts such as `OPENCODE_PLUGIN_SETUP.md` may modify user-level OpenCode configuration only within their declared scope; they must inventory the current environment first, preserve unrelated settings, re-verify upstream compatibility, define rollback, and treat incompatible tools as blocked/held instead of changing unrelated host versions.
+- Runtime plugins and standalone companions must be distinguished. Do not install an analytics companion as an OpenCode hook merely for convenience.
 - A convenience prompt must not bypass a destructive or overwrite confirmation merely to remain one-shot; require one concise checkpoint when an existing dirty/managed path is at risk.
 - `PROJECT_AUDIT.md`, `CODEBASE_ONBOARD.md`, and `CHANGE_AUDIT.md` are read-only by default; do not let convenience prompts silently become mutation workflows.
 - Keep the prompt set small. Prefer an upstream Skill or Spec Kit command when it already owns a task-specific workflow.
@@ -106,7 +107,8 @@ Before packaging a revision:
 10. check that README installation guidance is non-destructive;
 11. run an OpenCode discovery/trigger smoke test when OpenCode is available; otherwise report it as not run;
 12. confirm workflow-style Skills and prompts have explicit activation boundaries and do not silently replace OMO Slim or Spec Kit behavior;
-13. confirm active global guidance references `MEMORY.md`, does not route to retired History files, and does not require committing `.opencode/memory/` runtime data;
-14. distinguish deterministic static PASS from OpenCode/OMO behavioral PASS and update evaluation evidence honestly.
+13. confirm active memory guidance uses `opencode-mem`, treats memory as contextual evidence, and does not require `.opencode/history/` or `.opencode/memory/` runtime state;
+14. confirm plugin-stack evaluation distinguishes OpenCode runtime plugins from standalone companions and requires actual behavior evidence rather than config presence;
+15. distinguish deterministic static PASS from OpenCode/OMO behavioral PASS and update evaluation evidence honestly.
 
 Do not add a custom installer, manifest engine, migration system, or agent runtime to solve distribution. Reproducible environment setup belongs in bounded prompts and established package/config mechanisms rather than a new runtime.

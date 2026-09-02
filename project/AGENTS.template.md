@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Keep this file factual and project-specific. Global personal defaults may live in `~/.config/opencode/AGENTS.md` and `~/.config/opencode/ENGINEERING.md`; do not duplicate them here.
+Keep this file factual and project-specific. Global personal defaults may live in `~/.config/opencode/AGENTS.md`, `~/.config/opencode/ENGINEERING.md`, and `~/.config/opencode/MEMORY.md`; do not duplicate them here.
 
 ## Project summary
 
@@ -20,6 +20,8 @@ Use this order when sources conflict:
 4. maintained source, tests, schemas, build/configuration;
 5. project-local Skills/conventions;
 6. global engineering defaults and global Skills.
+
+Injected or recalled memory is contextual evidence only. It may explain prior work, but it never outranks the authorities above and must be reconciled with the current repository before it drives a material change.
 
 List any project document that must be read before substantive changes:
 

@@ -4,11 +4,11 @@
 
 ### Added
 
-- Added `global/MEMORY.md` as the Simple Memory-backed persistent handoff protocol, using exact branch/worktree handoff recall, repository-state reconciliation, sparse durable memory, single-writer OMO guidance, and explicit secret/privacy boundaries.
-- Added `prompts/OPENCODE_PLUGIN_SETUP.md` as a one-prompt, environment-aware setup/reconciliation workflow that re-verifies official upstreams before installing the recommended OpenCode plugin stack and records smoke tests/rollback.
+- Added `global/MEMORY.md` as the `opencode-mem` persistent-context policy: automatic capture/injection by default, repository-state reconciliation, project-scope guidance, optional multi-repo identity, manual-memory exceptions, and explicit local-storage/remote-provider privacy boundaries.
+- Added `prompts/OPENCODE_PLUGIN_SETUP.md` as a one-prompt, environment-aware setup/reconciliation workflow that re-verifies official upstreams before reconciling the recommended OpenCode tooling stack and records migration, runtime smoke tests, startup isolation, and rollback.
 - Added `evaluation/README.md` with a minimal static-vs-behavioral UAT model and a non-mutating `evaluation/agentrc.eval.jsonc` as optional cross-agent judge input.
 - Added zero-dependency maintainer-only `tools/audit.py` and `tools/README.md` for deterministic Skill/lock/template/prompt/license/link/eval checks, with machine-readable JSON output.
-- Added `prompts/README.md` with copy-paste one-line entry requests for plugin setup, bootstrap, refresh, audit, onboarding, and change audit.
+- Added `prompts/README.md` with copy-paste one-line entry requests for plugin/tooling setup, bootstrap, refresh, audit, onboarding, and change audit.
 - Added APM producer metadata and synchronized `.apm/prompts/` packaging mirrors for `apm-setup` and the routine `agent-sync` prompt.
 - Added `templates/omo/` with project-local OMO Slim Skill-routing examples for Java/Spring, Java/Spring/MyBatis, MyBatis+MBG, React/Vite, Next.js/React, Vue/Vite, Nuxt, and React Native plus a conditional routing guide.
 - Added five bounded project convenience prompts:
@@ -25,9 +25,12 @@
 
 ### Improved
 
-- Replaced the active file-journal History protocol with explicit Simple Memory handoff routing. `global/HISTORY.md` and the repository's `.opencode/history/` state are retired; Simple Memory is intentionally used with `autoLoad: false` and `autoSave: false`, and current Git/source/configuration remain authoritative.
-- Defined a compatibility-aware plugin policy: Simple Memory, cc-safety-net, TokenScope, and Notifier start as baseline candidates; `opencode-pty` is a compatibility-gated pilot; `opencode-snip` and `opencode-vibeguard` remain hold candidates until their relevant upstream risks are resolved or explicitly re-approved.
-- Recorded first post-transition plugin-stack host-smoke evidence for macOS arm64, OpenCode `1.18.25`, Bun `1.3.11`, Node `22.23.1`, and OMO Slim `2.2.17`: the four baseline candidates passed/preserved under the bounded setup workflow, PTY remained blocked on the published loader-risk boundary, and Hold candidates stayed uninstalled.
+- Retired the interim Simple Memory/TokenScope baseline. Simple Memory's manual branch/worktree handoff (`remember`/exact recall/update, `handoff/<branch>`, single-writer OMO policy, project-local `.opencode/memory/`) is no longer active guidance; TokenScope is replaced by standalone AgentsView analytics.
+- Made `opencode-mem` the active memory system. Routine work now relies on idle auto-capture and relevant fresh-session injection, while manual memory is reserved for immediate add/search/correction/migration and current Git/source/configuration/tests remain authoritative.
+- Defined the current role-separated tooling policy: OMO Slim, cc-safety-net, RTK, Notifier, opencode-mem, and Plannotator are active runtime/integrations; AgentsView is an external local analytics companion; `opencode-pty` remains a compatibility-gated pilot; DCP, Snip, VibeGuard, Morph Fast Apply, and opencode-ignore are not baseline.
+- Recorded current tool-stack host-smoke evidence for macOS on 2026-09-02: OpenCode `1.18.26`, OMO Slim `2.2.18`, cc-safety-net `2.3.1`, RTK `0.46.0`, Notifier `0.2.8`, opencode-mem `2.25.0`, Plannotator `0.27.11`, and AgentsView `0.42.0` passed their defined checks; opencode-mem fresh-session persistence, interactive auto-capture, and auto-injection all passed.
+- Added startup-failure isolation guidance after a misleading low-file-descriptor error was traced to a stale Herdr background-server/macOS protected-folder access context rather than the OpenCode plugin stack.
+- Removed the retired `.opencode/memory/` ignore from this repository and made the maintainer audit reject reintroduced Simple Memory runtime state alongside the already retired History artifacts.
 - Split the static audit into the stable `tools/audit.py` policy entry point and preserved `tools/_audit_core.py` implementation so current required/deprecated artifact policy can evolve without rewriting the validated Skill/hash/OMO/link checks.
 - Documented project-local OMO Slim configuration as an auto-loaded trust boundary that can alter agent behavior, tool access, and Skill access; bootstrap, refresh, audit, and evaluation guidance require explicit review and allowlist-preserving composition.
 - Changed OMO stack examples to root `agents.<agent>.skills` overrides, reducing named-preset coupling while preserving user-owned models/MCPs. Documented that runtime `/preset` switching uses separate merge behavior and requires its own routing smoke check when used.

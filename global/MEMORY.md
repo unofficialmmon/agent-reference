@@ -1,120 +1,122 @@
 # Persistent Memory Reference
 
-Default persistent-handoff rules for qualifying OpenCode project work. Memory is lazy-loaded for resume/handoff work rather than preloaded at startup.
+Persistent-memory policy for OpenCode projects using `opencode-mem`.
 
-This reference assumes the Simple Memory plugin (`@knikolov/opencode-plugin-simple-memory`) is available. The recommended mode is explicit/manual memory use with `autoLoad: false` and `autoSave: false`.
+Memory is contextual continuity, not a source of truth. Current Git state, maintained source, configuration, contracts, tests, and fresh validation override stored or injected memory.
 
-Memory is a handoff aid, not a source of truth. Current Git state, maintained source, configuration, contracts, and fresh validation override stored memory.
+## Normal behavior
 
-## Activation
+`opencode-mem` is designed to work without a mandatory handoff ceremony.
 
-Load this reference when either condition applies:
+Normal flow:
 
-- the user asks to resume, continue, pick up, summarize, or use prior project work;
-- qualifying repository work changed files/configuration and a persistent handoff should be updated before the final response.
+1. work normally in OpenCode;
+2. after conversation turns, the plugin may auto-capture memorable technical context when the session becomes idle;
+3. later sessions may receive relevant project memories automatically;
+4. the agent reconciles that context with the current repository before relying on it.
 
-Qualifying work includes implementation, debugging, refactoring, API/DB/auth/security/build/deploy/config changes, multi-step design/doc restructuring, and other useful commit candidates.
+A `Memory captured` notification is expected runtime feedback when auto-capture succeeds. It is not a request for the user or agent to save another handoff.
 
-Do not load or update persistent memory for simple Q&A, explanation-only work, read-only inspection, short snippets, one-off comparisons, or recommendations.
+Do not require routine commands such as `remember`, `recall`, `update`, `handoff/main`, or `handoff/<branch>` before finishing work. Do not recreate the old branch-scoped Simple Memory workflow under new names.
 
-If the Simple Memory tools are unavailable, do not recreate the legacy `.opencode/history/` system or invent a handoff. Continue from current repository evidence when possible and report persistent-memory resume/update as `BLOCKED`.
+## Authority and stale memory
 
-## Handoff identity
+Treat injected, searched, or manually added memory as a hint about prior work.
 
-Use one current handoff memory per active branch/worktree:
+When memory and current repository evidence differ:
 
-- type: `context`;
-- scope: `handoff/<current-branch>`;
-- scope matching: `exact`.
+1. explicit user instruction and project authority remain primary;
+2. maintained contracts/source/configuration/tests describe the current implementation;
+3. memory may explain history or intent but must not override current evidence;
+4. correct or forget stale memory when it is materially misleading and safe to do so.
 
-Resolve the current Git branch before recall/update. If HEAD is detached, use a stable scope such as `handoff/detached/<short-sha>` for that detached state.
+Stable normative rules belong in `AGENTS.md`, maintained contracts, configuration, or another authoritative project document. Memory is better suited to project-specific decisions, prior failed approaches, temporary blockers, useful work context, and preferences discovered across sessions.
 
-Simple Memory stores data under the OpenCode project directory (`.opencode/memory/`). Separate worktree directories therefore have separate local memory stores; do not assume a handoff automatically crosses worktrees or machines.
-
-## Resume procedure
+## Resume and continue requests
 
 For an explicit resume/continue request:
 
-1. read the project-root `AGENTS.md` when present;
-2. determine the current branch/worktree state;
-3. call `memory_recall` with `type="context"`, exact scope `handoff/<current-branch>`, and a small limit sufficient to detect duplicates;
-4. if no exact handoff exists, report that no persistent handoff exists for the current branch and continue only from current repository evidence;
-5. if more than one exact handoff exists, resolve the duplicate state before trusting or updating it; do not append another duplicate;
-6. verify the recalled goal/status against `git status`, current source/configuration/contracts, and any validation evidence that materially affects the next action;
-7. recall additional `decision`, `blocker`, `pattern`, or `preference` memories only when they are relevant to the current task.
+1. read the project-root `AGENTS.md` when present and inspect the current repository state;
+2. use already injected memory when relevant;
+3. search memory only when the injected context is insufficient or a specific prior fact is needed;
+4. reconcile material recalled facts with current Git/source/configuration/contracts/tests;
+5. continue from repository evidence even when no useful memory exists.
 
-Do not use `memory_context` as the authoritative resume path because it intentionally builds a compact/truncated context pack. Use exact `memory_recall` for the current handoff.
+Persistent memory is optional continuity. Missing or unavailable memory must not block ordinary repository work when current evidence is sufficient.
 
-## Handoff update
+## Manual memory use
 
-After qualifying work, keep exactly one current handoff for the active branch.
+Use the `memory` tool on demand rather than as a required end-of-task step.
 
-Use an upsert pattern because Simple Memory has separate remember/update tools:
+Reasonable manual uses include:
 
-1. exact-recall the current `context/handoff/<branch>` memory;
-2. if none exists, create it with `memory_remember`;
-3. if exactly one exists, replace its current contents with `memory_update`;
-4. if duplicates exist, reconcile/remove stale duplicates before writing and never create another handoff entry for the same exact scope.
+- immediately preserving a durable project decision before auto-capture runs;
+- searching for prior work or a known decision that was not injected;
+- listing or inspecting memories during troubleshooting;
+- correcting or forgetting stale/incorrect memory;
+- exporting/importing or migrating memory when the user explicitly wants that operation.
 
-Keep the handoff compact, normally about 500-1500 characters. Record only facts useful to the next session:
+Do not manually store every completed task, transient observation, terminal log, diff, or conversation summary. Automatic capture should handle normal continuity.
 
-- Goal;
-- Status;
-- Changed areas/files when useful;
-- Validation actually run and its result;
-- Remaining work;
-- Unverified boundaries;
-- Next action.
+## Scope and project identity
 
-The current handoff is a resume pointer, not a journal. Overwrite/update it as work advances.
+Use project scope by default unless there is a deliberate reason to query across projects.
 
-## Durable memory
+`opencode-mem` normally derives project identity from the current project/Git context. Do not create `.opencode-mem-project` automatically.
 
-Store durable memory sparsely and only when it is likely to remain useful across sessions:
+Use a `.opencode-mem-project` marker only when multiple nested repositories are intentionally one memory domain, for example:
 
-- `decision/<topic>` — durable architectural/design decisions and their reason;
-- `blocker/<topic>` — unresolved blockers that still constrain work;
-- `pattern/<topic>` — recurring repository patterns that are not already better expressed by authoritative project rules;
-- `preference/<topic>` — explicit user/project preferences that are appropriate to persist.
+```text
+workspace/
+├── .opencode-mem-project
+├── gateway/.git
+├── core/.git
+└── cargo/.git
+```
 
-Prefer `AGENTS.md`, maintained contracts, configuration, and Skills for durable normative rules. Do not duplicate an authoritative rule into memory merely for convenience.
+The marker changes project identity semantics; treat it as an intentional project decision rather than generic setup boilerplate.
 
-Do not automatically convert ordinary conversation, transient observations, or every completed task into durable memory.
+## Storage, provider, and privacy boundaries
 
-## OMO Slim ownership
+`opencode-mem` stores memory in its own local data directory by default (commonly under `~/.opencode-mem/data`), not in the retired project-local Simple Memory `.opencode/memory/` store.
 
-When OMO Slim delegates work, persistent-memory writes belong to the Orchestrator/coordinating agent.
+Local storage does not imply that every memory operation is local. Auto-capture and profile learning may use a configured AI provider. When that provider is remote, relevant conversation/work context can leave the machine for extraction even though the resulting memory database is local.
 
-- Subagents may read relevant memory when needed.
-- Subagents should return discoveries to the Orchestrator rather than independently mutating persistent memory.
-- The Orchestrator verifies material discoveries against the repository before persisting them.
+Therefore:
 
-This single-writer policy reduces races and contradictory handoffs during parallel delegation.
+- never intentionally store secrets, credentials, API keys, tokens, cookies, private keys, authorization headers, or other sensitive authentication material;
+- do not treat memory as a credential store;
+- do not print provider secrets while troubleshooting;
+- keep the web UI on loopback/localhost by default;
+- if the UI is intentionally exposed beyond loopback, follow the current upstream authentication guidance;
+- understand the configured capture provider and its data boundary before enabling auto-capture for sensitive repositories.
 
-## Safety and privacy
+The shared policy does not mandate one provider or model. Preserve a healthy existing provider configuration unless the user explicitly asks to change it. A validated environment may use a remote provider such as Z.AI, while another environment may use a different supported provider.
 
-Never store:
+## OMO Slim and delegated work
 
-- secrets, credentials, API keys, tokens, cookies, private keys, or authorization headers;
-- personal/sensitive data that is not explicitly appropriate for project-local persistence;
-- private host details that should not be written to local project state;
-- full conversations or private reasoning;
-- full diffs, large terminal output, repeated failure logs, or generated diagnostics.
+Do not impose the retired Simple Memory single-writer protocol on OMO Slim.
 
-`memory_forget` and `memory_update` are not secure-erasure mechanisms; deletion/audit data may retain previous content. Therefore sensitive values must never enter memory in the first place.
+Subagents should still return important discoveries to the coordinating agent as part of normal orchestration. The coordinating agent verifies material findings against repository evidence. Routine persistent-memory capture remains the memory plugin's responsibility unless an immediate manual memory operation is actually useful.
 
-Treat `.opencode/memory/` as machine-local runtime state by default. Do not commit it to Git unless a project has an explicit, reviewed reason to do so. Prefer a local exclusion such as `.git/info/exclude` when only one developer needs the setting; use a project `.gitignore` entry only when the repository intentionally standardizes the exclusion. Never ignore all of `.opencode/` because trackable commands, Skills, and project configuration may live there.
+## Migration and failure behavior
 
-## Legacy History migration
+The retired systems are:
 
-Do not bulk-import the legacy `.opencode/history/` journal tree.
+- file-based `.opencode/history/` work journals;
+- Simple Memory branch/worktree handoffs;
+- project-local `.opencode/memory/` as the active memory store.
 
-When migrating an existing project:
+Do not recreate them when `opencode-mem` is unavailable.
 
-1. read only `current.md` and the currently active area/index material needed to understand unfinished work;
-2. verify that state against current Git/source/configuration;
-3. create one current branch handoff plus only genuinely durable decisions/blockers/patterns/preferences;
-4. open a new OpenCode session and verify that a concise resume request can exact-recall the handoff and reconcile it with the repository;
-5. only after that smoke test succeeds, remove the legacy History routing/files.
+Existing legacy Simple Memory data may be retained temporarily during migration or audit. Do not delete legacy data automatically merely because the new plugin is installed. First prove fresh-session persistence and relevant-memory injection in the replacement system; cleanup is a separate explicit action.
 
-Past changelog entries that describe when the History system existed remain historical records and should not be rewritten merely because the active protocol changed.
+A meaningful `opencode-mem` validation should distinguish:
+
+- plugin load;
+- basic memory search/list/add behavior when exercised;
+- persistence across a closed and fresh OpenCode session;
+- automatic capture in a normal long-lived interactive session;
+- relevant memory injection in a fresh session.
+
+Configuration presence alone is not runtime proof.

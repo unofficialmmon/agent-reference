@@ -2,8 +2,8 @@
 """Deterministic static audit entry point for agent-reference.
 
 The implementation remains in _audit_core.py; this entry point owns the current
-required-file/deprecated-artifact policy so retired reference protocols do not
-remain required by the preserved audit core.
+required-file/deprecated-artifact policy so retired reference/runtime protocols
+do not remain active through the preserved audit core.
 """
 
 from __future__ import annotations
@@ -48,12 +48,25 @@ def audit_required_files(audit: core.Audit) -> None:
             audit.error("REQUIRED_FILE", "Required repository file is missing.", item)
 
     deprecated = [
-        "global/HISTORY.md",
-        ".opencode/history",
+        (
+            "global/HISTORY.md",
+            "DEPRECATED_HISTORY",
+            "Retired work-history artifact must not be active in agent-reference.",
+        ),
+        (
+            ".opencode/history",
+            "DEPRECATED_HISTORY",
+            "Retired work-history artifact must not be active in agent-reference.",
+        ),
+        (
+            ".opencode/memory",
+            "DEPRECATED_SIMPLE_MEMORY",
+            "Retired Simple Memory runtime state must not be active in agent-reference.",
+        ),
     ]
-    for item in deprecated:
+    for item, code, message in deprecated:
         if (ROOT / item).exists():
-            audit.error("DEPRECATED_HISTORY", "Retired work-history artifact must not be active in agent-reference.", item)
+            audit.error(code, message, item)
 
     license_dir = ROOT / "catalog/LICENSES"
     if not license_dir.is_dir() or not any(path.is_file() for path in license_dir.iterdir()):

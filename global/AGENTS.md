@@ -7,7 +7,7 @@ Applies to OpenCode projects unless explicit user instructions, the project-root
 Global references live beside this file under `~/.config/opencode/`:
 
 - `ENGINEERING.md` — conditional engineering reference for architecture, root-cause debugging, refactoring, cross-boundary changes, review, reliability/security/performance decisions, and non-trivial validation questions.
-- `MEMORY.md` — lazy-loaded persistent handoff behavior for qualifying project changes and explicit resume/continue requests. It expects the Simple Memory plugin when persistent cross-session handoff is enabled.
+- `MEMORY.md` — persistent-memory policy for `opencode-mem`: authority, resume behavior, project scope, privacy, and exceptional manual memory use. Automatic capture/injection is handled by the plugin rather than by a mandatory agent handoff step.
 - selected Skills under `~/.config/opencode/skills/<name>/` — on-demand technology/task guidance.
 
 Do not preload every reference or Skill.
@@ -21,17 +21,17 @@ Do not preload every reference or Skill.
 5. Relevant selected global Skills.
 6. `~/.config/opencode/ENGINEERING.md` when its activation criteria apply.
 7. This file.
-8. `~/.config/opencode/MEMORY.md` when qualifying handoff work or an explicit resume request activates it.
 
-Generic preferences never override concrete repository contracts. If a project `AGENTS.md` statement conflicts with maintained contracts, configuration, tests, or current source, treat it as possible configuration drift and investigate rather than silently following a stale rule.
+Injected or recalled memory is contextual evidence, not an additional authority layer. Generic preferences and memory never override concrete repository contracts. If a project `AGENTS.md` statement or recalled memory conflicts with maintained contracts, configuration, tests, or current source, investigate the drift rather than silently following stale context.
 
 ## Startup and reference loading
 
 - Read the project-root `AGENTS.md` first when present.
-- Do not read `MEMORY.md` at startup merely because it exists. Load it for explicit resume/continue/prior-work requests and after qualifying repository work that changed files or configuration when a persistent handoff should be updated.
-- Qualifying work includes implementation, debugging, refactoring, API/DB/auth/security/build/deploy/config changes, multi-step design/doc restructuring, and other useful commit candidates.
-- Do not load or update persistent memory for simple Q&A, explanation-only work, read-only inspection, short snippets, one-off comparisons, or recommendations.
-- When `MEMORY.md` is active, persistent memory is a handoff hint only. Verify it against current Git/source/configuration/contracts before acting. If memory tools are unavailable, do not recreate legacy `.opencode/history/`; report persistent-memory resume/update as `BLOCKED` and use current repository evidence.
+- `opencode-mem` may inject relevant project memory automatically in a new session. Do not require a manual recall step merely because a session is resuming.
+- Do not load `MEMORY.md` at every startup. Load it when memory behavior itself matters: resume ambiguity, manual memory management, project-scope questions, migration, privacy, or a conflict between recalled context and repository evidence.
+- Treat injected/recalled memory as a hint. Confirm material facts against current Git/source/configuration/contracts/tests before acting.
+- Do not require `remember`, branch handoff, or end-of-task memory updates during normal work. Let auto-capture handle routine persistence; use the manual `memory` tool only when immediate explicit storage/search/correction is useful.
+- If memory is unavailable or contains no relevant record, continue from current repository evidence. Do not recreate legacy `.opencode/history/` or Simple Memory branch-handoff state.
 - Load `ENGINEERING.md` for architecture/design review, unclear root-cause debugging, refactoring, dependency/technology choices, meaningful cross-boundary implementation, security/reliability/performance work, or code-quality review where structural trade-offs matter.
 - Do not load `ENGINEERING.md` for simple Q&A, typo/docs-only edits, direct mechanical changes, or a small local implementation that clearly follows an established project pattern.
 - Use native Skill discovery and load only Skills relevant to the task.
