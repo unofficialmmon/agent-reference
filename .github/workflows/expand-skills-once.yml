@@ -1,0 +1,47 @@
+name: expand-skills-once
+
+on:
+  push:
+    branches:
+      - agent-reference-skills-expansion-20260902
+
+permissions:
+  contents: write
+
+jobs:
+  expand:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout bootstrap branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Materialize one-off generator
+        run: |
+          base64 -d .tmp/expand_skills.py.gz.b64 | gunzip > .tmp/expand_skills.py
+          base64 -d .tmp/skills-expansion-manifest.json.gz.b64 | gunzip > .tmp/skills-expansion-manifest.json
+          base64 -d .tmp/audit.py.gz.b64 | gunzip > tools/audit.py
+          python3 -m py_compile .tmp/expand_skills.py tools/audit.py
+
+      - name: Generate pinned Skill expansion
+        run: python3 .tmp/expand_skills.py
+
+      - name: Run deterministic maintainer audit
+        run: python3 tools/audit.py
+
+      - name: Check whitespace errors
+        run: git diff --check
+
+      - name: Commit generated expansion
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'expand reviewed Skill catalog [skills-expansion-generated]'
+          git push origin "HEAD:${GITHUB_REF_NAME}"
