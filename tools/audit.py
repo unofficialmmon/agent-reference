@@ -8,7 +8,14 @@ do not remain active through the preserved audit core.
 
 from __future__ import annotations
 
+import sys
 from pathlib import Path
+
+# Importing _audit_core would normally create tools/__pycache__/..., which the
+# audit correctly treats as a generated artifact. Disable bytecode generation
+# before importing the implementation so a normal audit run does not create its
+# own failure condition.
+sys.dont_write_bytecode = True
 
 import _audit_core as core
 
