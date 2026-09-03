@@ -25,7 +25,7 @@ jobs:
           python3 -m json.tool catalog/skills-expansion-2026-09-03.json >/dev/null
       - name: Preserve declared-only NestJS license provenance
         run: |
-          rm -f .github/skills-integration-trigger-2.txt
+          rm -f .github/skills-integration-trigger-*.txt
           python3 - <<'PY'
           import json
           from pathlib import Path
@@ -33,20 +33,23 @@ jobs:
           script = Path('tools/_integrate_skills_once.py')
           text = script.read_text()
           old = '    raise RuntimeError(f"missing license evidence: {item[\'id\']}")'
-          new = '''    if item["id"] == "nestjs-best-practices" and item["license"] == "MIT":
-              target = ROOT / "catalog/LICENSES/nestjs-best-practices-LICENSE-NOTICE.md"
-              target.write_text(
-                  "# Upstream license notice\\n\\n"
-                  "The pinned upstream `SKILL.md` declares `license: MIT`, but the repository at "
-                  f"`{item['revision']}` contains no root license file. This notice preserves that "
-                  "provenance limitation; no absent upstream license text is fabricated.\\n",
-                  encoding="utf-8",
-              )
-              return str(target.relative_to(ROOT))
-          raise RuntimeError(f"missing license evidence: {item['id']}")'''
+          replacement = "\n".join([
+              '    if item["id"] == "nestjs-best-practices" and item["license"] == "MIT":',
+              '        target = ROOT / "catalog/LICENSES/nestjs-best-practices-LICENSE-NOTICE.md"',
+              '        target.write_text(',
+              '            "# Upstream license notice\\n\\n"',
+              '            + "The pinned upstream `SKILL.md` declares `license: MIT`, but the repository at `"',
+              '            + item["revision"]',
+              '            + "` contains no root license file. This notice preserves that provenance limitation; "',
+              '            + "no absent upstream license text is fabricated.\\n",',
+              '            encoding="utf-8",',
+              '        )',
+              '        return str(target.relative_to(ROOT))',
+              '    raise RuntimeError(f"missing license evidence: {item[\'id\']}")',
+          ])
           if old not in text:
               raise SystemExit('license fallback marker not found')
-          script.write_text(text.replace(old, new, 1))
+          script.write_text(text.replace(old, replacement, 1))
 
           manifest_path = Path('catalog/skills-expansion-2026-09-03.json')
           manifest = json.loads(manifest_path.read_text())
