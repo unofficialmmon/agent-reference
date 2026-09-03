@@ -1,0 +1,39 @@
+name: integrate-reviewed-skills-once
+
+on:
+  push:
+    branches:
+      - agent-reference-skills-integration-20260903
+
+permissions:
+  contents: write
+
+concurrency:
+  group: integrate-reviewed-skills-once
+  cancel-in-progress: false
+
+jobs:
+  integrate:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Validate one-shot inputs
+        run: |
+          python3 -m py_compile tools/_integrate_skills_once.py tools/audit.py
+          python3 -m json.tool catalog/skills-expansion-2026-09-03.json >/dev/null
+      - name: Materialize reviewed snapshots
+        run: python3 tools/_integrate_skills_once.py
+      - name: Static repository audit
+        run: python3 tools/audit.py
+      - name: Diff hygiene
+        run: git diff --check
+      - name: Commit validated expansion
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          test -n "$(git status --porcelain)"
+          git commit -m "expand reviewed Skill catalog"
+          git push origin HEAD:agent-reference-skills-integration-20260903
