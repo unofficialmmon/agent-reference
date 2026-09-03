@@ -28,3 +28,7 @@ The Spring Boot, Spring Security, Maven, MyBatis, MyBatis Dynamic SQL, and MyBat
 `api-contract`, `generated-code`, and `java-style` are repository-authored/local-derived Skills and are covered by the root LICENSE.
 
 This notice is attribution metadata, not legal advice. Consumers remain responsible for satisfying the licenses applicable to the content they redistribute or modify.
+
+## 2026-09 expansion sources
+
+Additional pinned content comes from Android (Apache-2.0), Expo (MIT), Flutter (BSD-3-Clause), Vercel/Next.js and Vercel Labs (MIT), affaan-m/ECC (MIT), wshobson/agents (MIT), Kadajett/agent-nestjs-skills (MIT), sickn33/agentic-awesome-skills (MIT), and vuejs-ai/skills (MIT). See `catalog/skills.lock.json` and retained license evidence.

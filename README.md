@@ -177,7 +177,7 @@ AgentsView replaces TokenScope in the recommended stack when standalone analytic
 
 `skills/<category>/<id>/` is the canonical reviewed source. `catalog/skills.lock.json` records provenance, hashes, activation guidance, operational risk, known issues, and redistribution evidence.
 
-`.apm/skills/<id>/` is the APM producer surface. It contains byte-identical mirrors of every **non-operational** catalog Skill. The current catalog contains 40 Skills: 31 non-operational IDs are APM-selectable and the 9 IDs under `skills/operational/` remain intentionally catalog-only.
+`.apm/skills/<id>/` is the APM producer surface. It contains byte-identical mirrors of every **non-operational** catalog Skill. The current catalog contains 78 Skills: 59 non-operational IDs are APM-selectable and the 19 IDs under `skills/operational/` remain intentionally catalog-only.
 
 The maintainer audit fails if:
 
@@ -297,3 +297,7 @@ The prompt set is intentionally small and explicit. `prompts/README.md` provides
 - `AGENT_SYNC.md` — routine APM dependency and agent-configuration sync.
 
 Choose the narrowest prompt that matches the task. Project bootstrap/refresh must not silently mutate user-level plugin/model/MCP configuration; tooling environment setup is a separate explicit action.
+
+### 2026-09 reviewed catalog expansion
+
+Added 38 pinned unique Skills: 28 APM-selectable and 10 operational opt-ins. See `catalog/SKILLS-ZIP-EXPANSION-REVIEW.md` for additions, aliases, merges, exclusions, and deferred provenance work.
