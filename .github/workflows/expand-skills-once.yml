@@ -1,6 +1,9 @@
 name: expand-skills-once
 
 on:
+  push:
+    branches:
+      - agent-reference-skills-expansion-20260902
   pull_request:
     branches:
       - main
@@ -8,9 +11,13 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: expand-skills-once-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   expand:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - name: Checkout bootstrap branch without marketplace actions
         env:
