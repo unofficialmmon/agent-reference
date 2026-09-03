@@ -4,7 +4,7 @@ Prepare the current repository's agent-facing configuration for OpenCode, agent-
 
 This is a project-onboarding task, not a feature implementation task. Do not modify application source, business logic, tests, schemas, migrations, generated output, or deployment configuration except for tooling/configuration files explicitly covered below.
 
-**Spec Kit is optional.** Do not install, initialize, repair, upgrade, or make Spec Kit the default workflow unless the user explicitly asks for Spec Kit in this bootstrap. If an existing `.specify/` tree is present and Spec Kit was not requested, preserve it untouched and report its presence only.
+**Spec Kit is optional.** Do not install, initialize, repair, upgrade, or make Spec Kit the default workflow unless the user explicitly asks for Spec Kit in this bootstrap. If an existing `.specify/` tree is present and Spec Kit was not requested, preserve it untouched.
 
 ## Reference source
 
@@ -57,6 +57,7 @@ Ask one concise confirmation before proceeding when any of these are true:
 - `AGENTS.md`, `.opencode/`, `.agents/skills/`, `.specify/`, a project-local OMO Slim config, `apm.yml`, or relevant `.gitignore` entries already exist and may be materially rewritten;
 - a command would require `--force` or overwrite a modified/unknown managed file;
 - an existing Skill with the same ID would be replaced;
+- user-global Skill content would be deleted or rewritten without already-established user-scope authorization;
 - an existing non-template constitution would be materially changed.
 
 A request to run this bootstrap authorizes normal onboarding, but it does not authorize silent overwrite of overlapping user work. If targets are new and no conflict exists, proceed without an unnecessary question.
@@ -76,6 +77,7 @@ Inspect only enough current material to establish:
 - formatter/linter configuration;
 - real build/test/validation commands;
 - current `AGENTS.md`, APM manifest/lock if present, `.opencode/`, `.agents/skills/`, and installed Skill IDs;
+- user-level same-ID Skill roots when they can shadow selected project Skills;
 - `.specify/` only as an existing optional integration unless Spec Kit was explicitly requested.
 
 Do not treat deleted, archived, generated, example, or stale-index-only material as current architecture authority.
@@ -98,6 +100,8 @@ Keep only durable project-specific facts, normally:
 
 Do not copy global `ENGINEERING.md`, whole Skill bodies, generic framework advice, OMO agent roles, speculative architecture, or mandatory methodology for routine fixes.
 
+If the repository does not use Spec Kit, do not add a Spec Kit section merely because the template contains an optional example. Remove stale claims that Spec Kit is installed or required when current repository evidence and explicit user intent show it has been retired.
+
 Preserve valid existing project rules. When `AGENTS.md` conflicts with maintained contracts/source, treat it as possible drift and resolve the evidence rather than hiding the mismatch.
 
 ## 3. Select project Skills without breaking ownership
@@ -114,7 +118,9 @@ When the agent-reference catalog is accessible, inspect `catalog/skills.lock.jso
 
 Respect the repository's existing Skill ownership model:
 
-- If the project already has a coherent APM adoption, do not hand-copy or edit APM-generated `.agents/skills/` output. Preserve APM ownership and use the supported `/agent-sync` or `/apm-setup` path for dependency/selection changes.
+- If the project already has a coherent APM adoption, do not hand-copy or edit APM-generated `.agents/skills/` output. Preserve APM ownership and use `/agent-sync` or `/apm-setup` for dependency/selection changes.
+- For an APM-adopted repository, project technology Skills should resolve to the APM-managed project copy. A higher-precedence user-global same-ID technology Skill is ownership debt; report it, and delete it only when user-scope cleanup is explicitly authorized and its ownership is clear.
+- Reserve user-level Skills for genuinely cross-project utilities/tooling or intentional documented overrides.
 - If APM is absent and the user did not explicitly request manual Skill deployment, report the recommended Skill IDs but do not create a competing manual installation. Recommend `/apm-setup` for first adoption.
 - Manual project-local copying is a fallback only when APM is unavailable or the user explicitly chooses manual management. In that case, copy the complete Skill directory byte-for-byte and do not overwrite same-ID content silently.
 
@@ -157,7 +163,7 @@ If Spec Kit was not requested:
 - do not create or repair `.specify/`;
 - do not create or restore `speckit.*` commands;
 - do not create or modify a constitution;
-- preserve any existing Spec Kit files untouched and report `Spec Kit: NOT REQUESTED`.
+- preserve any existing Spec Kit files untouched.
 
 When explicitly requested, use the installed Spec Kit CLI and its native integration workflow as authority. First run:
 
@@ -192,8 +198,8 @@ git status --short
 
 Also verify:
 
-- `AGENTS.md` has no unresolved placeholders;
-- selected Skill IDs are unique across the discovery roots inspected;
+- `AGENTS.md` has no unresolved placeholders or stale tool claims;
+- selected Skill IDs are unique across the discovery roots inspected, or every same-ID state has a deliberate documented owner;
 - APM-managed outputs were not hand-edited;
 - every OMO-routed Skill ID is discoverable and no unrelated user-level OMO setting was copied into the project;
 - no operational Skill was installed or routed without explicit authorization;
@@ -202,19 +208,38 @@ Also verify:
 
 When Spec Kit was explicitly requested, additionally run its native status check after mutation and verify managed files/constitution as appropriate.
 
-For OMO diagnostics, determine the package spec already configured by OpenCode. When an existing supported runner can invoke that same package/version safely, run `doctor --json` from the project root; otherwise report OMO diagnostics `NOT RUN`.
+For OMO diagnostics, determine the package spec already configured by OpenCode. When an existing supported runner can invoke that same package/version safely, run `doctor --json` from the project root; otherwise report OMO diagnostics `NOT RUN` only when that missing proof is material to the requested onboarding.
+
+## Completion boundary
+
+After onboarding and validation are complete, emit one final report and stop. Do not open an optional-cleanup selector or generic follow-up menu. Put material unresolved items under `Needs attention`.
 
 ## Final report
 
-Report only:
+Follow the global completion response contract.
 
-1. project facts discovered;
-2. `AGENTS.md` changes;
-3. selected Skills, ownership/deployment state, duplicates, and operational exclusions;
-4. project-local OMO Slim routing and diagnostic status;
-5. Spec Kit as `NOT REQUESTED`, preserved-existing, or explicitly configured state;
-6. files changed;
-7. actual validation results;
-8. `NOT RUN`, `BLOCKED`, or unresolved conflicts.
+Use `COMPLETED`, `COMPLETED_WITH_ISSUES`, `NOOP`, `NOOP_WITH_ISSUES`, or `BLOCKED` according to the actual requested onboarding result.
 
-Do not describe the repository as fully configured when a required requested step failed, was not run, or remains blocked.
+Default shape:
+
+```text
+## Result
+<STATUS> — <brief project/stack context and what onboarding accomplished>
+
+## Changed
+- `<path or grouped path>` — <what changed>
+
+## Needs attention
+- <only material unresolved ownership, routing, optional-tool conflict, or blocked proof; omit when empty>
+
+## Validation
+- PASS|FAIL|BLOCKED|NOT RUN `<command or check>` — <useful result>
+```
+
+Reporting rules:
+
+- name concrete `AGENTS.md`, APM, OMO, or other configuration paths that actually changed;
+- summarize selected Skill ownership/deployment only when it changed or has a conflict;
+- mention Spec Kit only when explicitly requested, existing state changed, or a stale authoritative project contract conflicts with its absence;
+- omit normal preserved state and do not reproduce the internal onboarding checklist;
+- do not describe the repository as fully configured when a required requested step failed or remains blocked.

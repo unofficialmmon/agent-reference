@@ -29,7 +29,7 @@ If current guidance, Skill selection, and OMO routing already match the reposito
 1. Start with `git status --short` and preserve existing user changes.
 2. Treat sibling repositories as read-only unless explicitly authorized.
 3. Treat CodeGraph/search indexes as navigation aids; verify important claims against current files.
-4. Before deleting/replacing a user-modified Skill, materially changing an optional Spec Kit constitution, using `--force`, or overwriting an overlapping dirty file, show the proposed change and ask one concise confirmation.
+4. Before deleting/replacing a user-modified Skill, deleting user-global Skill content without already-established user-scope authorization, materially changing an optional Spec Kit constitution, using `--force`, or overwriting an overlapping dirty file, show the proposed change and ask one concise confirmation.
 5. Do not commit, push, reset, clean, deploy, or run destructive commands.
 
 ## Procedure
@@ -45,7 +45,8 @@ Correct only evidence-backed drift:
 - changed module/domain ownership;
 - changed API/DB/auth/security/generated boundaries;
 - obsolete project-specific rules;
-- durable new project facts.
+- durable new project facts;
+- stale claims that optional tooling such as Spec Kit is installed or required when current repository evidence and explicit user intent show it has been retired.
 
 Do not copy generic engineering or framework guidance into the project file.
 
@@ -62,6 +63,9 @@ When the agent-reference catalog is accessible:
 Respect the existing deployment owner:
 
 - For a coherent APM-managed project, do not hand-edit `.agents/skills/` or generated lock/output. Use `/agent-sync` for routine agent-reference updates and `/apm-setup` for first adoption or damaged/incomplete ownership.
+- For an APM-adopted repository, project technology Skills should resolve to the APM-managed project copy. Treat a higher-precedence user-global same-ID technology Skill as ownership debt unless it is a deliberate documented override.
+- Reserve user-level Skills for genuinely cross-project utilities/tooling or intentional documented overrides.
+- Do not delete user-global Skill content from a project refresh unless user-scope cleanup is already explicitly authorized and the ownership is clear; otherwise report the conflict for separate cleanup.
 - For manual project-local Skills, preserve complete directories and source provenance. Do not silently migrate them to APM merely because APM is available.
 - If the catalog is inaccessible, mark Skill reconciliation `NOT RUN` instead of inventing IDs or content.
 
@@ -81,7 +85,7 @@ If OMO Slim is installed/configured or `.opencode/oh-my-opencode-slim.json[c]` e
 - account for JSONC precedence if both project config formats exist;
 - prefer root `agents.<agent>.skills` for ordinary project routing unless the repository deliberately uses preset-specific routing.
 
-After a routing change, determine the OMO Slim package spec already configured by OpenCode and, when an existing supported runner can invoke that same package/version safely, run its `doctor --json` from the project root. Do not hard-code `@latest` or upgrade the plugin as a side effect. Otherwise report diagnostics `NOT RUN`. Behavioral changes require an OpenCode restart before smoke testing.
+After a routing change, determine the OMO Slim package spec already configured by OpenCode and, when an existing supported runner can invoke that same package/version safely, run its `doctor --json` from the project root. Do not hard-code `@latest` or upgrade the plugin as a side effect. Otherwise report diagnostics `NOT RUN` only when that missing proof is material. Behavioral changes require an OpenCode restart before smoke testing.
 
 ### 4. Preserve or explicitly maintain optional Spec Kit
 
@@ -91,7 +95,8 @@ If Spec Kit maintenance was **not** explicitly requested:
 - do not create, restore, repair, or delete `.specify/`;
 - do not recreate `speckit.*` commands after a user has uninstalled the integration;
 - do not modify a constitution;
-- if `.specify/` or Spec Kit command remnants exist, report them as existing optional state, not as a refresh failure.
+- if `.specify/` or Spec Kit command remnants exist, treat them as existing optional state rather than a refresh failure;
+- if `AGENTS.md` still claims Spec Kit is installed/required but current repository state and explicit user intent show it was retired, update the stale `AGENTS.md` claim without recreating Spec Kit.
 
 If the user explicitly requested Spec Kit maintenance, use Spec Kit's own manifest-aware commands as authority:
 
@@ -123,19 +128,41 @@ Also verify that:
 - every OMO-routed Skill is actually discoverable;
 - no operational Skill was introduced without explicit authorization;
 - Spec Kit files were untouched when Spec Kit maintenance was not requested;
+- stale `AGENTS.md` claims corrected by this refresh match current repository evidence;
 - no application source or unrelated configuration changed.
 
 Run Spec Kit status again only when Spec Kit maintenance was explicitly requested. Do not run the full application test suite solely for configuration refresh unless a project rule requires it.
 
+## Completion boundary
+
+After refresh and validation are complete, emit one final report and stop. Do not open an optional-cleanup selector or generic follow-up menu. Put material unresolved items under `Needs attention`.
+
 ## Final report
 
-Report only:
+Follow the global completion response contract.
 
-1. stale configuration found;
-2. files changed;
-3. project facts added, removed, or corrected;
-4. Skill selection/ownership changes and conflicts;
-5. project-local OMO Slim routing changes and diagnostics;
-6. Spec Kit as `NOT REQUESTED`, preserved-existing, or explicitly maintained state;
-7. unresolved items or confirmations not granted;
-8. checks actually performed, with `PASS`, `FAIL`, `NOT RUN`, or `BLOCKED` stated honestly.
+Use `COMPLETED`, `COMPLETED_WITH_ISSUES`, `NOOP`, `NOOP_WITH_ISSUES`, or `BLOCKED` according to the actual refresh result.
+
+Default shape:
+
+```text
+## Result
+<STATUS> — <what stale agent-facing state was reconciled, or why no change was needed>
+
+## Changed
+- `<path or grouped path>` — <specific stale fact/routing/ownership/configuration correction>
+
+## Needs attention
+- <only material unresolved ownership conflict, blocked proof, or intentional separate cleanup; omit when empty>
+
+## Validation
+- PASS|FAIL|BLOCKED|NOT RUN `<command or check>` — <useful result>
+```
+
+Reporting rules:
+
+- name concrete changed paths and the stale facts corrected there;
+- report Skill ownership only when it changed or conflicts remain;
+- mention Spec Kit only when existing state changed, explicit Spec Kit maintenance was requested, or a stale project contract conflicted with its absence;
+- omit normal preserved state and do not reproduce the internal refresh checklist;
+- do not call refresh complete while a required requested correction failed or remains blocked.

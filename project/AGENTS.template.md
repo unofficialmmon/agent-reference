@@ -65,7 +65,14 @@ For generator-owned source, use the `generated-code` Skill when it is installed/
 
 ## Skills
 
-List only project-specific routing or overrides. Prefer selecting maintained Skills from the shared `agent-reference` catalog instead of rewriting generic technology guidance in this file. Install them globally or project-locally according to the actual project need.
+List only project-specific Skill selection/routing facts or intentional overrides. Prefer maintained Skills from the shared `agent-reference` catalog instead of rewriting generic technology guidance in this file.
+
+For an APM-adopted repository:
+
+- project technology Skills are selected through `apm.yml` and deployed by APM under the project Skill root;
+- do not hand-edit APM-generated Skill output;
+- do not duplicate the same project technology Skill ID under `~/.config/opencode/skills/`;
+- reserve user-level Skills for genuinely cross-project utilities/tooling or a deliberate documented override.
 
 Examples:
 
@@ -75,7 +82,9 @@ Do not load every Skill at startup.
 
 ## Spec Kit
 
-If this repository uses Spec Kit:
+Omit this section entirely when the repository does not use Spec Kit.
+
+If this repository intentionally uses Spec Kit:
 
 - `.specify/` is owned by Spec Kit;
 - use `/speckit.*` for features intentionally following the Spec Kit workflow;
