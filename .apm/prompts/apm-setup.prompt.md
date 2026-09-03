@@ -24,23 +24,19 @@ Use this priority:
 2. project `AGENTS.md` and authoritative project contracts;
 3. maintained source, tests, schemas, build/configuration, ownership, and project docs;
 4. the installed APM version's supported schema/commands/docs;
-5. current OpenCode/OMO Slim/Spec Kit configuration and native diagnostics;
+5. current OpenCode/OMO Slim configuration and any existing optional Spec Kit state;
 6. the resolved `agent-reference` revision, its APM producer surface, and catalog metadata;
 7. generic guidance.
 
-Preserve all dirty work and ownership boundaries. Do not stage, commit, push, stash, reset, clean, force-update, or overwrite unrelated files.
+Preserve dirty work and ownership boundaries. Do not stage, commit, push, stash, reset, clean, force-update, or overwrite unrelated files.
 
 ## Existing adoption and stop conditions
 
 First determine whether the repository is already correctly managed by APM.
 
-If the current manifest, generated lock, installed content, ownership, selected Skill discovery, and diagnostics already prove a healthy adoption, do not cosmetically rewrite anything. Validate what is available, report the future `/agent-sync` path, and finish with exactly:
+If the current manifest, generated lock, installed content, selected Skill discovery, and diagnostics already prove a healthy adoption, do not cosmetically rewrite anything. Validate what is available, report the future `/agent-sync` path, and finish as `NOOP`.
 
-```text
-NOOP
-```
-
-If APM, its supported schema, the reference source, its deployable Skill primitives, or a safe non-overwriting operation is unavailable, continue read-only only and report the affected work `BLOCKED` or `NOT RUN`.
+If APM, its supported schema, the reference source, its deployable Skill primitives, or a safe non-overwriting operation is unavailable, continue read-only only and report the affected scope as `BLOCKED` or `NOT RUN`.
 
 ## Inspect before selecting or writing
 
@@ -51,14 +47,14 @@ Inspect only enough to establish:
 - current `apm.yml`, generated lock, ownership, and dirty/unknown state;
 - project/user OpenCode Skill discovery roots and existing Skill IDs/origins;
 - applicable project/global OMO Slim JSON/JSONC configuration and precedence;
-- Spec Kit presence, managed files, and constitution state;
+- existing Spec Kit state only when `.specify/` or `speckit.*` artifacts are present; absence is healthy and does not require installation;
 - OpenCode commands and their origins, including `/agent-sync` when present;
 - the current `agent-reference` revision and `.apm/skills/<id>/SKILL.md` producer primitives;
 - relevant `catalog/skills.lock.json` metadata for candidate Skills.
 
 Catalog presence is not activation, and catalog presence alone does not prove APM deployability. A Skill is selectable from this package only when its current revision exposes the ID under `.apm/skills/`.
 
-`agent-reference` intentionally exposes non-operational Skills through `.apm/skills/` and keeps `skills/operational/` catalog-only. Do not select `all`, wildcard, invented, or operational IDs. Select only Skills justified by repository evidence.
+`agent-reference` intentionally exposes non-operational Skills through `.apm/skills/` and keeps `skills/operational/` catalog-only. Do not select wildcard, invented, or operational IDs. Select only Skills justified by repository evidence.
 
 Treat indexes, caches, generated search data, and recalled memory as navigation/context only. Confirm material claims against current repository evidence.
 
@@ -94,25 +90,27 @@ The package producer surface is split deliberately:
 
 Generated target output and the generated lock are APM-owned and must not be hand-edited or reconstructed.
 
-## OpenCode discovery precedence and same-ID Skills
+## Skill ownership and discovery precedence
+
+For an APM-adopted repository, the preferred end state is that project technology Skills are owned by APM and resolve to the APM-managed project copy. User-level Skills should be reserved for genuinely cross-project utilities/tooling or intentional documented overrides.
 
 After deployment, verify the effective OpenCode Skill winner, not only file existence.
 
-For current OpenCode discovery, a user-level `~/.config/opencode/skills/<id>` copy can take precedence over an APM-deployed project `.agents/skills/<id>` copy. Therefore same-ID entries are not automatically errors and must be compared by complete file inventory and content/hash.
+A user-level `~/.config/opencode/skills/<id>` copy can take precedence over an APM-deployed project `.agents/skills/<id>` copy. Compare complete file inventories and content/hash before classifying the state:
 
-Classify them as follows:
+- `APM_EFFECTIVE` — no higher-precedence divergent copy masks the selected APM deployment;
+- `SHADOWED_IDENTICAL` — a higher-precedence same-ID copy is byte-identical to the APM-managed copy;
+- `SHADOWED_DIVERGENT` — a higher-precedence same-ID copy differs and the runtime winner is not the intended APM content.
 
-- `SHADOWED_IDENTICAL` — a higher-precedence same-ID copy exists but is byte-identical to the APM-managed copy. Preserve it unless its ownership is clearly obsolete and removal is independently safe.
-- `SHADOWED_DIVERGENT` — a higher-precedence same-ID copy differs from the APM-managed copy. Mark routed/discovery validation `BLOCKED`; do not silently delete, overwrite, or edit the user/global copy.
-- `APM_EFFECTIVE` — no higher-precedence divergent copy masks the selected APM deployment.
+Do not call a selector plus one global physical Skill a duplicate file by itself. Report the physical higher-precedence path when it matters.
 
-Do not call a selector plus a global physical Skill a duplicate file. Report physical paths and the effective runtime winner.
+Do not silently delete or modify a user-global Skill merely to make validation green. If the user has explicitly adopted an APM-only policy for project technology Skills, an identical or superseded global copy is cleanup debt; remove it only when its ownership is clear and deletion is authorized for user scope. Never remove genuine cross-project utility/tooling Skills as part of a project migration.
 
 ## Mutation checkpoint
 
 Before the first write, state every intended APM-managed target and whether it is new, clean, dirty, modified, overlapping, or unowned.
 
-Ask one concise confirmation only if the planned operation would overwrite dirty/user-modified/unknown content, replace a same-ID Skill with uncertain ownership, or change an ownership boundary. Otherwise proceed with the native supported APM flow.
+Ask one concise confirmation only if the planned operation would overwrite dirty/user-modified/unknown content, replace a same-ID Skill with uncertain ownership, delete user-global content without already-established authorization, or change an ownership boundary. Otherwise proceed with the native supported APM flow.
 
 Use the installed APM version's documented dry-run form when available and appropriate, then perform the supported install:
 
@@ -122,29 +120,23 @@ apm install
 
 If installation, source transport, authentication, primitive selection, or deployment fails, preserve the previous healthy/manual state and report `BLOCKED` or `FAIL`; do not improvise partial deployment.
 
-## Skill migration and routing
+Before removing any superseded manual project Skill copy, compare origin, revision/hash, complete-directory contents, ownership, discovery precedence, and dirty state with the APM replacement. Remove only an unchanged, clearly superseded copy after successful APM replacement and verified effective discovery. Preserve ambiguous, project-authored, modified, or differently sourced copies and report them.
 
-Before removing any manual Skill copy, compare origin, revision/hash, complete-directory contents, ownership, discovery precedence, and dirty state with the APM replacement.
+Preserve OMO models, variants, MCPs, companion settings, permissions, prompts, custom agents, and unrelated routing. Verify every routed Skill ID is physically discoverable and resolves to the intended/identical content. Never auto-route operational Skills.
 
-Remove only an unchanged, clearly superseded copy after successful APM replacement and verified effective discovery. Preserve ambiguous, project-authored, modified, differently sourced, or higher-precedence divergent copies and report them rather than silently deleting them.
-
-Preserve OMO models, variants, MCPs, companion settings, permissions, prompts, custom agents, and unrelated routing. Verify every routed Skill ID is both physically discoverable and resolves to the intended/identical content. Never auto-route operational Skills.
-
-Preserve the project `AGENTS.md` and Spec Kit integration/constitution unless a concrete adoption-caused issue requires a narrow repair.
+Preserve the project `AGENTS.md` and any existing optional Spec Kit state unless a concrete adoption-caused issue requires a narrow repair. Do not install or restore Spec Kit merely because `.specify/` is absent.
 
 ## Memory boundary
 
 APM does not own project memory.
 
-Current persistent memory is `opencode-mem`, whose normal workflow is automatic capture and relevant later-session injection. Therefore setup must:
+Current persistent memory is `opencode-mem`. Setup must:
 
 - not create or restore `.opencode/history/`;
 - not create or restore Simple Memory `.opencode/memory/` state;
-- not modify `opencode-mem` configuration or its local storage as part of APM adoption;
+- not modify `opencode-mem` configuration or local storage as part of APM adoption;
 - not require `remember`, `recall`, branch handoffs, or an end-of-task manual handoff;
-- treat any injected/recalled memory as contextual evidence only, subordinate to current Git/source/config/contracts/tests.
-
-Do not introduce a replacement history/handoff mechanism.
+- treat recalled memory as contextual evidence only, subordinate to current Git/source/config/contracts/tests.
 
 ## Required validation
 
@@ -162,35 +154,54 @@ Also verify, with `PASS`, `FAIL`, `BLOCKED`, or `NOT RUN`:
 
 - `apm.yml` schema and generated-lock consistency;
 - selected IDs exist in the resolved `.apm/skills/` producer surface;
-- every selected Skill is deployed as a complete APM-managed directory under the target Skill root;
+- every selected Skill is deployed as a complete APM-managed directory;
 - selected Skill provenance and hashes/ownership where available;
-- effective OpenCode discovery, including `APM_EFFECTIVE`, `SHADOWED_IDENTICAL`, or `SHADOWED_DIVERGENT` classification for same-ID paths;
-- OMO JSON/JSONC parsing, precedence, preserved user settings, and routed-ID effective discoverability;
-- Spec Kit and `AGENTS.md` preservation;
+- effective discovery and runtime winner for same-ID paths;
+- OMO parsing, precedence, preserved user settings, and routed-ID discoverability;
 - package command deployment under `.opencode/commands/`, including `/agent-sync` when provided;
 - absence of unrelated application/configuration changes;
 - absence of newly created legacy History or Simple Memory runtime state.
 
-A third-party/vendor `apm audit` finding must remain `FAIL` if the command fails, even when separately classified as pre-existing vendor/test data. Do not mutate vendor dependencies or invent an ignore mechanism merely to make the audit green.
+A third-party/vendor `apm audit` finding remains `FAIL` when the command fails, even when deployment drift is clean. Do not mutate vendor dependencies or invent an ignore mechanism merely to make the audit green.
 
 Never turn a blocked, skipped, or failed check into a pass.
 
+## Completion boundary
+
+After setup and validation are complete, emit one final report and stop. Do not open an optional-cleanup selector or generic follow-up menu. Put material unresolved items under `Needs attention`; the user can request cleanup as a separate task.
+
 ## Final report
 
-Report only:
+Follow the global completion response contract. For this prompt use:
 
-1. Stack and relevant commands;
-2. APM version/install status;
-3. selected Skills, producer availability, and repository evidence;
-4. manifest/lock paths, ownership, and validation;
-5. APM Skill deployment paths and effective discovery/shadow classification;
-6. manual Skill migration/preserved uncertain copies;
-7. OMO preservation/routing status;
-8. Spec Kit and `AGENTS.md` preservation;
-9. `/agent-sync` availability and future update path;
-10. Memory — confirm APM did not mutate `opencode-mem` or recreate retired History/Simple Memory state;
-11. validation results, keeping `apm audit` separate from deployment-drift status;
-12. exact changed paths;
-13. adoption status and unresolved conflicts.
+- `COMPLETED` — APM adoption completed and selected project Skills resolve to intended/identical content with required validation satisfied;
+- `COMPLETED_WITH_ISSUES` — adoption completed, but a material non-blocking issue remains, such as vendor-only audit findings or optional user-global cleanup debt;
+- `NOOP` — adoption was already healthy and no mutation was required;
+- `NOOP_WITH_ISSUES` — no mutation was required but a material existing issue remains;
+- `BLOCKED` — adoption could not be completed safely.
 
-Do not call setup complete while a required step is `FAIL`, `BLOCKED`, or `NOT RUN`.
+Use this compact shape:
+
+```text
+## Result
+<STATUS> — <one or two sentences describing the adoption outcome and selected Skill scope>
+
+## Changed
+- <only actual changed APM/configuration paths and what changed>
+
+## Needs attention
+- <only material unresolved ownership, policy, audit, or verification items; omit when empty>
+
+## Validation
+- PASS|FAIL|BLOCKED|NOT RUN `<command or check>` — <useful result>
+```
+
+Reporting rules:
+
+- group repetitive Skill deployment paths instead of listing every file;
+- name every `SHADOWED_DIVERGENT` runtime winner and higher-precedence path;
+- summarize identical shadows compactly and treat them as cleanup debt rather than a deployment failure;
+- keep `apm audit` separate from deployment-drift status;
+- mention Spec Kit only if existing state changed or an authoritative current project contract conflicts with its absence;
+- omit normal facts such as `OMO preserved`, `Memory preserved`, or `AGENTS.md preserved` when nothing happened to them;
+- do not reproduce an internal numbered checklist in the final response.
