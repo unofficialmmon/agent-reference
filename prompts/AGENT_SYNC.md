@@ -24,7 +24,7 @@ Use this priority:
 2. project `AGENTS.md` and authoritative project contracts;
 3. maintained source, tests, schemas, build/configuration, and project docs;
 4. the installed APM version's supported behavior;
-5. current OpenCode/OMO Slim/Spec Kit configuration and diagnostics;
+5. current OpenCode/OMO Slim configuration and any existing optional Spec Kit state;
 6. the resolved `agent-reference` revision, its APM producer surface, and selected catalog content;
 7. generic guidance.
 
@@ -55,7 +55,7 @@ Inspect only enough to establish:
 - APM-managed and manual/local Skill roots plus user/project OpenCode discovery roots;
 - installed/routed Skill IDs, physical origins, effective discovery winner, and same-ID content equality;
 - applicable `.opencode/oh-my-opencode-slim.json` / `.jsonc` and effective global OMO configuration;
-- Spec Kit integration, managed files, and constitution state;
+- Spec Kit state only when `.specify/` exists or an authoritative current project contract explicitly requires it; absence alone is not an agent-sync failure;
 - package-provided command deployment under `.opencode/commands/`;
 - whether any planned write overlaps dirty, unknown, or user-owned files.
 
@@ -130,7 +130,7 @@ Remove a superseded manual Skill copy only when its origin, revision/hash, compl
 
 Preserve OMO models, variants, MCPs, companion settings, permissions, prompts, custom agents, and unrelated routing. Repair only an unambiguous APM-caused routed-Skill break. Never auto-route operational Skills.
 
-Preserve project `AGENTS.md` and Spec Kit state unless a concrete APM-caused drift requires a narrow repair.
+Preserve project `AGENTS.md` and any existing Spec Kit state unless a concrete APM-caused drift requires a narrow repair. Do not install or restore Spec Kit merely because `.specify/` is absent. If a current authoritative project contract still requires Spec Kit while its artifacts are absent, report that as a separate project-contract inconsistency, not as an APM update failure.
 
 ## Memory boundary
 
@@ -164,7 +164,7 @@ Also verify, with `PASS`, `FAIL`, `BLOCKED`, or `NOT RUN`:
 - every selected Skill is deployed completely to the APM target Skill root;
 - effective OpenCode discovery classification: `APM_EFFECTIVE`, `SHADOWED_IDENTICAL`, or `SHADOWED_DIVERGENT`;
 - OMO JSON/JSONC parsing, precedence, preserved user settings, and routed-ID effective discoverability;
-- `AGENTS.md` and Spec Kit preservation;
+- project `AGENTS.md` preservation and, only when present or explicitly required, Spec Kit preservation/state;
 - package prompt deployment under `.opencode/commands/`;
 - absence of unrelated application/config changes;
 - absence of newly created legacy History or Simple Memory runtime state;
@@ -172,25 +172,62 @@ Also verify, with `PASS`, `FAIL`, `BLOCKED`, or `NOT RUN`:
 
 Never convert a skipped, blocked, or failed check into a pass. Do not mutate third-party vendor dependencies or invent an ignore/baseline mechanism merely to make `apm audit` green.
 
+## Completion boundary
+
+The sync command has one user-interaction checkpoint: the pre-mutation confirmation above when ownership or dirty-content risk actually requires it.
+
+After the sync attempt and validation are complete:
+
+- do not open a follow-up selector, confirmation menu, or multi-choice prompt;
+- do not ask whether the user wants optional cleanup, vendor remediation, global-Skill reconciliation, or Spec Kit work;
+- report unresolved items under `Needs attention` and stop;
+- let the user request a separate follow-up task if they want one.
+
+A finished sync must end as a finished report, not as a new interactive workflow.
+
 ## Final report
 
-Report only:
+Optimize the report for human review rather than reproducing the internal validation checklist. Normal preserved state is omitted unless it changed or failed.
 
-1. `agent-reference` — `UPDATED` or `NOOP`;
-2. previous/resulting revisions;
-3. selected Skills, producer availability, and APM deployment status;
-4. manifest/lock ownership and status;
-5. effective discovery/shadow classification and any preserved same-ID paths;
-6. OMO preservation/routing status;
-7. `AGENTS.md` and Spec Kit preservation;
-8. Memory — confirm APM did not mutate `opencode-mem` or recreate retired History/Simple Memory state;
-9. `apm outdated` result;
-10. `apm audit` result, separately classifying pre-existing vendor findings when present;
-11. other validation results;
-12. exact changed paths;
-13. remaining conflicts or unverified scope.
+Use these status values:
 
-If no dependency/configuration change was needed and every required selected Skill is healthy/effectively discoverable, end the report with exactly:
+- `UPDATED` — the dependency revision changed and the intended APM deployment completed without a remaining material issue affecting effective selected-Skill use or required policy enforcement;
+- `UPDATED_WITH_ISSUES` — the revision/deployment updated, but a material issue remains, such as `SHADOWED_DIVERGENT`, failed audit, or unavailable required policy enforcement;
+- `NOOP` — no dependency/configuration change was needed and required selected Skills are healthy/effectively discoverable;
+- `NOOP_WITH_ISSUES` — no update was needed, but a material unresolved issue remains;
+- `BLOCKED` — the sync itself could not be completed safely.
+
+Use this compact structure:
+
+```text
+## Result
+<STATUS> — agent-reference <previous> → <resulting revision>
+<one sentence stating what was actually updated or why no update was needed>
+
+## Changed
+- <only when files changed: exact APM-managed path/group and what changed>
+- <group repetitive Skill paths by count or IDs instead of one line per file>
+
+## Needs attention
+- <only material unresolved items; omit this section when empty>
+
+## Validation
+- PASS|FAIL|BLOCKED|NOT RUN `<command or check>` — <useful result>
+```
+
+Reporting rules:
+
+- name concrete changed paths when an update occurred;
+- state the effective runtime winner for every `SHADOWED_DIVERGENT` Skill and its higher-precedence path;
+- summarize `SHADOWED_IDENTICAL` counts compactly unless the identities are needed to understand an issue;
+- keep `apm audit` separate from deployment drift and say when a failure is confined to third-party/vendor content;
+- if organization policy could not be fetched and the update proceeded without enforcement, report that prominently under `Needs attention` or validation;
+- absence of `.specify/` is not a failure by itself; mention Spec Kit only when existing artifacts changed or a current authoritative project contract conflicts with its absence;
+- omit routine facts such as “OMO preserved”, “Memory preserved”, or “AGENTS.md preserved” when nothing happened to them;
+- do not emit a numbered 1–13 checklist;
+- do not end with offers, optional-action menus, or follow-up questions.
+
+For a clean `NOOP`, keep the report especially short and end with exactly:
 
 ```text
 NOOP
