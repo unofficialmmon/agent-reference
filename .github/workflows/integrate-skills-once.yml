@@ -25,6 +25,7 @@ jobs:
           python3 -m json.tool catalog/skills-expansion-2026-09-03.json >/dev/null
       - name: Preserve declared-only NestJS license provenance
         run: |
+          rm -f .github/skills-integration-trigger-2.txt
           python3 - <<'PY'
           import json
           from pathlib import Path
