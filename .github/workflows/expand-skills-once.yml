@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   expand:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
         with:
@@ -42,4 +42,4 @@ jobs:
           git commit -m "expand reviewed Skill catalog"
           git push origin HEAD:main
 
-# Triggered manually on 2026-09-03 after validating the uploaded multi-Skill bundle.
+# Retried on macOS runner after the Ubuntu job failed before runner allocation.
