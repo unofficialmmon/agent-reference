@@ -4,6 +4,8 @@
 
 ### Added
 
+- Added 38 reviewed pinned Skill IDs (28 selectable, 10 operational opt-ins).
+
 - Added `.apm/skills/` as the APM producer surface for all 31 non-operational catalog Skills. Each packaged Skill is an exact complete-directory mirror of its canonical `skills/<category>/<id>/` source; the 9 operational Skills remain catalog-only and are intentionally not APM-selectable.
 - Added deterministic APM packaging checks to `tools/audit.py`: required producer artifacts, canonical prompt-mirror parity, complete non-operational Skill exposure, operational exclusion, file-set/hash parity, and symlink rejection.
 - Added `global/MEMORY.md` as the `opencode-mem` persistent-context policy: automatic capture/injection by default, repository-state reconciliation, project-scope guidance, optional multi-repo identity, manual-memory exceptions, and explicit local-storage/remote-provider privacy boundaries.
@@ -26,6 +28,8 @@
 - Added MIT attribution material for `github/awesome-copilot` and `obra/superpowers`.
 
 ### Improved
+
+- Merged non-duplicative debugging and Spring application-security guidance into existing maintained references.
 
 - Promoted the producer package to `0.2.0` to reflect the new deployable safe-Skill surface.
 - Corrected APM setup/sync dependency examples to the current `dependencies.apm` schema instead of the invalid flat dependency-list shape.

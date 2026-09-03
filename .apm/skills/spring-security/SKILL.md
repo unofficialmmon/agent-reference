@@ -60,3 +60,12 @@ This is an original pi-dev-kit summary derived from official documentation.
 3. Verify CSRF/CORS decisions against browser credential behavior.
 4. Test allowed, denied, and unauthenticated requests.
 5. Keep secrets and tokens out of source, logs, and test reports.
+
+## Application security hardening
+
+- Use Spring Security adaptive password encoders; never store plaintext credentials or invent password hashing.
+- Keep secrets out of committed configuration, defaults, logs, and fixtures.
+- Use parameterized persistence APIs and validated DTO boundaries; never concatenate untrusted SQL, JPQL, commands, redirects, or paths.
+- Put headers and rate limits at the owning boundary and verify the effective response instead of duplicating controls.
+- Constrain upload size, type, path, storage, and execution boundaries.
+- Redact personal and authentication data from logs.

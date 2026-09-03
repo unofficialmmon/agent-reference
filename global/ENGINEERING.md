@@ -32,11 +32,11 @@ Avoid these families of failure:
 Before changing code for a bug or failure:
 
 1. Reproduce or establish the failing behavior when practical.
-2. Read the actual error and trace the relevant data/control path.
+2. Read the actual error and trace the relevant data/control path. Compare with the nearest working path when one exists; differences in inputs, state, ownership, and control flow are evidence.
 3. Identify which component owns the violated invariant or contract.
 4. Form one evidence-backed cause hypothesis.
 5. Fix the owning cause with the smallest change that preserves the established scope.
-6. Rerun the same failing check or scenario before broadening verification.
+6. Rerun the same failing check or scenario before broadening verification. Remove temporary diagnostics and obsolete workarounds before completion.
 
 If several independent patches have failed, stop adding exceptions and reconsider the model, invariant, boundary, or architecture.
 

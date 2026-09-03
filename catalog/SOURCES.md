@@ -134,3 +134,7 @@ This evidence is intentionally narrow. It does not certify every Skill, prompt, 
 - Upstream Skill license files remain inside snapshots when supplied.
 - Consolidated source license/attribution material is under `catalog/LICENSES/`.
 - Root `NOTICE` maps included sources and highlights incomplete standalone license evidence.
+
+## 2026-09 reviewed expansion sources
+
+Pinned snapshots were added from Android, Expo, Flutter, Vercel/Next.js, Vercel Labs, affaan-m/ECC, wshobson/agents, Kadajett/agent-nestjs-skills, sickn33/agentic-awesome-skills, and vuejs-ai/skills. Exact revisions, paths, file hashes, licenses, risk placement, and activation guidance are recorded in `skills.lock.json`.
