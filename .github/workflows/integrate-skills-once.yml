@@ -60,10 +60,85 @@ jobs:
                   ]
           manifest_path.write_text(json.dumps(manifest, indent=2) + '\n')
           PY
+      - name: Adapt upstream frontmatter for OpenCode
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          script = Path('tools/_integrate_skills_once.py')
+          text = script.read_text()
+          helper = "\n".join([
+              '',
+              'def normalize_new_frontmatter(manifest: dict) -> None:',
+              '    for item in manifest["skills"]:',
+              '        path = ROOT / "skills" / item["category"] / item["id"] / "SKILL.md"',
+              '        text = path.read_text(encoding="utf-8")',
+              '        lines = text.splitlines()',
+              '        if not lines or lines[0].strip() != "---":',
+              '            raise RuntimeError(f"missing frontmatter: {item[\'id\']}")',
+              '        try:',
+              '            end = next(i for i in range(1, len(lines)) if lines[i].strip() == "---")',
+              '        except StopIteration as exc:',
+              '            raise RuntimeError(f"unterminated frontmatter: {item[\'id\']}") from exc',
+              '        fields: dict[str, list[str]] = {}',
+              '        front = lines[1:end]',
+              '        i = 0',
+              '        while i < len(front):',
+              '            line = front[i]',
+              '            match = re.match(r"^([A-Za-z0-9_-]+):(?:\\s*(.*))?$", line) if not line.startswith((" ", "\\t")) else None',
+              '            if not match:',
+              '                i += 1',
+              '                continue',
+              '            key = match.group(1)',
+              '            block = [line]',
+              '            i += 1',
+              '            while i < len(front) and (not front[i].strip() or front[i].startswith((" ", "\\t"))):',
+              '                block.append(front[i])',
+              '                i += 1',
+              '            fields[key] = block',
+              '        if "description" not in fields:',
+              '            raise RuntimeError(f"missing description: {item[\'id\']}")',
+              '        output = ["---", f"name: {item[\'id\']}"]',
+              '        for key in ("description", "license", "compatibility"):',
+              '            output.extend(fields.get(key, []))',
+              '        output.append("---")',
+              '        body = lines[end + 1:]',
+              '        normalized = "\\n".join(output + body).rstrip() + "\\n"',
+              '        path.write_text(normalized, encoding="utf-8")',
+              '        if not item["operational"]:',
+              '            mirror = ROOT / ".apm/skills" / item["id"] / "SKILL.md"',
+              '            mirror.write_text(normalized, encoding="utf-8")',
+              '',
+          ])
+          marker = '\n\ndef merge_guidance() -> None:'
+          if marker not in text:
+              raise SystemExit('frontmatter helper insertion marker not found')
+          text = text.replace(marker, helper + marker, 1)
+          call_marker = '    materialize(manifest)\n    merge_guidance()'
+          if call_marker not in text:
+              raise SystemExit('frontmatter helper call marker not found')
+          text = text.replace(call_marker, '    materialize(manifest)\n    normalize_new_frontmatter(manifest)\n    merge_guidance()', 1)
+          text = text.replace('        adapter = bool(item.get("mode"))', '        payload_adapter = bool(item.get("mode"))\n        adapter = True', 1)
+          text = text.replace(
+              '"integrity": "pinned-upstream-payload-hash-verified" if adapter else "pinned-hash-verified",',
+              '"integrity": "pinned-upstream-payload-hash-verified" if payload_adapter else "pinned-upstream-body-adapted-frontmatter-hash-verified",',
+              1,
+          )
+          text = text.replace(
+              '"Complete pinned upstream snapshot from the reviewed 2026-09 expansion."',
+              '"Pinned upstream body with host-compatible frontmatter normalization from the reviewed 2026-09 expansion."',
+              1,
+          )
+          script.write_text(text)
+          PY
           python3 -m py_compile tools/_integrate_skills_once.py
       - name: Materialize reviewed snapshots
         run: python3 tools/_integrate_skills_once.py
+      - name: Remove generated Python caches
+        run: find . -type d -name __pycache__ -prune -exec rm -rf {} +
       - name: Static repository audit
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
         run: python3 tools/audit.py
       - name: Diff hygiene
         run: git diff --check
