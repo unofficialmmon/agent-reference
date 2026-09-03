@@ -4,7 +4,23 @@ These are explicit, bounded entry points. They coordinate existing OpenCode, OMO
 
 Spec Kit is **not** part of the default agent-reference project baseline. Its absence is healthy. Bootstrap/refresh must not install, restore, or repair it unless the user explicitly requests Spec Kit work.
 
+For APM-adopted repositories, project technology Skills should be owned by the project APM deployment rather than duplicated under the user-global Skill root. User-level Skills are best reserved for genuine cross-project utilities/tooling or deliberate documented overrides.
+
 Use the prompt file from the reference source rather than copying its body into every repository.
+
+## Completion reports
+
+Mutation/setup prompts follow the global completion response contract in `global/AGENTS.md`:
+
+- lead with a concrete overall result;
+- name actual changed paths/symbols and what changed there;
+- include behavior/decision sections only when they materially help review;
+- report validation as `PASS`, `FAIL`, `BLOCKED`, or `NOT RUN` with the actual command/check;
+- show only material unresolved items under `Needs attention`;
+- omit normal preserved state and internal checklist dumps;
+- end after the final report instead of opening an optional follow-up menu.
+
+Read-only audit/onboarding prompts may keep their task-specific output structures when those structures better express findings or discovery evidence.
 
 ## OpenCode tooling environment setup or reconciliation
 
@@ -30,7 +46,7 @@ Expected scope: repository facts, project `AGENTS.md`, project-relevant Skill se
 Read /path/to/agent-reference/prompts/APM_SETUP.md and execute it completely for the current repository.
 ```
 
-Command: `apm-setup` — Set up Microsoft APM and migrate this project to agent-reference APM management. Configuration/deployment-only; do not modify application source.
+Command: `apm-setup` — Set up Microsoft APM and migrate this project to agent-reference APM management. Configuration/deployment-only; do not modify application source. The preferred end state is APM-owned project technology Skills with no accidental higher-precedence global same-ID override.
 
 ## Routine agent-reference APM sync
 
@@ -46,7 +62,7 @@ Command: `agent-sync` — Update agent-reference APM dependencies and reconcile 
 Read /path/to/agent-reference/prompts/TEST_SETUP.md and execute it completely for the current repository.
 ```
 
-Command: `test-setup` — Establish or reconcile a small, trustworthy testing portfolio from Static/Unit through representative System/E2E evidence. It may modify test infrastructure, tests, test CI configuration, and the project Testing section; it must not change production behavior merely to make tests pass.
+Command: `test-setup` — Establish or reconcile a small, trustworthy testing portfolio from Static/Unit through representative System/E2E evidence. It may modify test infrastructure, tests, test CI configuration, and the project Testing section; it must not change production behavior merely to make tests pass. Its specialized evidence matrix may supplement the common completion contract because testing responsibility state is part of the requested result.
 
 ## Existing repository after stack/architecture changes
 
