@@ -1,6 +1,8 @@
 # Convenience prompt index
 
-These are explicit, bounded entry points. They coordinate existing OpenCode, OMO Slim, Spec Kit, and agent-reference capabilities; they do not replace them.
+These are explicit, bounded entry points. They coordinate existing OpenCode, OMO Slim, APM, optional Spec Kit, and agent-reference capabilities; they do not replace them.
+
+Spec Kit is **not** part of the default agent-reference project baseline. Its absence is healthy. Bootstrap/refresh must not install, restore, or repair it unless the user explicitly requests Spec Kit work.
 
 Use the prompt file from the reference source rather than copying its body into every repository.
 
@@ -20,7 +22,7 @@ Read /path/to/agent-reference/prompts/PROJECT_BOOTSTRAP.md and execute it comple
 Do not modify application source during bootstrap.
 ```
 
-Expected scope: repository facts, project `AGENTS.md`, selected project-local Skills, minimal project-local OMO Slim Skill routing, Spec Kit setup/health, configuration validation.
+Expected scope: repository facts, project `AGENTS.md`, project-relevant Skill selection/ownership, minimal project-local OMO Slim Skill routing, and configuration validation. Spec Kit setup is included only when explicitly requested.
 
 ## Microsoft APM setup
 
@@ -53,7 +55,7 @@ Read /path/to/agent-reference/prompts/PROJECT_REFRESH.md and execute it for the 
 Keep the refresh configuration-only.
 ```
 
-Expected scope: stale `AGENTS.md`, Skill selection/routing, OMO local routing, Spec Kit integration/constitution drift, configuration validation.
+Expected scope: stale `AGENTS.md`, Skill selection/ownership, OMO local routing, optional explicitly requested Spec Kit maintenance, and configuration validation. A removed/absent Spec Kit integration is not recreated automatically.
 
 ## Read-only setup health check
 
@@ -61,6 +63,8 @@ Expected scope: stale `AGENTS.md`, Skill selection/routing, OMO local routing, S
 Read /path/to/agent-reference/prompts/PROJECT_AUDIT.md and audit the current repository.
 Do not modify files.
 ```
+
+Spec Kit absence is not an audit finding; existing `.specify/` state may be reported read-only when present.
 
 ## Understand an unfamiliar repository
 
@@ -84,4 +88,5 @@ Do not modify files.
 - Testing portfolio/infrastructure setup: `TEST_SETUP`.
 - Already configured but stale: `PROJECT_REFRESH`.
 - Unsure whether setup is healthy: `PROJECT_AUDIT` before mutating anything.
+- Spec Kit: opt in explicitly when the project actually wants specification/governance workflows.
 - Do not chain all prompts by default. Choose the narrowest one that matches the task.
