@@ -28,9 +28,20 @@ jobs:
 
       - name: Materialize one-off generator
         run: |
-          base64 -d .tmp/expand_skills.py.gz.b64 | gunzip > .tmp/expand_skills.py
-          base64 -d .tmp/skills-expansion-manifest.json.gz.b64 | gunzip > .tmp/skills-expansion-manifest.json
-          base64 -d .tmp/audit.py.gz.b64 | gunzip > tools/audit.py
+          python3 - <<'PY'
+          import base64
+          import gzip
+          from pathlib import Path
+
+          files = (
+              ('.tmp/expand_skills.py.gz.b64', '.tmp/expand_skills.py'),
+              ('.tmp/skills-expansion-manifest.json.gz.b64', '.tmp/skills-expansion-manifest.json'),
+              ('.tmp/audit.py.gz.b64', 'tools/audit.py'),
+          )
+          for source, target in files:
+              encoded = Path(source).read_bytes()
+              Path(target).write_bytes(gzip.decompress(base64.b64decode(encoded)))
+          PY
           python3 -m py_compile .tmp/expand_skills.py tools/audit.py
 
       - name: Generate pinned Skill expansion
