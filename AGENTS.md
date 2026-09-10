@@ -81,7 +81,7 @@ Do not reintroduce the legacy `global/HISTORY.md`, `.opencode/history/`, or Simp
 
 Keep project-local OMO Slim examples under `templates/omo/` as non-authoritative composition aids.
 
-- Examples must contain only project-local Skill routing, not user-specific models, credentials, MCP endpoints, companion state, or full global configuration.
+- Root stack examples must contain only project-local Skill routing, not user-specific models, credentials, MCP endpoints, companion state, or full global configuration. Separate `templates/omo/mcp/` examples may contain approved MCP access lists only; server definitions remain under `templates/opencode/`.
 - Use current OMO Slim schema/configuration semantics as authority.
 - Make conditional Skills obvious in `ROUTING.md`; do not encode every optional technology into a broad default template.
 - Never auto-route operational Skills.
@@ -135,3 +135,11 @@ Before packaging a revision:
 19. distinguish deterministic static PASS from APM/OpenCode/OMO behavioral PASS and update evaluation evidence honestly.
 
 Do not add a custom installer, manifest engine, migration system, or agent runtime to solve distribution. Reproducible distribution belongs in established APM primitives and bounded configuration prompts.
+
+## Adopted tools and setup
+
+Keep the original runtime registry schema stable; agent capabilities, project automation and developer CLI catalogs have distinct scopes and globally unique IDs. A preferred tool is not necessarily installed, enabled, authenticated or runtime-verified. Pilot/operational tools remain explicit opt-ins. Recent upstream activity is not a safety certificate; inspect explicit maintenance announcements too.
+
+Setup prompts coordinate native upstream installation methods on the explicitly targeted host. They must preserve current managers/configuration and must not become an installer, patch engine or automatic consumer migration. Ship MCP fragments disabled and secret-free. OpenCode owns MCP transports; OMO owns per-agent access; global/project instructions own usage policy. Preserve current preset/wildcard/exclusion behavior and do not duplicate a healthy OMO Context7 provider.
+
+Validate adopted catalogs, template negative cases and relevant direct-tool fixtures alongside the existing audit. Keep direct CLI/MCP fixture results separate from target-host OpenCode/OMO behavior and consumer CI/Bot enrollment. Do not promote policy from a handshake or copy old runtime evidence to a new date. No new Skill snapshot is required merely because a CLI or MCP was added.

@@ -12,6 +12,8 @@ When this prompt is read from an `agent-reference/prompts/` directory, treat the
 
 ## Scoped guidance and evidence-backed recommendations
 
+For tool recommendations also read `catalog/TOOLING.md` and the project-tool section of `project/SCOPED_GUIDANCE.md`. Report evidence, existing owner and selected candidate; do not install binaries, add CI/security/Bot workflows or change global OpenCode/MCP configuration under bootstrap/refresh-only authority. Explicit tooling setup belongs to `prompts/PROJECT_TOOLING_SETUP.md` (project) or `prompts/TOOLING_SETUP.md` (workstation).
+
 Read `project/SCOPED_GUIDANCE.md` from the resolved agent-reference source root when module instructions, parallel writes, or changed Skill selection are in scope. Use root-only guidance unless distinct maintained module rules justify a split. Preserve existing scoped files, route to them explicitly, and verify in-scope/out-of-scope host behavior before claiming automatic discovery.
 
 For proposed Skill changes, show concrete source/dependency evidence mapped to exact candidate IDs and selection reasons. Recommendations are not automatic installation; retain the existing APM ownership and mutation checkpoints. Do not create a stack detector, installer, or extra selection manifest.

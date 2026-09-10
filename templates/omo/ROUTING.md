@@ -89,7 +89,7 @@ Fixer candidates:
 - `vue`
 - `vite`
 - `pinia` — only when Pinia is present.
-- `vueuse-functions` — only when VueUse is present or deliberately being adopted.
+- `vueuse-functions` — only when VueUse is present or deliberately adopted.
 - `pnpm` — only when pnpm is used.
 - `vitest` — only when Vitest is configured/used.
 
@@ -148,3 +148,7 @@ Orchestrator already has wildcard access in the common global configuration, so 
 
 Never auto-route `skills/operational/*`. These may execute tools, access browsers/profiles, run local services, deploy, mutate infrastructure, or depend on credentials. Require explicit user authorization for the specific Skill and task.
 OMO routing is not a security boundary by itself. Use OpenCode `permission.skill` (`ask`/`deny`) when consequential Skill loading needs an explicit gate.
+
+## MCP routing
+
+For approved tool adoption use [mcp/README.md](mcp/README.md), separately from these Skill lists. Reuse OMO's healthy Context7 provider and existing `gh_grep` access. Preserve intentional `mcps` allowlists, wildcards and exclusions; do not give every agent every newly installed server. Verify actual delegated calls and permissions after restart/preset switching. CLI tools do not get MCP entries.

@@ -25,8 +25,8 @@ The reviewed catalog lives under `skills/`. APM exposes the non-operational subs
 Apply the pack incrementally.
 
 1. Diff/merge `global/AGENTS.md` into `~/.config/opencode/AGENTS.md`; never overwrite an existing personal file blindly.
-2. Copy `global/ENGINEERING.md` and `global/MEMORY.md` only after checking for existing files with those names.
-3. For the recommended user-level tooling stack, explicitly run `prompts/OPENCODE_PLUGIN_SETUP.md`.
+2. Copy `global/ENGINEERING.md`, `global/MEMORY.md`, and `global/TOOLS.md` only after checking for existing files with those names.
+3. For first workstation setup, explicitly run `prompts/TOOLING_SETUP.md`. The narrower `OPENCODE_PLUGIN_SETUP.md` entry remains supported. Missing installations are a normal starting state; optional tools are not bulk-installed.
 4. Start with zero global Skills. Use APM to select only project-relevant non-operational Skills; manual copying is a fallback, not the preferred package workflow.
 5. Create/refine the project `AGENTS.md` manually or explicitly run `prompts/PROJECT_BOOTSTRAP.md`.
 6. Restart OpenCode after plugin/Skill/routing changes before checking discovery and behavior.
@@ -34,7 +34,7 @@ Apply the pack incrementally.
 Example tooling setup request:
 
 ```text
-Read /path/to/agent-reference/prompts/OPENCODE_PLUGIN_SETUP.md and execute it completely for my current OpenCode environment.
+Read /path/to/agent-reference/prompts/TOOLING_SETUP.md and execute it for my current OpenCode V1 environment.
 Preserve unrelated OpenCode and OMO Slim configuration.
 ```
 
@@ -111,6 +111,16 @@ agent-reference/
     └── LICENSES/
 ```
 
+## Adopted tool setup
+
+The approved 24-tool set is documented in [catalog/TOOLING.md](catalog/TOOLING.md). Existing runtime policy stays in `catalog/tooling.json`; five agent capabilities, ten project-automation tools and nine developer CLIs have separate registries with cross-catalog ID checks. Catalog inclusion is not installation or startup activation.
+
+Use [TOOLING_SETUP](prompts/TOOLING_SETUP.md) for target-host inventory -> missing selected installation -> minimal OpenCode/OMO merge -> actual tests -> NOOP/rollback checks. Use [PROJECT_TOOLING_SETUP](prompts/PROJECT_TOOLING_SETUP.md) for a scoped consumer repository and [DEVELOPER_CLI_SETUP](prompts/DEVELOPER_CLI_SETUP.md) for selected workstation utilities. All share [installation/ownership rules](templates/setup/CONTRACT.md) and [supported installation channels](templates/setup/INSTALLATION.md).
+
+MCP server fragments live in [templates/opencode](templates/opencode/README.md), all initially disabled. OMO [MCP access examples](templates/omo/mcp/README.md) are separate from Skill routing; Context7 may already be supplied by OMO. CLI-only utilities are not plugins/MCPs. Project [automation examples](templates/project/README.md) and [security CI examples](templates/github/README.md) are opt-in, not automatically deployed to every repository. Existing healthy build/task/runtime/hook owners win.
+
+A GitHub merge or APM sync does not modify your workstation's `opencode.json(c)`, OMO settings or global AGENTS. Execute the setup prompt in OpenCode on that machine. Credentials/App grants and actual host smoke remain separate requirements. See [capability evidence boundaries](evaluation/CAPABILITY_SMOKE.md) and [the adoption plan](evaluation/TOOL_ADOPTION_PLAN.md).
+
 ## Global references
 
 Recommended OpenCode global files:
@@ -119,11 +129,13 @@ Recommended OpenCode global files:
 ~/.config/opencode/
 ├── AGENTS.md
 ├── ENGINEERING.md
-└── MEMORY.md
+├── MEMORY.md
+└── TOOLS.md
 ```
 
 - `AGENTS.md` is the short router, priority, scope, safety, and validation baseline.
 - `ENGINEERING.md` is conditional. Load it for architecture/design review, unclear root-cause debugging, refactoring, meaningful cross-boundary work, security/reliability/performance decisions, and structural review—not for every small edit.
+- `TOOLS.md` is conditional tool-selection/authorization guidance, not a preload list or installer.
 - `MEMORY.md` defines how automatically injected/recalled `opencode-mem` context is interpreted: repository evidence remains authoritative, routine work does not require a manual handoff, and manual memory operations are exceptional/on-demand.
 
 The retired file-based work journal under `.opencode/history/` and the retired Simple Memory branch-handoff protocol are not part of the active system. Do not recreate them when persistent memory is unavailable; continue from current repository evidence.

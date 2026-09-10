@@ -16,6 +16,8 @@ Identify maintained files/builds, supported languages, runtime versions, existin
 
 ## Mutation
 
+Use [project task/hook/runtime examples](../templates/project/README.md) and [CI security examples](../templates/github/README.md) only after establishing scope. These examples are not automatically copied or enabled. Run their native validators and target-specific clean/failing tests; the repository fixture checks are not consumer-project certification.
+
 Before writes, list selected package installations and config/workflow paths. On a developer workstation, request any ungranted global install/admin scope; use an existing approved project-local package route when supported. CI installation on a disposable runner is not proof of workstation installation.
 
 Use current upstream syntax and the repository's real commands. Add only missing config under the current owner's files. Keep action revisions and executable dependencies pinned; preserve dirty changes. No empty `just test`/`just security` recipes, success stubs or invented native commands. `just verify` is optional; native commands remain available for diagnosis. Keep mise runtime management separate from just task ownership when both are adopted.

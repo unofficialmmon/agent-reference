@@ -95,6 +95,10 @@ If this repository intentionally uses Spec Kit:
 - current project contracts/source and explicit user requirements still remain authoritative;
 - do not start Spec Kit automatically for unrelated routine fixes.
 
+## Tooling (only when adopted)
+
+Omit this section when it adds no project-specific facts. Record installed/authorized capability IDs and their config owner, actual task and native commands, CI coverage and prerequisites. Do not copy global tool descriptions or infer installation from catalog inclusion. Existing healthy build/runtime/hook/update owners win over preferred examples. Specialized tool setup, browser use, migration recipes and GitHub writes require their own applicable authorization.
+
 ## Testing
 
 Record only the testing topology, executable evidence, commands, and prerequisites that actually exist in this project.

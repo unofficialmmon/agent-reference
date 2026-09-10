@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### OpenCode V1 tool adoption (2026-09-10)
+
+- Added 24 selected tools in scoped capability/automation/developer catalogs without changing the existing 16-entry runtime policy schema; added read-only upstream observations and negative tests.
+- Added first-workstation, developer CLI and project setup entries with official installation channels, current-state inventory, secret-safe surgical merge, rollback and honest host evidence.
+- Added four disabled MCP fragments, separate OMO MCP composition and conditional global TOOLS guidance; prevent duplicate Context7, retain Serena pilot and Playwright operational opt-in.
+- Added actual disposable ast-grep/Playwright MCP smoke and checker clean/negative/partial-staging fixtures, plus opt-in project/CI examples and audit integration.
+- Recorded Gitleaks' feature-complete/security-patch-only maintenance announcement; no unreviewed replacement or second scanner was adopted.
+- No V2, vendor Skill modification, new Skill activation, user-workstation installation or automatic consumer CI/Bot enrollment.
+
 ### V1 measured quality
 
 - Added maintainer-only tooling policy, checked README projection, and explicitly historical structured smoke evidence.

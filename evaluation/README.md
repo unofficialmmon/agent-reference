@@ -175,3 +175,11 @@ AgentRC source contracts checked for this workflow: `microsoft/agentrc` revision
 Repository CI retains audit/test summaries and a source snapshot for reproduction. Native model responses/trajectories are not uploaded by default: they may contain repository or provider context. The optional workflow retains only gate status and context/version metadata. Keep sensitive transcripts local and explicitly review/redact anything selected for publication.
 
 The expected follow-up host checks after adopting scoped/concurrency guidance are: applicable scoped-rule reading, out-of-scope non-interference, explicit writer ownership, integrated validation, and effective selected-Skill discovery. Mark them `NOT RUN` until actually exercised in the user's OpenCode/OMO/APM environment.
+
+## Tool adoption verification
+
+The 24 newly selected tools are policy entries, not 24 installation receipts. `tools/tool_catalog.py` validates the extended registries and can emit bounded upstream observations; `tools/capability_templates.py` validates shipped fragments only. Both are included in the static audit. [CAPABILITY_SMOKE.md](CAPABILITY_SMOKE.md) separates direct CLI/MCP checks from actual OpenCode/OMO host behavior.
+
+`capability-smoke.yml` exercises installed ast-grep and isolated localhost Playwright MCP in a disposable runner. `automation-smoke.yml` exercises installed ShellCheck, Hadolint, Gitleaks and Trivy on clean/failing inert fixtures, including partial staging and redaction. These do not certify a consumer application, workstation install, CodeQL/App enrollment, recipe migration, or authenticated remote MCP calls. Gitleaks upstream's security-patch-only maintenance state is recorded in the project/tool guidance.
+
+Use [TOOL_ADOPTION_PLAN.md](TOOL_ADOPTION_PLAN.md) for delivery scope and PR records. Preserve old evidence dates; never relabel historical PASS as a new host result. Missing credentials/host access and unexecuted model evaluations remain BLOCKED/NOT RUN.

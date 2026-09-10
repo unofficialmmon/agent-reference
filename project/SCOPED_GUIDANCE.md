@@ -27,3 +27,11 @@ Check `activationGuidance`, source risk, and producer availability. Recommend on
 Read-only exploration may run in parallel. Before any parallel writes, identify each writer's files and shared contracts. Overlapping files, lockfiles, generated outputs, migrations, and shared test fixtures require a single writer or serialization. Disjoint filenames do not prove semantic independence.
 
 For substantial independent mutations, use native Git worktrees when authorized and available. Worktrees separate files, not ports, databases, credentials, or external services; isolate those explicitly. Do not force-clean worktrees or create commits/merges as an implicit consequence of delegation. The coordinator reviews the integrated diff and runs combined relevant validation; separate subagent PASS reports are not integration proof.
+
+## Project tool recommendations
+
+Read `catalog/TOOLING.md` and the selected automation/developer/agent catalog from the source root. Use the same evidence -> candidate -> existing owner -> decision map for tools. A GitHub remote alone does not prove CodeQL language support or entitlement. Docker/shell examples inside vendor snapshots do not justify adding lint to every consumer. An absent hook/task/runtime facade is a candidate gap, not authorization to migrate an existing healthy owner.
+
+Bootstrap/refresh may record actual configured tool facts in project AGENTS, but installation and CI/Bot/hook setup require the separate explicit tooling setup scope. Refer to `prompts/PROJECT_TOOLING_SETUP.md`, `templates/project/README.md` and `templates/github/README.md`; do not copy a universal workflow set. For MCP configuration use the OpenCode setup and composition examples, not a custom patcher.
+
+Record only project-specific enabled capabilities, target paths, canonical/native commands and known prerequisites. Do not duplicate 24 tool manuals in project AGENTS. Source-rewriting OpenRewrite and browser-driving Playwright remain operational, even when their project stacks are present. Shared browser, ports, databases and credentials need explicit ownership just like files.

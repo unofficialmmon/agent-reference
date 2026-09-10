@@ -43,6 +43,8 @@ Playwright MCP: explicit browser task only. Keep disabled otherwise; when select
 
 ## Configuration ownership
 
+Use [the disabled MCP fragments and setup checks](../templates/opencode/README.md), [OMO access composition](../templates/omo/mcp/README.md) and [global reference merge](../templates/setup/GLOBAL_REFERENCE_MERGE.md) as scoped candidates. No example is a complete replacement configuration. Validate one actual direct operation and delegated call using [CAPABILITY_SMOKE.md](../evaluation/CAPABILITY_SMOKE.md).
+
 External MCP server transport, command/URL, authentication reference and enabled state belong to OpenCode `mcp` configuration, not `plugin`. OMO defines which agents can access those MCPs; do not duplicate server endpoints there. CLI binaries need PATH visibility, not invented MCP entries. Models/providers remain unchanged.
 
 Compose actual effective allowlists, preserving wildcards, explicit exclusions and unrelated MCPs/Skills. Do not blindly replace arrays with examples. Verify root vs active-preset behavior for the installed OMO version and test after `/preset` switching when used. Newly installed tools must not silently expand wildcard agents' operational access. Apply explicit permissions at the actual tool boundary; routing alone is not a sandbox.
