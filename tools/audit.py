@@ -17,6 +17,8 @@ from pathlib import Path
 sys.dont_write_bytecode = True
 
 import _audit_core as core
+import tool_catalog
+import capability_templates
 import quality
 from eval_gate import load_suite
 
@@ -176,6 +178,20 @@ def audit_required_files(audit: core.Audit) -> None:
         "tools/README.md",
         "tools/_audit_core.py",
         "tools/audit.py",
+        "catalog/agent-capabilities.json",
+        "catalog/automation-tools.json",
+        "catalog/developer-tools.json",
+        "catalog/TOOLING.md",
+        "global/TOOLS.md",
+        "prompts/TOOLING_SETUP.md",
+        "prompts/DEVELOPER_CLI_SETUP.md",
+        "prompts/PROJECT_TOOLING_SETUP.md",
+        "templates/setup/CONTRACT.md",
+        "templates/setup/INSTALLATION.md",
+        "templates/opencode/README.md",
+        "templates/project/README.md",
+        "templates/github/README.md",
+        "evaluation/CAPABILITY_SMOKE.md",
         "tools/quality.py",
         "tools/freshness.py",
         "tools/eval_gate.py",
@@ -220,6 +236,11 @@ def audit_required_files(audit: core.Audit) -> None:
     _audit_prompt_mirror(audit, "prompts/APM_SETUP.md", ".apm/prompts/apm-setup.prompt.md")
     _audit_prompt_mirror(audit, "prompts/AGENT_SYNC.md", ".apm/prompts/agent-sync.prompt.md")
     _audit_apm_skill_mirrors(audit)
+    try:
+        audit.metrics["selectedToolEntries"] = len(tool_catalog.load_tools(ROOT))
+        audit.metrics["mcpFragments"] = capability_templates.check(ROOT)["fragments"]
+    except (OSError, ValueError, TypeError, KeyError, IndexError) as exc:
+        audit.error("TOOL_ADOPTION_CONTRACT", str(exc))
     result = quality.check_repository(ROOT)
     for error in result["errors"]:
         audit.error("QUALITY_METADATA", error)

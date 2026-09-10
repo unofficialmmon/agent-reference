@@ -41,7 +41,7 @@ def validate_fragment(data):
     else:
         require(server.get('type') == 'local', 'Expected local MCP')
         command = server.get('command')
-        require(isinstance(command, list) and all(isinstance(x, str) and x for x in command), 'Invalid command array')
+        require(isinstance(command, list) and len(command) >= 3 and all(isinstance(x, str) and x for x in command), 'Invalid command array')
         joined = ' '.join(command)
         require('@latest' not in joined and '<' not in joined and '>' not in joined, 'Unpinned/unresolved MCP command')
         require(data.get('permission', {}).get(ident + '_*') in {'ask', 'deny'}, 'Operational permission gate missing')

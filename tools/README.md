@@ -49,3 +49,14 @@ python3 tools/eval_gate.py
 `freshness.py --online` is an explicit read-only upstream check; see [catalog maintenance](../catalog/MAINTENANCE.md) for statuses, limits, and review policy. `quality.py --tooling-table` prints the deterministic README projection without modifying it.
 
 `eval_gate.py --report <native-output.json> --context <run-context.json>` requires the actual AgentRC `--output` artifact, not its summary stdout. Capture context immediately before evaluation using `eval_gate.py --capture-context`; this records revision, suite/instruction hashes and timestamp, not a test result. The gate rejects missing, extra, duplicate, unknown, malformed, or stale-suite evidence and requires all cases to pass. Context mismatch or a missing report cannot pass. This is policy-response evidence only; OpenCode/OMO/APM host checks remain separate.
+
+## Tool adoption maintainers
+
+- `python3 tools/tool_catalog.py`: offline schema/ID/activation checks across runtime and adopted-tool catalogs.
+- `python3 tools/tool_catalog.py --online`: read-only upstream metadata/commit/release observations; exit 2 for unresolved/partial results, never install/update.
+- `python3 tools/capability_templates.py`: shipped-fragment policy checks, not arbitrary user-config validation.
+- `python3 tools/smoke_ast_grep.py`: execute an already installed CLI on temporary structural fixtures.
+- `node tools/smoke_playwright.cjs`: direct isolated MCP smoke using the explicitly supplied isolated `CAPABILITY_PREFIX` test installation.
+- `python3 tools/smoke_security.py`: installed checker clean/negative/partial-staging tests; no source scan or package installation.
+
+The main audit now includes adopted catalogs and MCP fragments. Tests cover both valid examples and rejected unsafe inputs. Fixture workflows own disposable-runner test dependency installation; these scripts are not workstation installers. Keep generated reports outside the repository and never attach unredacted findings or personal configuration.

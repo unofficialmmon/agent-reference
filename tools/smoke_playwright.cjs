@@ -22,6 +22,7 @@ async function main() {
   try {
     await new Promise((resolve, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', resolve); });
     await client.connect(transport);
+    if (transport.stderr) transport.stderr.on('data', () => {});
     const tools = await client.listTools();
     for (const name of ['browser_navigate', 'browser_snapshot', 'browser_close']) {
       if (!tools.tools.some(t => t.name === name)) throw new Error(`Missing MCP tool ${name}`);

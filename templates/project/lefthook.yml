@@ -1,0 +1,5 @@
+# Merge into an existing approved Lefthook configuration, not another hook owner.
+pre-commit:
+  commands:
+    secrets:
+      run: gitleaks git --staged --redact --no-banner --exit-code 1 .

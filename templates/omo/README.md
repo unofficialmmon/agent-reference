@@ -43,3 +43,7 @@ Use a preset-local override only when Skill routing is intentionally different f
 - `react-native.jsonc` — React Native baseline.
 
 `PROJECT_BOOTSTRAP.md` and `PROJECT_REFRESH.md` should read `ROUTING.md`, use the nearest example only as a candidate, and produce the smallest evidence-backed project override.
+
+## MCP composition is separate
+
+The existing stack templates remain Skill-only. New MCP allowlist candidates and their distinct ownership rules are in [mcp/README.md](mcp/README.md). They refer to already registered OpenCode MCP server IDs, do not define endpoints and must not replace current allowlists, exclusions or active preset behavior. See [OpenCode fragments](../opencode/README.md) for the server layer.

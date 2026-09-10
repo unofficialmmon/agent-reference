@@ -52,6 +52,8 @@ Determine whether the current configuration gives coding agents accurate, minima
 
 ## Scoped and selection consistency
 
+When approved tool catalogs are available, audit installation/configuration/authentication/routing evidence separately. Flag duplicate Context7 providers, a CLI registered as MCP/plugin, unintended wildcard access to operational tools, overwritten MCP exclusions, non-existent PATH executables, and stale setup claims. Inspect actual OMO preset and OpenCode permission layers without modifying them. An uninstalled optional tool is not a defect; a required configured tool that cannot execute is unverified. Do not install packages, enable MCPs, run browser/migration operations or enroll Bots during this read-only audit.
+
 Use `project/SCOPED_GUIDANCE.md` from the agent-reference source root when available. Check root-to-module references exist, applicable scoped rules agree with current ownership/contracts, and unrelated modules are not eagerly loaded. Treat untested nested auto-injection as `UNVERIFIED`, not PASS.
 
 For selected/routed Skills, require maintained stack or task evidence; distinguish recommendations from actual APM selection and effective discovery. Confirm parallel writers have explicit non-overlapping ownership and that combined validation, not separate agent reports, supports completion. These are read-only findings; do not rewrite configuration during audit.
