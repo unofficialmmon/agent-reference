@@ -1,108 +1,52 @@
 # Convenience prompt index
 
-These are explicit, bounded entry points. They coordinate existing OpenCode, OMO Slim, APM, optional Spec Kit, and agent-reference capabilities; they do not replace them.
+Use the narrowest explicit entry point from a local, reviewed agent-reference source checkout or resolved APM package source. Catalog inclusion is not installation. Project technology Skills remain APM-owned; Spec Kit remains opt-in. These prompts coordinate native tools, not a new runtime or installer.
 
-Spec Kit is **not** part of the default agent-reference project baseline. Its absence is healthy. Bootstrap/refresh must not install, restore, or repair it unless the user explicitly requests Spec Kit work.
+## First workstation setup, including missing tools
 
-For APM-adopted repositories, project technology Skills should be owned by the project APM deployment rather than duplicated under the user-global Skill root. User-level Skills are best reserved for genuine cross-project utilities/tooling or deliberate documented overrides.
+Read `TOOLING_SETUP.md` when workstation setup and its combined report are explicitly wanted:
 
-Use the prompt file from the reference source rather than copying its body into every repository.
+```text
+Read /path/to/agent-reference/prompts/TOOLING_SETUP.md and execute it for this machine.
+Preserve my existing models, providers, MCP exclusions, shell configuration and project work.
+Keep Serena pilot and Playwright/OpenRewrite disabled unless I explicitly select them.
+```
+
+Default scope is preferred agent capabilities plus rg/jq. Optional human UX tools require selection; project configuration requires a named/scoped repository. Actual credentials or administrator grants must be supplied through the supported host flow, never pasted into chat or committed. A GitHub-only execution cannot install the user's computer.
+
+## Narrow setup entries
+
+| Entry | Scope |
+|---|---|
+| `OPENCODE_PLUGIN_SETUP.md` | Existing compatible filename: OpenCode runtime/plugins, approved MCP capabilities, ast-grep, and minimal OpenCode/OMO configuration reconciliation |
+| `DEVELOPER_CLI_SETUP.md` | Selected developer CLI installation and separately approved shell integrations |
+| `PROJECT_TOOLING_SETUP.md` | Evidence-backed project CI/security/task/runtime/hook configuration; no application-source migration |
+
+All setup entries use [the common contract](../templates/setup/CONTRACT.md) and [official installation channels](../templates/setup/INSTALLATION.md). Start with an inventory; preserve healthy installations; surgically merge approved keys; keep rollback; validate actual operations. No blind global upgrades, overwrite, automatic pilot promotion or optional-tool bulk installation.
+
+## Project agent guidance and Skills
+
+```text
+Read /path/to/agent-reference/prompts/PROJECT_BOOTSTRAP.md and execute it for the current repository.
+Do not modify application source or user-global configuration.
+```
+
+Bootstrap owns factual project AGENTS, relevant Skill selection and minimal routing. Tooling recommendations do not silently invoke a workstation installer or a security/Bot setup.
+
+`PROJECT_REFRESH.md` reconciles stale guidance/Skill/routing facts; healthy state is NOOP. It does not restore removed Spec Kit or replace native build/runtime conventions.
+
+`APM_SETUP.md` (`apm-setup`) performs first APM adoption and selected-content deployment. `AGENT_SYNC.md` (`agent-sync`) performs routine updates only after healthy adoption. Neither updates user-global tool installations. Canonical prompts and APM command mirrors retain their existing ownership.
+
+`TEST_SETUP.md` (`test-setup`) establishes a real testing portfolio and may modify test infrastructure/tests/test CI, but not production behavior merely to pass checks. Do not substitute lint or security scanning for actual application tests.
+
+## Read-only entries
+
+- `PROJECT_AUDIT.md`: configuration health; do not install or repair during audit.
+- `CODEBASE_ONBOARD.md`: current repository map; no files changed.
+- `CHANGE_AUDIT.md`: acceptance review of the working-tree change; no files changed.
+
+Use `/speckit.*` only for explicitly selected specification work. Do not chain all setup/audit prompts by default.
 
 ## Completion reports
 
-Mutation/setup prompts follow the global completion response contract in `global/AGENTS.md`:
-
-- lead with a concrete overall result;
-- name actual changed paths/symbols and what changed there;
-- include behavior/decision sections only when they materially help review;
-- report validation as `PASS`, `FAIL`, `BLOCKED`, or `NOT RUN` with the actual command/check;
-- show only material unresolved items under `Needs attention`;
-- omit normal preserved state and internal checklist dumps;
-- end after the final report instead of opening an optional follow-up menu.
-
-Read-only audit/onboarding prompts may keep their task-specific output structures when those structures better express findings or discovery evidence.
-
-## OpenCode tooling environment setup or reconciliation
-
-```text
-Read /path/to/agent-reference/prompts/OPENCODE_PLUGIN_SETUP.md and execute it completely for my current OpenCode environment.
-Preserve unrelated OpenCode and OMO Slim configuration.
-```
-
-Expected scope: current environment inventory, official-upstream re-verification, compatibility-aware reconciliation of the active OpenCode tool stack, retirement/migration of obsolete plugins when present, runtime smoke tests, external-companion validation, and rollback notes. This prompt may change user-level OpenCode/tool configuration; it does not modify application source or commit/push repositories.
-
-## New or newly adopted repository
-
-```text
-Read /path/to/agent-reference/prompts/PROJECT_BOOTSTRAP.md and execute it completely for the current repository.
-Do not modify application source during bootstrap.
-```
-
-Expected scope: repository facts, project `AGENTS.md`, project-relevant Skill selection/ownership, minimal project-local OMO Slim Skill routing, and configuration validation. Spec Kit setup is included only when explicitly requested.
-
-## Microsoft APM setup
-
-```text
-Read /path/to/agent-reference/prompts/APM_SETUP.md and execute it completely for the current repository.
-```
-
-Command: `apm-setup` — Set up Microsoft APM and migrate this project to agent-reference APM management. Configuration/deployment-only; do not modify application source. The preferred end state is APM-owned project technology Skills with no accidental higher-precedence global same-ID override.
-
-## Routine agent-reference APM sync
-
-```text
-Read /path/to/agent-reference/prompts/AGENT_SYNC.md and execute it completely for the current repository.
-```
-
-Command: `agent-sync` — Update agent-reference APM dependencies and reconcile project agent configuration. Run only after `apm-setup` has completed; do not install APM or perform first-time migration.
-
-## Test environment setup
-
-```text
-Read /path/to/agent-reference/prompts/TEST_SETUP.md and execute it completely for the current repository.
-```
-
-Command: `test-setup` — Establish or reconcile a small, trustworthy testing portfolio from Static/Unit through representative System/E2E evidence. It may modify test infrastructure, tests, test CI configuration, and the project Testing section; it must not change production behavior merely to make tests pass. Its specialized evidence matrix may supplement the common completion contract because testing responsibility state is part of the requested result.
-
-## Existing repository after stack/architecture changes
-
-```text
-Read /path/to/agent-reference/prompts/PROJECT_REFRESH.md and execute it for the current repository.
-Keep the refresh configuration-only.
-```
-
-Expected scope: stale `AGENTS.md`, Skill selection/ownership, OMO local routing, optional explicitly requested Spec Kit maintenance, and configuration validation. A removed/absent Spec Kit integration is not recreated automatically.
-
-## Read-only setup health check
-
-```text
-Read /path/to/agent-reference/prompts/PROJECT_AUDIT.md and audit the current repository.
-Do not modify files.
-```
-
-Spec Kit absence is not an audit finding; existing `.specify/` state may be reported read-only when present.
-
-## Understand an unfamiliar repository
-
-```text
-Read /path/to/agent-reference/prompts/CODEBASE_ONBOARD.md and map the current repository.
-Do not modify files.
-```
-
-## Audit a completed working-tree change
-
-```text
-Read /path/to/agent-reference/prompts/CHANGE_AUDIT.md and audit the current change against the request and repository contracts.
-Do not modify files.
-```
-
-## Selection rule
-
-- User-level OpenCode/tool stack setup/reconciliation: `OPENCODE_PLUGIN_SETUP`.
-- New repository bootstrap: `PROJECT_BOOTSTRAP`; existing repository APM adoption: `APM_SETUP`.
-- Existing APM dependency maintenance: `AGENT_SYNC`.
-- Testing portfolio/infrastructure setup: `TEST_SETUP`.
-- Already configured but stale: `PROJECT_REFRESH`.
-- Unsure whether setup is healthy: `PROJECT_AUDIT` before mutating anything.
-- Spec Kit: opt in explicitly when the project actually wants specification/governance workflows.
-- Do not chain all prompts by default. Choose the narrowest one that matches the task.
+Use the global completion contract: concrete Result, actual Changed paths, meaningful Behavior/Decision only when needed, actual Validation checks, material Needs attention, then stop. Separate installation, configuration, authentication, routing, direct operation and host behavior. Use PASS/FAIL/BLOCKED/NOT RUN honestly; configuration presence is not runtime success. Read-only prompts keep their purpose-built output. Do not end a finished setup with an optional-cleanup selector.
