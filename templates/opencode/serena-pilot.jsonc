@@ -1,0 +1,19 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  // Project-local pilot only. First apply a reviewed read-only project config.
+  // This source pin is not a runtime/security certification.
+  "mcp": {
+    "serena": {
+      "type": "local",
+      "command": [
+        "uvx", "--from",
+        "git+https://github.com/oraios/serena@701e7c843f46c6a649203a488cece1bf19f1df90",
+        "serena", "start-mcp-server", "--transport", "stdio",
+        "--project-from-cwd", "--context", "ide", "--mode", "planning",
+        "--enable-web-dashboard", "false", "--open-web-dashboard", "false"
+      ],
+      "enabled": false
+    }
+  },
+  "permission": {"serena_*": "ask"}
+}

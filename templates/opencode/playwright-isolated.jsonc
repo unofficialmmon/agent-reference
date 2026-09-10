@@ -1,0 +1,12 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  // Explicit browser task only; re-verify the pinned package on the target host.
+  "mcp": {
+    "playwright": {
+      "type": "local",
+      "command": ["npx", "-y", "@playwright/mcp@0.0.80", "--isolated", "--headless"],
+      "enabled": false
+    }
+  },
+  "permission": {"playwright_*": "ask"}
+}

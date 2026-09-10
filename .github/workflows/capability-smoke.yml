@@ -1,0 +1,47 @@
+name: capability-smoke
+on:
+  pull_request:
+    paths: ['templates/opencode/**', 'templates/omo/mcp/**', 'tools/smoke_*', '.github/workflows/capability-smoke.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: capability-smoke-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  direct-tools:
+    name: Direct CLI and isolated browser MCP (not OpenCode host)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      CAPABILITY_PREFIX: ${{ runner.temp }}/capability-deps
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned test tools on disposable runner only
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$CAPABILITY_PREFIX" "$RUNNER_TEMP/capability-evidence"
+          npm install --prefix "$CAPABILITY_PREFIX" --save-exact @ast-grep/cli@0.45.3 @playwright/mcp@0.0.80 @modelcontextprotocol/sdk@1.25.2
+          echo "$CAPABILITY_PREFIX/node_modules/.bin" >> "$GITHUB_PATH"
+          "$CAPABILITY_PREFIX/node_modules/.bin/playwright" install --with-deps chromium
+          cp "$CAPABILITY_PREFIX/package-lock.json" "$RUNNER_TEMP/capability-evidence/dependency-lock.json"
+      - name: AST structural search and bounded rewrite
+        run: python3 tools/smoke_ast_grep.py | tee "$RUNNER_TEMP/capability-evidence/ast-grep.json"
+        shell: bash --noprofile --norc -eo pipefail {0}
+      - name: Direct isolated localhost MCP operation
+        run: node tools/smoke_playwright.cjs | tee "$RUNNER_TEMP/capability-evidence/playwright.json"
+        shell: bash --noprofile --norc -eo pipefail {0}
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: capability-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/capability-evidence/
+          if-no-files-found: warn
+          retention-days: 14

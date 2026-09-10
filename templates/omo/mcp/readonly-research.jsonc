@@ -1,0 +1,7 @@
+{
+  // Candidate only. Preserve existing allowlist entries and explicit exclusions.
+  // These IDs must already resolve in the effective OpenCode configuration.
+  "agents": {
+    "librarian": {"mcps": ["context7", "gh_grep", "github"]}
+  }
+}

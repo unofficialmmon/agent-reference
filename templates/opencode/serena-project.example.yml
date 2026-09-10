@@ -1,0 +1,11 @@
+{
+  "project_name": "scoped-project",
+  "language_servers": ["java"],
+  "encoding": "utf-8",
+  "ignore_all_files_in_gitignore": true,
+  "read_only": true,
+  "activation_command": null,
+  "fixed_tools": ["get_symbols_overview", "find_symbol", "find_referencing_symbols"],
+  "excluded_tools": [],
+  "included_optional_tools": []
+}
