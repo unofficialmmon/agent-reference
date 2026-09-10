@@ -1,0 +1,42 @@
+# Misconfiguration example only; add image/dependency scanning for real targets.
+name: config-security
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Install reviewed Trivy release with pinned checksum evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/trivy-package" "$RUNNER_TEMP/security-bin"
+          cd "$RUNNER_TEMP/trivy-package"
+          curl --fail --silent --show-error --location --retry 2 -o checksums.txt https://github.com/aquasecurity/trivy/releases/download/v0.74.0/trivy_0.74.0_checksums.txt
+          printf '%s  checksums.txt\n' bc701c3c3ee8b9acbea2c23257e41381e3854888f51281616a6ba5dc96963821 | sha256sum --check
+          curl --fail --silent --show-error --location --retry 2 -O https://github.com/aquasecurity/trivy/releases/download/v0.74.0/trivy_0.74.0_Linux-64bit.tar.gz
+          sha256sum --check --ignore-missing checksums.txt
+          tar -xzf trivy_0.74.0_Linux-64bit.tar.gz trivy
+          install -m 755 trivy "$RUNNER_TEMP/security-bin/trivy"
+          echo "$RUNNER_TEMP/security-bin" >> "$GITHUB_PATH"
+      - name: Scan maintained configuration targets
+        shell: bash
+        run: |
+          set -euo pipefail
+          trivy config --severity HIGH,CRITICAL --include-non-failures --exit-code 1 --format json --output "$RUNNER_TEMP/trivy-config.json" .
+          python3 - "$RUNNER_TEMP/trivy-config.json" <<'PYCODE'
+          import json, sys
+          report = json.load(open(sys.argv[1], encoding="utf-8"))
+          if not any(row.get("Class") == "config" for row in report.get("Results", [])):
+              raise SystemExit("No configuration target scanned: select actual targets, not a false security PASS")
+          PYCODE

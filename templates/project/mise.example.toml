@@ -1,0 +1,5 @@
+# Optional sample for a Python project, not a universal runtime policy.
+# Reconcile with the project's actual required version and existing manager.
+# Pin the resolved patch with native mise before deployment; this is a sample.
+[tools]
+python = "3.12.11"
