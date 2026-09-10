@@ -10,6 +10,12 @@ This is a project-onboarding task, not a feature implementation task. Do not mod
 
 When this prompt is read from an `agent-reference/prompts/` directory, treat the parent `agent-reference/` directory as the reference source root. Resolve catalog and Skill paths from that root. If the source root cannot be located, do not guess paths or recreate Skill content; continue only with repository-local work and report Skill selection as `NOT RUN`.
 
+## Scoped guidance and evidence-backed recommendations
+
+Read `project/SCOPED_GUIDANCE.md` from the resolved agent-reference source root when module instructions, parallel writes, or changed Skill selection are in scope. Use root-only guidance unless distinct maintained module rules justify a split. Preserve existing scoped files, route to them explicitly, and verify in-scope/out-of-scope host behavior before claiming automatic discovery.
+
+For proposed Skill changes, show concrete source/dependency evidence mapped to exact candidate IDs and selection reasons. Recommendations are not automatic installation; retain the existing APM ownership and mutation checkpoints. Do not create a stack detector, installer, or extra selection manifest.
+
 ## Intended result
 
 Leave the repository with:

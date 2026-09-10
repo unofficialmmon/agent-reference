@@ -26,7 +26,7 @@ Injected or recalled memory is contextual evidence, not an additional authority 
 
 ## Startup and reference loading
 
-- Read the project-root `AGENTS.md` first when present.
+- Read the project-root `AGENTS.md` first when present, then applicable scoped/ancestor instructions before changing files. Read only the affected scope; investigate conflicting contracts instead of silently overriding them. Do not assume untested nested auto-injection.
 - `opencode-mem` may inject relevant project memory automatically in a new session. Do not require a manual recall step merely because a session is resuming.
 - Do not load `MEMORY.md` at every startup. Load it when memory behavior itself matters: resume ambiguity, manual memory management, project-scope questions, migration, privacy, or a conflict between recalled context and repository evidence.
 - Treat injected/recalled memory as a hint. Confirm material facts against current Git/source/configuration/contracts/tests before acting.
@@ -37,7 +37,7 @@ Injected or recalled memory is contextual evidence, not an additional authority 
 - Use native Skill discovery and load only Skills relevant to the task.
 - Treat CodeGraph, search indexes, caches, and symbol databases as navigation aids. Confirm current filesystem/source state before using their results as implementation or architecture authority.
 - Treat sibling/shared repositories as read-only unless explicit authority grants writes.
-- Preserve dirty working-tree changes and unrelated user work.
+- Preserve dirty working-tree changes and unrelated user work. Parallel readers are allowed; writers need explicit file/contract ownership. Serialize overlapping writes, and validate the integrated result rather than trusting separate subagent passes.
 
 ## Requirement discipline
 

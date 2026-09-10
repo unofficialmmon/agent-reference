@@ -30,11 +30,26 @@ jobs:
       - name: Prepare evidence directory
         run: mkdir -p "$RUNNER_TEMP/agent-reference-evidence"
 
+      - name: Positive and negative contract tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tools/tests -v 2>&1 | tee "$RUNNER_TEMP/agent-reference-evidence/tests.txt"
+
+      - name: Static quality and evaluation contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/quality.py > "$RUNNER_TEMP/agent-reference-evidence/quality.json"
+          python3 tools/eval_gate.py > "$RUNNER_TEMP/agent-reference-evidence/eval-suite.json"
+          python3 tools/freshness.py > "$RUNNER_TEMP/agent-reference-evidence/freshness-offline.json"
+
       - name: Deterministic repository audit
         shell: bash
         run: |
           set -euo pipefail
           python3 tools/audit.py | tee "$RUNNER_TEMP/agent-reference-evidence/audit.txt"
+          python3 tools/audit.py --json > "$RUNNER_TEMP/agent-reference-evidence/audit.json"
 
       - name: Whitespace check
         shell: bash

@@ -31,3 +31,13 @@ Keep this repository a static reference/APM producer, not an installer, stack de
 Review repository rules and upstream command contracts; establish baseline; implement bounded changes; run unit/negative tests and full audit; inspect the diff and hashes; run GitHub CI; publish exact checks and remaining host-specific proof in the PR.
 
 Implementation status and exact check results will be recorded after execution, not predicted here.
+
+## Implementation record
+
+Implemented the bounded P0/P1 scope on `feat/measured-quality-v1`: registry/projection checks, read-only subtree freshness reporting, explicitly historical smoke metadata, strict AgentRC suite/result/context gates, 58 deterministic contract tests, scoped/parallel/selection guidance, and separate audit/CLI-contract/report workflows.
+
+Local execution: all 58 tests passed; full audit returned PASS_WITH_WARNINGS with 0 errors, 2 retained upstream length warnings, 78 Skills, 59 APM mirrors, and 19 excluded operational Skills. Whitespace and workflow YAML parsing passed. No vendored Skill, Skill lock, APM Skill mirror, or preserved core-audit implementation changed.
+
+Model-assisted AgentRC assessment and actual OpenCode/OMO/APM host smoke have not been run in this environment. Their absence must not be presented as successful model/runtime validation. GitHub CI results and final revision are recorded in PR #6 after execution. No V2, new baseline plugin, or user-machine configuration change is included.
+
+Deferred: composite Skill scores, analytics ingestion, SBOM automation, and proving measurable before/after model-quality gains. These are not silently represented as implemented.

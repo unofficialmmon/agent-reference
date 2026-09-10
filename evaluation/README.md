@@ -142,3 +142,36 @@ AgentsView: PASS | PARTIAL | FAIL | NOT RUN
 Behavioral cases: PASS | PARTIAL | FAIL | NOT RUN
 Known limitations:
 ```
+
+## V1 measured-quality checks
+
+The suite explicitly sets `instructionFile` to `global/AGENTS.md`. Native AgentRC otherwise defaults to a Copilot instructions path and may silently compare against empty instructions when that file is absent. The maintainer gate rejects missing/empty instructions before a model is invoked.
+
+The 17 cases are non-mutating policy-response assessments, not 17 proven host behaviors. Five cases cover scoped instructions, concurrent ownership, evidence-backed recommendations, absent optional Spec Kit, and audit evidence boundaries. These cross-agent results do not establish OpenCode V1 nested discovery, actual Skill loading, editing correctness, or plugin behavior.
+
+### Native optional assessment
+
+Use the manual `behavioral-eval` workflow only after providing an authorized Copilot evaluation token and explicitly accepting provider usage. Pull requests run CLI-contract checks without model credentials; model execution is never a side effect of a PR. The default workflow token is not assumed to grant Copilot access. The workflow pins the evaluated AgentRC revision and Copilot CLI version, uses Node 22, records context, and requires all cases to pass the native result gate.
+
+For an already provisioned local AgentRC/Copilot environment, choose supported response/judge models explicitly and write outputs outside the checkout:
+
+```bash
+python3 tools/eval_gate.py --capture-context > /tmp/agentrc-context.json
+agentrc eval evaluation/agentrc.eval.jsonc --repo "$PWD" \
+  --model "$RESPONSE_MODEL" --judge-model "$JUDGE_MODEL" \
+  --output /tmp/agentrc-native-results.json --fail-level 100 --json
+python3 tools/eval_gate.py --report /tmp/agentrc-native-results.json \
+  --context /tmp/agentrc-context.json
+```
+
+The context record binds revision, suite/instruction hashes, and capture time to the results being reviewed. It is not signed attestation. Never use an old successful artifact after changing instructions. Inspect trajectories and repeat material failures; compare the same repository, prompts, models, and tool versions for two consistent runs before claiming improvement. A threshold alone is not a measured improvement over a baseline.
+
+AgentRC source contracts checked for this workflow: `microsoft/agentrc` revision `8d0c05c96dcfe674019359bcebd9ab6b251d2203`, `src/commands/eval.ts`, `packages/core/src/services/evaluator.ts`, and `package.json`. Its package requires Node 22 despite an older CI-doc prerequisite. `--json` stdout is a summary envelope; `--output` contains per-case responses, verdicts, and metrics.
+
+### Evidence retention and privacy
+
+`evidence/tool-stack-2026-09-02.json` transcribes the historical summary above. Unknown model/tested-revision values remain null; no new host PASS is claimed. Fresh host records must include redacted artifacts and their exact environment. Static schema validation cannot authenticate those observations.
+
+Repository CI retains audit/test summaries and a source snapshot for reproduction. Native model responses/trajectories are not uploaded by default: they may contain repository or provider context. The optional workflow retains only gate status and context/version metadata. Keep sensitive transcripts local and explicitly review/redact anything selected for publication.
+
+The expected follow-up host checks after adopting scoped/concurrency guidance are: applicable scoped-rule reading, out-of-scope non-interference, explicit writer ownership, integrated validation, and effective selected-Skill discovery. Mark them `NOT RUN` until actually exercised in the user's OpenCode/OMO/APM environment.

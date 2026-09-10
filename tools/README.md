@@ -27,8 +27,25 @@ The audit uses only the Python standard library. It checks:
 - local/authored Markdown links;
 - packaged symlinks and Python cache artifacts.
 
-Expected current packaging metrics are 31 deployable non-operational Skills and 9 excluded operational Skills. The audit derives these counts from the canonical `skills/` tree instead of hard-coding the IDs, so later catalog changes must update the APM surface consistently.
+Expected current packaging metrics are 59 deployable non-operational Skills and 19 excluded operational Skills (78 total). The audit derives these counts from the canonical `skills/` tree instead of hard-coding the IDs, so later catalog changes must update the APM surface consistently.
 
 Warnings do not fail the command. Errors return a non-zero exit code.
 
 A static PASS proves repository and packaging consistency only. It does not prove that a specific installed APM version actually deployed selected Skills, which target path won OpenCode discovery precedence, plugin compatibility, model behavior, OMO routing, Spec Kit execution, opencode-mem behavior, Plannotator feedback, AgentsView discovery, or project-specific outcomes. Use `evaluation/README.md`, `/apm-setup` or `/agent-sync`, and the relevant runtime smoke tests for those checks.
+
+## Quality, freshness, and regression tests
+
+Python 3.10+ standard library only; these tools are maintainer-only, not consumer runtime dependencies.
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tools/tests -v
+python3 tools/quality.py
+python3 tools/freshness.py
+python3 tools/eval_gate.py
+```
+
+`audit.py` includes the quality registry/projection and evidence-schema checks plus the explicit evaluation instruction-file check. Tests cover valid inputs and failure cases; they do not run a coding model. Keep generated reports outside the checkout (CI uses `RUNNER_TEMP`) and disable bytecode so audit does not encounter self-generated artifacts.
+
+`freshness.py --online` is an explicit read-only upstream check; see [catalog maintenance](../catalog/MAINTENANCE.md) for statuses, limits, and review policy. `quality.py --tooling-table` prints the deterministic README projection without modifying it.
+
+`eval_gate.py --report <native-output.json> --context <run-context.json>` requires the actual AgentRC `--output` artifact, not its summary stdout. Capture context immediately before evaluation using `eval_gate.py --capture-context`; this records revision, suite/instruction hashes and timestamp, not a test result. The gate rejects missing, extra, duplicate, unknown, malformed, or stale-suite evidence and requires all cases to pass. Context mismatch or a missing report cannot pass. This is policy-response evidence only; OpenCode/OMO/APM host checks remain separate.

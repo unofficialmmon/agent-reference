@@ -149,13 +149,28 @@ External companion
 └─ AgentsView        session/history/token/cost analytics
 ```
 
-Policy states:
+Tool policy is owned by [catalog/tooling.json](catalog/tooling.json). Policy is not a compatibility verdict or an installation instruction. The following table is a checked projection, not a second source of truth.
 
-- active baseline: OMO Slim, cc-safety-net, RTK, OpenCode Notifier, opencode-mem, Plannotator;
-- external companion: AgentsView, kept outside the OpenCode plugin hook stack;
-- retired: Simple Memory and TokenScope;
-- pilot: `opencode-pty`, only after current OpenCode/runtime/platform compatibility is proven;
-- not baseline/hold: DCP, `opencode-snip`, `opencode-vibeguard`, Morph Fast Apply, and `opencode-ignore` unless a later explicit evaluation changes the decision.
+<!-- tooling-policy:begin -->
+| Tool | Policy | Integration |
+|---|---|---|
+| OpenCode | `baseline` | `host` |
+| OMO Slim | `baseline` | `plugin` |
+| cc-safety-net | `baseline` | `plugin` |
+| RTK | `baseline` | `integration` |
+| OpenCode Notifier | `baseline` | `plugin` |
+| opencode-mem | `baseline` | `plugin` |
+| Plannotator | `baseline` | `integration` |
+| AgentsView | `external` | `companion` |
+| opencode-pty | `pilot` | `plugin` |
+| Simple Memory | `retired` | `plugin` |
+| TokenScope | `retired` | `plugin` |
+| DCP | `hold` | `plugin` |
+| opencode-snip | `hold` | `plugin` |
+| opencode-vibeguard | `hold` | `plugin` |
+| Morph Fast Apply | `hold` | `integration` |
+| opencode-ignore | `hold` | `plugin` |
+<!-- tooling-policy:end -->
 
 ### Memory behavior
 
@@ -301,3 +316,20 @@ Choose the narrowest prompt that matches the task. Project bootstrap/refresh mus
 ### 2026-09 reviewed catalog expansion
 
 Added 38 pinned unique Skills: 28 APM-selectable and 10 operational opt-ins. See `catalog/SKILLS-ZIP-EXPANSION-REVIEW.md` for additions, aliases, merges, exclusions, and deferred provenance work.
+
+## Measured quality maintenance (OpenCode V1)
+
+The [implementation plan](evaluation/MODERNIZATION_PLAN.md) preserves the current runtime and all pinned Skill snapshots. New maintainer tools are not installed into consumer projects.
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tools/tests -v
+python3 tools/audit.py
+python3 tools/freshness.py
+python3 tools/eval_gate.py
+```
+
+The full audit includes tooling-policy projection, historical-evidence schema, and instruction-under-test checks. Freshness uses existing `reviewed` dates; offline output makes no upstream-current claim. Explicit `--online` checks compare the relevant upstream subtree, not unrelated repository commits. Neither mode upgrades anything. See [catalog maintenance](catalog/MAINTENANCE.md).
+
+Native AgentRC assessment is an optional, credential-gated **cross-agent policy-response comparison**. Its suite now explicitly tests `global/AGENTS.md`; a missing instruction file, missing/duplicate case, or unknown verdict cannot pass the result gate. It does not certify OpenCode discovery, plugin hooks, or real editing behavior. See [evaluation](evaluation/README.md) for execution and host-smoke boundaries.
+
+For genuinely different module rules, use [scoped guidance](project/SCOPED_GUIDANCE.md), not one AGENTS file per directory. Parallel readers are allowed; shared-tree writers need explicit ownership and overlapping writes are serialized. Evidence-backed Skill recommendations still require the existing APM selection workflow.

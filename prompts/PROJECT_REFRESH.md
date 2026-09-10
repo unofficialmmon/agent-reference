@@ -10,6 +10,12 @@ Update configuration/reference files only. Do not modify application source, tes
 
 When this prompt is read from an `agent-reference/prompts/` directory, treat the parent `agent-reference/` directory as the reference source root. Resolve catalog and Skill paths from that root. If it cannot be located, do not guess or recreate Skill content; mark catalog reconciliation `NOT RUN`.
 
+## Scoped guidance and evidence-backed recommendations
+
+Read `project/SCOPED_GUIDANCE.md` from the resolved agent-reference source root when module instructions, parallel writes, or changed Skill selection are in scope. Use root-only guidance unless distinct maintained module rules justify a split. Preserve existing scoped files, route to them explicitly, and verify in-scope/out-of-scope host behavior before claiming automatic discovery.
+
+For proposed Skill changes, show concrete source/dependency evidence mapped to exact candidate IDs and selection reasons. Recommendations are not automatic installation; retain the existing APM ownership and mutation checkpoints. Do not create a stack detector, installer, or extra selection manifest.
+
 ## Goal
 
 Reconcile only the agent-facing configuration the repository actually uses:

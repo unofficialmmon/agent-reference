@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+### V1 measured quality
+
+- Added maintainer-only tooling policy, checked README projection, and explicitly historical structured smoke evidence.
+- Added read-only Skill review-age/upstream-subtree reporting using existing lock provenance, without auto-updates or fabricated review dates.
+- Fixed the AgentRC suite's missing instruction-under-test selection, added five scoped/ownership/evidence cases, and added strict result/context gates.
+- Added deterministic positive/negative regression tests and CI evidence retention; static/CLI-contract checks remain separate from credential-gated model assessment and OpenCode host smoke.
+- Added conditional scoped AGENTS guidance, parallel-write ownership, and evidence-backed Skill recommendations to existing project prompts. Preserved V1, APM ownership, zero global Skills, operational isolation, and all upstream snapshot bytes.
+- Corrected stale maintainer documentation counts to 59 selectable and 19 operational Skills. No runtime/model compatibility or performance improvement is claimed without new measurements.
+
+
 ### Added
 
 - Added 38 reviewed pinned Skill IDs (28 selectable, 10 operational opt-ins).
