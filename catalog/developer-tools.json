@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "scope": "developer-cli",
+  "policyReviewedAt": "2026-09-10",
+  "tools": [
+    {"id":"ripgrep","name":"ripgrep (rg)","upstream":"BurntSushi/ripgrep","policy":"baseline","activation":"on-demand","interface":"cli","purpose":"Noninteractive text search for humans and agents; preserve ignore boundaries","docs":"https://github.com/BurntSushi/ripgrep","install":"official-package"},
+    {"id":"jq","name":"jq","upstream":"jqlang/jq","policy":"baseline","activation":"on-demand","interface":"cli","purpose":"JSON inspection and bounded transformation without logging secrets","docs":"https://jqlang.org/download/","install":"official-package"},
+    {"id":"yq","name":"yq (Mike Farah)","upstream":"mikefarah/yq","policy":"optional","activation":"on-demand","interface":"cli","purpose":"YAML/JSON inspection; do not confuse with another yq implementation or round-trip JSONC destructively","docs":"https://github.com/mikefarah/yq","install":"official-package"},
+    {"id":"fd","name":"fd","upstream":"sharkdp/fd","policy":"optional","activation":"user-choice","interface":"cli","purpose":"File search; account for distribution-specific binary names","docs":"https://github.com/sharkdp/fd","install":"official-package"},
+    {"id":"fzf","name":"fzf","upstream":"junegunn/fzf","policy":"optional","activation":"user-choice","interface":"cli","purpose":"Human interactive selection; never block unattended agent jobs","docs":"https://github.com/junegunn/fzf","install":"official-package"},
+    {"id":"bat","name":"bat","upstream":"sharkdp/bat","policy":"optional","activation":"user-choice","interface":"cli","purpose":"Human file viewing; plain no-pager output for automation","docs":"https://github.com/sharkdp/bat","install":"official-package"},
+    {"id":"zoxide","name":"zoxide","upstream":"ajeetdsouza/zoxide","policy":"optional","activation":"user-choice","interface":"cli","purpose":"Human shell navigation; initialize only the user's actual shell with consent","docs":"https://github.com/ajeetdsouza/zoxide","install":"official-package"},
+    {"id":"lazygit","name":"lazygit","upstream":"jesseduffield/lazygit","policy":"optional","activation":"user-choice","interface":"cli","purpose":"Human Git TUI; not an agent or CI dependency","docs":"https://github.com/jesseduffield/lazygit","install":"official-package"},
+    {"id":"difftastic","name":"difftastic","upstream":"Wilfred/difftastic","policy":"optional","activation":"user-choice","interface":"cli","purpose":"Human syntax-aware review; native Git diff remains patch/check authority","docs":"https://difftastic.wilfred.me.uk/installation.html","install":"official-package"}
+  ]
+}

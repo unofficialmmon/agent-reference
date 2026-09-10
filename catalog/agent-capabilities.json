@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "scope": "agent-capabilities",
+  "policyReviewedAt": "2026-09-10",
+  "tools": [
+    {"id":"github-mcp","name":"GitHub MCP Server","upstream":"github/github-mcp-server","policy":"baseline","activation":"on-demand","interface":"mcp","purpose":"Repository, issue, PR and Actions evidence; default read-only with limited toolsets","docs":"https://github.com/github/github-mcp-server","install":"remote-or-official-binary"},
+    {"id":"context7","name":"Context7","upstream":"upstash/context7","policy":"baseline","activation":"on-demand","interface":"mcp","purpose":"Version-sensitive external documentation; preserve healthy OMO-provided instance instead of duplicate registration","docs":"https://github.com/upstash/context7","install":"reuse-or-remote"},
+    {"id":"ast-grep","name":"ast-grep","upstream":"ast-grep/ast-grep","policy":"baseline","activation":"on-demand","interface":"cli","purpose":"Structural search; preview and explicitly scope rewrites","docs":"https://ast-grep.github.io/guide/quick-start.html","install":"official-package"},
+    {"id":"serena","name":"Serena","upstream":"oraios/serena","policy":"pilot","activation":"explicit-opt-in","interface":"mcp","purpose":"Semantic navigation pilot; no duplicate memory ownership or unreviewed edit/shell tools","docs":"https://oraios.github.io/serena/02-usage/020_running.html","install":"official-python-tool"},
+    {"id":"playwright-mcp","name":"Playwright MCP","upstream":"microsoft/playwright-mcp","policy":"operational","activation":"explicit-opt-in","interface":"mcp","purpose":"Browser/UI work only with isolated test profile and explicit target scope","docs":"https://github.com/microsoft/playwright-mcp","install":"official-npm-package"}
+  ]
+}
