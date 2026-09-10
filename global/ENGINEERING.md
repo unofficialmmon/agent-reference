@@ -248,6 +248,12 @@ Verify that it:
 
 For high-risk contract, DB, auth/security, deployment, or destructive changes, require clear scope and validation criteria before implementation.
 
+## Concurrent changes
+
+Allow parallel read-only investigation. Assign explicit file and shared-contract ownership before parallel mutation; serialize overlapping writes, shared lockfiles, migrations, fixtures, and generated outputs. Disjoint paths can still share semantics.
+
+Use native worktrees for substantial independent mutations only with appropriate authorization. They do not isolate services, ports, databases, or credentials. Preserve dirty work; no implicit force-clean, commit, push, or merge. Review the integrated diff and run combined relevant checks before reporting completion.
+
 ## 17. Completion
 
 Work is verified complete only when the requested behavior is implemented within the agreed scope, no known unacceptable risk is hidden, and required validation has actually passed.

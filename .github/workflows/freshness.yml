@@ -1,0 +1,57 @@
+name: catalog-freshness-report
+
+on:
+  pull_request:
+    paths:
+      - 'catalog/**'
+      - 'tools/freshness.py'
+      - 'tools/quality.py'
+      - '.github/workflows/freshness.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '23 3 * * 1'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: catalog-freshness-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  report:
+    name: Read-only upstream observations (not a quality gate)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Observe without upgrading or editing files
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -uo pipefail
+          python3 tools/freshness.py --online > "$RUNNER_TEMP/freshness.json"
+          code=$?
+          cat "$RUNNER_TEMP/freshness.json"
+          if [[ "$code" == 2 ]]; then
+            echo '::warning::PARTIAL upstream observations; inspect UNKNOWN entries. No freshness or runtime PASS is claimed.'
+            echo 'PARTIAL: some upstream observations are UNKNOWN. This report-only job does not certify freshness.' >> "$GITHUB_STEP_SUMMARY"
+          elif [[ "$code" != 0 ]]; then
+            exit "$code"
+          else
+            echo 'Report produced. UPSTREAM_CHANGED, UNCOMPARABLE, and review-due findings need human review; no updates were made.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+          git diff --exit-code
+      - name: Retain read-only observations
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: freshness-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/freshness.json
+          if-no-files-found: error
+          retention-days: 14

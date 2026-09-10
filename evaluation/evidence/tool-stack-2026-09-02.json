@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "id": "tool-stack-2026-09-02",
+  "evidenceClass": "historical-summary",
+  "observedAt": "2026-09-02",
+  "recordedAt": "2026-09-10",
+  "source": {
+    "path": "evaluation/README.md",
+    "revision": "2ad0496d3c9a2fd4d6b16c95e5b0c9943197d2a6"
+  },
+  "environment": {
+    "os": "macOS",
+    "model": null,
+    "repositoryRevision": null,
+    "versions": {
+      "opencode": "1.18.26",
+      "omo-slim": "2.2.18",
+      "cc-safety-net": "2.3.1",
+      "rtk": "0.46.0",
+      "notifier": "0.2.8",
+      "opencode-mem": "2.25.0",
+      "plannotator": "0.27.11",
+      "agentsview": "0.42.0"
+    },
+    "captureProvider": "Z.AI",
+    "captureModel": "glm-5.3"
+  },
+  "checks": [
+    {
+      "id": "startup",
+      "tool": "opencode",
+      "status": "PASS"
+    },
+    {
+      "id": "delegation",
+      "tool": "omo-slim",
+      "status": "PASS"
+    },
+    {
+      "id": "destructive-command-analysis",
+      "tool": "cc-safety-net",
+      "status": "PASS"
+    },
+    {
+      "id": "command-rewrite",
+      "tool": "rtk",
+      "status": "PASS"
+    },
+    {
+      "id": "plugin-startup",
+      "tool": "notifier",
+      "status": "PASS"
+    },
+    {
+      "id": "memory-load",
+      "tool": "opencode-mem",
+      "status": "PASS"
+    },
+    {
+      "id": "fresh-session-persistence",
+      "tool": "opencode-mem",
+      "status": "PASS"
+    },
+    {
+      "id": "idle-auto-capture",
+      "tool": "opencode-mem",
+      "status": "PASS"
+    },
+    {
+      "id": "fresh-session-injection",
+      "tool": "opencode-mem",
+      "status": "PASS"
+    },
+    {
+      "id": "local-plan-feedback",
+      "tool": "plannotator",
+      "status": "PASS"
+    },
+    {
+      "id": "opencode-session-discovery",
+      "tool": "agentsview",
+      "status": "PASS"
+    }
+  ],
+  "limitations": [
+    "Transcribed from the existing maintainer smoke summary; raw logs were not retained in this repository.",
+    "The tested repository revision and coordinating model were not recorded and remain unknown.",
+    "Not a new execution on 2026-09-10, not full Skill coverage, and not certification of another machine or later release.",
+    "Notifier evidence is plugin startup, not proof a notification was visually observed."
+  ]
+}

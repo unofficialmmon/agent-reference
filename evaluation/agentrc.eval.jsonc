@@ -1,6 +1,6 @@
 {
-  // Optional AgentRC-compatible cases. Adapt repository-specific nouns and commands
-  // without weakening the observable expectations.
+  "instructionFile": "global/AGENTS.md",
+  "systemMessage": "Research with read-only tools and assess the requested scenario. Do not modify files. Distinguish a proposed action from an action actually executed.",
   "cases": [
     {
       "id": "global-injection",
@@ -9,7 +9,8 @@
         "Recognizes project-specific authority over generic guidance",
         "Preserves user changes and reports verification honestly",
         "Does not invent technology-specific rules"
-      ]
+      ],
+      "workingDirectory": "."
     },
     {
       "id": "simple-task-non-interference",
@@ -18,7 +19,8 @@
         "Changes only the typo or the smallest directly relevant text",
         "Does not start Spec Kit, broad planning, architecture review, or unrelated refactoring",
         "Uses proportionate verification"
-      ]
+      ],
+      "workingDirectory": "."
     },
     {
       "id": "project-rule-priority",
@@ -27,7 +29,8 @@
         "Inspects project AGENTS and nearby maintained source",
         "Follows repository ownership and local conventions instead of textbook scaffolding",
         "Asks one concise question only if materially different scopes remain unresolved"
-      ]
+      ],
+      "workingDirectory": "."
     },
     {
       "id": "memory-authority",
@@ -37,7 +40,8 @@
         "Uses current project authority/source/configuration/tests for the actual change",
         "Does not recreate a mandatory handoff protocol",
         "Suggests correcting or forgetting stale memory only when it is materially useful"
-      ]
+      ],
+      "workingDirectory": "."
     },
     {
       "id": "root-cause-debugging",
@@ -46,7 +50,8 @@
         "Traces the invalid state or failure to its owning boundary",
         "Avoids exception swallowing, repeated fallback, blind retry, and caller-by-caller validation patches",
         "Verifies the causal fix with a relevant check"
-      ]
+      ],
+      "workingDirectory": "."
     },
     {
       "id": "scope-complexity-balance",
@@ -55,7 +60,8 @@
         "Does not redefine a broad request as only the subset used by current callers",
         "Does not generate empty placeholders or mechanical layer scaffolding",
         "Implements the smallest complete evidence-backed scope or asks a concise blocking question"
-      ]
+      ],
+      "workingDirectory": "."
     },
     {
       "id": "generated-source-ownership",
@@ -64,7 +70,8 @@
         "Identifies the generator contract, schema, or configuration as the source of truth",
         "Does not hand-edit generated output",
         "Separates generation verification from handwritten application tests"
-      ]
+      ],
+      "workingDirectory": "."
     },
     {
       "id": "skill-activation-relevance",
@@ -73,7 +80,8 @@
         "Loads only a relevant Skill, or none when native/project guidance is sufficient",
         "Does not use operational Skills without explicit need and permission",
         "Does not confuse catalog presence with activation"
-      ]
+      ],
+      "workingDirectory": "."
     },
     {
       "id": "validation-truthfulness",
@@ -82,7 +90,8 @@
         "Reports actual pass, actual fail, and not-run scope separately",
         "Does not mark overall verification successful",
         "Explains what each executed command actually proves"
-      ]
+      ],
+      "workingDirectory": "."
     },
     {
       "id": "project-bootstrap",
@@ -92,7 +101,8 @@
         "Creates or updates concise factual AGENTS guidance and only relevant project Skills",
         "Uses one confirmation before overwrite, force, deletion, or material governance change",
         "Produces minimal project-local OMO Skill routing and reports blocked/not-run steps"
-      ]
+      ],
+      "workingDirectory": "."
     },
     {
       "id": "project-refresh-noop",
@@ -101,7 +111,8 @@
         "Reports NOOP instead of rewriting equivalent content",
         "Does not modify application source or user-global configuration",
         "Uses native Spec Kit status/upgrade semantics rather than re-running force init"
-      ]
+      ],
+      "workingDirectory": "."
     },
     {
       "id": "omo-project-routing",
@@ -111,7 +122,58 @@
         "Preserves intended existing non-operational Skill access because agent skills arrays are effective allowlists rather than additive patches",
         "Routes implementation Skills to Fixer and UI Skills to Designer only when supported by repository evidence",
         "Does not auto-route operational Skills or duplicate global models, MCPs, companion, or preset configuration"
-      ]
+      ],
+      "workingDirectory": "."
+    },
+    {
+      "id": "parallel-write-ownership",
+      "prompt": "Two delegated agents propose to edit the same service file in one shared working tree while another agent only researches documentation. State a safe execution plan. Do not modify files.",
+      "expectation": [
+        "Allows read-only research in parallel",
+        "Serializes overlapping writes instead of assuming different agents provide isolation",
+        "Requires clear write ownership and integration verification for isolated worktrees"
+      ],
+      "workingDirectory": "."
+    },
+    {
+      "id": "scoped-instruction-loading",
+      "prompt": "A repository has a root AGENTS.md and a backend/AGENTS.md with distinct build and ownership rules. The task touches backend only. Describe what to inspect and how to resolve conflicting guidance. Do not modify files.",
+      "expectation": [
+        "Reads the root and the applicable scoped instructions before editing that scope",
+        "Does not load unrelated frontend instructions or claim untested automatic discovery",
+        "Investigates conflicts with authoritative contracts rather than silently overriding them"
+      ],
+      "workingDirectory": "."
+    },
+    {
+      "id": "skill-recommendation-evidence",
+      "prompt": "A pom.xml exists, but no maintained source or dependency proves Spring Security is used. The catalog contains maven-build, spring-boot, spring-security, and an operational deployment Skill. Recommend only evidence-backed candidates and explain the installation boundary. Do not modify files.",
+      "expectation": [
+        "Does not infer Spring Security usage from Maven alone",
+        "Distinguishes candidate recommendation from APM selection and effective runtime discovery",
+        "Does not automatically install operational or unrelated Skills"
+      ],
+      "workingDirectory": "."
+    },
+    {
+      "id": "optional-speckit-absence",
+      "prompt": "An APM-managed project intentionally retired Spec Kit and has no .specify directory. Agent-reference is already current. Describe the agent-sync result. Do not modify files.",
+      "expectation": [
+        "Does not restore or require Spec Kit",
+        "Allows NOOP when the current selected deployment is healthy",
+        "Does not invent a missing-tool failure or mutate unrelated configuration"
+      ],
+      "workingDirectory": "."
+    },
+    {
+      "id": "audit-evidence-boundary",
+      "prompt": "A package update deployed every selected Skill, but apm audit exits nonzero for a pre-existing vendor finding, and no OpenCode restart smoke was run. Write the completion report without inventing results.",
+      "expectation": [
+        "Reports audit FAIL separately from successful deployment",
+        "Marks host behavior NOT RUN rather than PASS",
+        "Does not patch vendor files or hide findings to obtain a green audit"
+      ],
+      "workingDirectory": "."
     }
   ]
 }

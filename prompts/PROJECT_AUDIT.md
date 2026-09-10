@@ -50,6 +50,12 @@ Determine whether the current configuration gives coding agents accurate, minima
 8. Inspect `.opencode/`, `.agents/`, and ignore rules for actual credential/cache exposure or overly broad ignores.
 9. Check for stale paths, nonexistent commands, removed technology, duplicated global guidance, speculative rules, and project instructions that conflict with maintained repository facts.
 
+## Scoped and selection consistency
+
+Use `project/SCOPED_GUIDANCE.md` from the agent-reference source root when available. Check root-to-module references exist, applicable scoped rules agree with current ownership/contracts, and unrelated modules are not eagerly loaded. Treat untested nested auto-injection as `UNVERIFIED`, not PASS.
+
+For selected/routed Skills, require maintained stack or task evidence; distinguish recommendations from actual APM selection and effective discovery. Confirm parallel writers have explicit non-overlapping ownership and that combined validation, not separate agent reports, supports completion. These are read-only findings; do not rewrite configuration during audit.
+
 ## Do not
 
 - Do not edit source, docs, configuration, Skills, Spec Kit artifacts, or history.

@@ -17,6 +17,8 @@ from pathlib import Path
 sys.dont_write_bytecode = True
 
 import _audit_core as core
+import quality
+from eval_gate import load_suite
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -174,6 +176,13 @@ def audit_required_files(audit: core.Audit) -> None:
         "tools/README.md",
         "tools/_audit_core.py",
         "tools/audit.py",
+        "tools/quality.py",
+        "tools/freshness.py",
+        "tools/eval_gate.py",
+        "tools/tests/test_quality.py",
+        "catalog/tooling.json",
+        "catalog/MAINTENANCE.md",
+        "project/SCOPED_GUIDANCE.md",
     ]
     for item in required:
         if not (ROOT / item).is_file():
@@ -211,6 +220,15 @@ def audit_required_files(audit: core.Audit) -> None:
     _audit_prompt_mirror(audit, "prompts/APM_SETUP.md", ".apm/prompts/apm-setup.prompt.md")
     _audit_prompt_mirror(audit, "prompts/AGENT_SYNC.md", ".apm/prompts/agent-sync.prompt.md")
     _audit_apm_skill_mirrors(audit)
+    result = quality.check_repository(ROOT)
+    for error in result["errors"]:
+        audit.error("QUALITY_METADATA", error)
+    audit.metrics["toolPolicyEntries"] = result["tools"]
+    audit.metrics["structuredEvidenceRecords"] = result["evidenceRecords"]
+    try:
+        load_suite(ROOT / "evaluation/agentrc.eval.jsonc", ROOT)
+    except (OSError, ValueError, TypeError) as exc:
+        audit.error("EVAL_INSTRUCTION_CONTRACT", str(exc))
 
 
 def main() -> int:

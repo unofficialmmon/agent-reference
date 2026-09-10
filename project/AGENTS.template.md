@@ -37,6 +37,10 @@ Do not treat deleted, generated, archived, or example source as current architec
 - Human-owned implementation paths: `<paths if useful>`
 - Files/directories that must not be changed: `<paths>`
 
+## Scoped instructions (optional)
+
+Omit this section when root instructions suffice. For real module-specific differences, record each existing scoped AGENTS path, its directory/trigger, and unique build, contract, or ownership facts. Root rules apply repository-wide; scoped rules refine the affected area without overriding unrelated contracts. Read applicable files explicitly when automatic discovery has not been proven. Do not preload every module or duplicate global guidance.
+
 ## Architecture and project conventions
 
 Document only rules that are genuinely specific to this project, for example:

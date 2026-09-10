@@ -12,43 +12,15 @@ Do not blindly install versions recorded in documentation or prior smoke evidenc
 
 ## Current policy
 
-### Active runtime / integrations
+Resolve `catalog/tooling.json` from this prompt's agent-reference source root before proposing tool changes. It is the canonical tool ID, upstream, role, and policy registry; do not infer approval from popularity, an installed package, or historical smoke evidence. If the registry is unavailable, continue inventory read-only and report reconciliation `BLOCKED` rather than guessing policy.
 
-- OMO Slim — orchestration and delegated agents. Canonical repository: `alvinunreal/oh-my-opencode-slim`.
-- cc-safety-net — destructive-command guard. Canonical repository: `kenryu42/cc-safety-net`.
-- RTK — command-output/token optimization integration. Canonical repository: `rtk-ai/rtk`.
-- OpenCode Notifier — user notifications. Canonical repository: `mohak34/opencode-notifier`.
-- opencode-mem — automatic persistent project memory. Package/repository: `opencode-mem`, `tickernelz/opencode-mem`.
-- Plannotator — human plan/document/code review and feedback. Canonical repository: `backnotprop/plannotator`.
+- `baseline`: preserve/reconcile the role, subject to current compatibility checks.
+- `external`: standalone companion; do not register it as a runtime plugin.
+- `pilot`: explicit experiment only, never an automatic baseline installation.
+- `hold`: do not install without a separate review changing the policy.
+- `retired`: remove only proven plugin-specific registrations with rollback and migration-data preservation.
 
-### External companion
-
-- AgentsView — standalone local session/history/token/cost analytics. Canonical repository: `kenn-io/agentsview`.
-
-AgentsView is intentionally outside the OpenCode runtime hook stack.
-
-### Retired from the active baseline
-
-- Simple Memory (`@knikolov/opencode-plugin-simple-memory`) — replace with `opencode-mem`.
-- TokenScope (`@ramtinj95/opencode-tokenscope`) — replace with AgentsView when standalone analytics is acceptable.
-
-Do not delete legacy Simple Memory data during migration merely because the plugin registration was removed. Retain it until replacement persistence/injection has been proven, then treat cleanup as a separate explicit action.
-
-### Pilot
-
-- `opencode-pty` (`shekohex/opencode-pty`) — useful for interactive/multi-service processes, but install only after the current published release passes compatibility smoke with the active OpenCode/Bun/Node environment.
-
-### Not baseline / hold
-
-Do not install these by default:
-
-- DCP — rejected for the baseline after background context-compression loops proved disruptive to the workflow;
-- `opencode-snip` — hold while automatic shell rewriting can materially alter quoted/chained commands or permission semantics;
-- `opencode-vibeguard` — hold while masking/secret-boundary concerns remain relevant;
-- Morph Fast Apply — optional, not baseline while native editing is adequate;
-- `opencode-ignore` — optional, not baseline while native permissions/safety rules cover the need.
-
-A tool can be downgraded whenever current upstream evidence shows a regression. Popularity or a newer version alone is not enough to promote a held tool.
+Registry policy and runtime health are independent. An approved tool can still be `BLOCKED` in the actual environment. Do not promote a tool or update the registry as a side effect of setup. Keep legacy Simple Memory data until replacement persistence/injection is proven; cleanup remains separately authorized.
 
 ## Mutation boundary
 

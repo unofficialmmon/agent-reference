@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "scope": "opencode-v1",
+  "policyReviewedAt": "2026-09-10",
+  "notes": "Policy is not installation state or current runtime health. Null upstreams are not verified source identities. No version here is a request to upgrade.",
+  "tools": [
+    {
+      "id": "opencode",
+      "name": "OpenCode",
+      "kind": "host",
+      "policy": "baseline",
+      "upstream": "anomalyco/opencode",
+      "rationale": "V1 harness; V2 is outside this maintenance scope."
+    },
+    {
+      "id": "omo-slim",
+      "name": "OMO Slim",
+      "kind": "plugin",
+      "policy": "baseline",
+      "upstream": "alvinunreal/oh-my-opencode-slim",
+      "rationale": "Orchestration and delegated agents; preserve user-owned models and permissions."
+    },
+    {
+      "id": "cc-safety-net",
+      "name": "cc-safety-net",
+      "kind": "plugin",
+      "policy": "baseline",
+      "upstream": "kenryu42/cc-safety-net",
+      "rationale": "Destructive-command guard, not a sandbox; native permissions still apply."
+    },
+    {
+      "id": "rtk",
+      "name": "RTK",
+      "kind": "integration",
+      "policy": "baseline",
+      "upstream": "rtk-ai/rtk",
+      "rationale": "Command-output/token optimization; verify rewritten command semantics."
+    },
+    {
+      "id": "notifier",
+      "name": "OpenCode Notifier",
+      "kind": "plugin",
+      "policy": "baseline",
+      "upstream": "mohak34/opencode-notifier",
+      "rationale": "Notifications; preserve deliberate event choices."
+    },
+    {
+      "id": "opencode-mem",
+      "name": "opencode-mem",
+      "kind": "plugin",
+      "policy": "baseline",
+      "upstream": "tickernelz/opencode-mem",
+      "rationale": "Automatic project memory; source/config/tests remain authoritative; extraction may use a remote provider."
+    },
+    {
+      "id": "plannotator",
+      "name": "Plannotator",
+      "kind": "integration",
+      "policy": "baseline",
+      "upstream": "backnotprop/plannotator",
+      "rationale": "Optional local human review for consequential plans/diffs, not mandatory ceremony."
+    },
+    {
+      "id": "agentsview",
+      "name": "AgentsView",
+      "kind": "companion",
+      "policy": "external",
+      "upstream": "kenn-io/agentsview",
+      "rationale": "Local session/history/usage analytics outside runtime hooks; no required daemon."
+    },
+    {
+      "id": "opencode-pty",
+      "name": "opencode-pty",
+      "kind": "plugin",
+      "policy": "pilot",
+      "upstream": "shekohex/opencode-pty",
+      "rationale": "Explicit pilot only after runtime/platform/permission smoke; guards may not cover PTY commands."
+    },
+    {
+      "id": "simple-memory",
+      "name": "Simple Memory",
+      "kind": "plugin",
+      "policy": "retired",
+      "upstream": null,
+      "rationale": "Replaced by opencode-mem; retain legacy data until replacement persistence is proven."
+    },
+    {
+      "id": "tokenscope",
+      "name": "TokenScope",
+      "kind": "plugin",
+      "policy": "retired",
+      "upstream": null,
+      "rationale": "Replaced by AgentsView; remove only identified plugin-specific entries."
+    },
+    {
+      "id": "dcp",
+      "name": "DCP",
+      "kind": "plugin",
+      "policy": "hold",
+      "upstream": null,
+      "rationale": "Not baseline: background compression loops were disruptive in the observed workflow."
+    },
+    {
+      "id": "opencode-snip",
+      "name": "opencode-snip",
+      "kind": "plugin",
+      "policy": "hold",
+      "upstream": null,
+      "rationale": "Not baseline: automatic shell rewriting can alter quoting/chaining or permissions."
+    },
+    {
+      "id": "opencode-vibeguard",
+      "name": "opencode-vibeguard",
+      "kind": "plugin",
+      "policy": "hold",
+      "upstream": null,
+      "rationale": "Not baseline: masking and secret-boundary concerns require separate review."
+    },
+    {
+      "id": "morph-fast-apply",
+      "name": "Morph Fast Apply",
+      "kind": "integration",
+      "policy": "hold",
+      "upstream": null,
+      "rationale": "Optional only after a demonstrated native editing limitation."
+    },
+    {
+      "id": "opencode-ignore",
+      "name": "opencode-ignore",
+      "kind": "plugin",
+      "policy": "hold",
+      "upstream": null,
+      "rationale": "Optional only after a demonstrated native permission/safety limitation."
+    }
+  ]
+}
