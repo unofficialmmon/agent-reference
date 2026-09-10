@@ -1,0 +1,45 @@
+name: tool-maintenance-report
+on:
+  pull_request:
+    paths: ['catalog/**', 'tools/tool_catalog.py', '.github/workflows/tool-maintenance.yml']
+  workflow_dispatch:
+  schedule:
+    - cron: '47 3 * * 1'
+permissions:
+  contents: read
+concurrency:
+  group: tool-maintenance-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  observe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Observe selected upstreams without changing policy or installations
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -uo pipefail
+          python3 tools/tool_catalog.py --online > "$RUNNER_TEMP/tool-maintenance.json"
+          code=$?
+          if [[ "$code" == 2 ]]; then
+            echo '::warning::PARTIAL maintenance observations. Inspect UNRESOLVED entries; no safety or compatibility PASS is claimed.'
+          elif [[ "$code" != 0 ]]; then
+            cat "$RUNNER_TEMP/tool-maintenance.json"
+            exit "$code"
+          fi
+          echo 'Read-only tool report produced. Recent activity is not a safety certificate; slow activity is not abandonment.' >> "$GITHUB_STEP_SUMMARY"
+          git diff --exit-code
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: tool-maintenance-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/tool-maintenance.json
+          if-no-files-found: error
+          retention-days: 14
