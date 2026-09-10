@@ -15,7 +15,6 @@ jobs:
     timeout-minutes: 15
     env:
       PYTHONDONTWRITEBYTECODE: '1'
-      CAPABILITY_PREFIX: ${{ runner.temp }}/capability-deps
     steps:
       - uses: actions/checkout@v4
         with:
@@ -23,6 +22,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Set isolated runner paths
+        shell: bash
+        run: echo "CAPABILITY_PREFIX=$RUNNER_TEMP/capability-deps" >> "$GITHUB_ENV"
       - name: Install pinned test tools on disposable runner only
         shell: bash
         run: |
