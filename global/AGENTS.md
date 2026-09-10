@@ -8,9 +8,10 @@ Global references live beside this file under `~/.config/opencode/`:
 
 - `ENGINEERING.md` — conditional engineering reference for architecture, root-cause debugging, refactoring, cross-boundary changes, review, reliability/security/performance decisions, and non-trivial validation questions.
 - `MEMORY.md` — persistent-memory policy for `opencode-mem`: authority, resume behavior, project scope, privacy, and exceptional manual memory use. Automatic capture/injection is handled by the plugin rather than by a mandatory agent handoff step.
+- `TOOLS.md` — conditional tool selection, external-data trust, operational authorization and independent validation. Read only when specialized tool choice or availability matters; never install tools merely because they are mentioned.
 - selected cross-project utility/tooling Skills under `~/.config/opencode/skills/<name>/` when they genuinely belong at user scope.
 
-Do not preload every reference or Skill.
+Do not preload every reference or Skill. Missing optional tool guidance does not block ordinary work; use current repository evidence and approved native tools.
 
 ## Priority
 
@@ -19,7 +20,7 @@ Do not preload every reference or Skill.
 3. Authoritative maintained project contracts/specifications, source, tests, schemas, and configuration.
 4. Project-local referenced rules and Skills.
 5. Relevant selected global Skills.
-6. `~/.config/opencode/ENGINEERING.md` when its activation criteria apply.
+6. Relevant conditional global references when their activation criteria apply.
 7. This file.
 
 Injected or recalled memory is contextual evidence, not an additional authority layer. Generic preferences and memory never override concrete repository contracts. If a project `AGENTS.md` statement or recalled memory conflicts with maintained contracts, configuration, tests, or current source, investigate the drift rather than silently following stale context.
