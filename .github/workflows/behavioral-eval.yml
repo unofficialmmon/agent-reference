@@ -46,17 +46,28 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Install pinned evaluation CLIs on disposable runner
-        run: npm install --global "github:microsoft/agentrc#$AGENTRC_REVISION" "@github/copilot@$COPILOT_VERSION"
+      - name: Build pinned AgentRC with its own dependency lock
+        shell: bash
+        run: |
+          set -euo pipefail
+          git init "$RUNNER_TEMP/agentrc-source"
+          git -C "$RUNNER_TEMP/agentrc-source" remote add origin https://github.com/microsoft/agentrc.git
+          git -C "$RUNNER_TEMP/agentrc-source" fetch --depth=1 origin "$AGENTRC_REVISION"
+          git -C "$RUNNER_TEMP/agentrc-source" checkout --detach FETCH_HEAD
+          test "$(git -C "$RUNNER_TEMP/agentrc-source" rev-parse HEAD)" = "$AGENTRC_REVISION"
+          cd "$RUNNER_TEMP/agentrc-source"
+          npm ci --include=dev
+          test -f dist/index.js
+          npm install --global "@github/copilot@$COPILOT_VERSION"
       - name: Check native CLI contract without credentials or model calls
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p "$RUNNER_TEMP/eval-evidence"
-          agentrc --version > "$RUNNER_TEMP/eval-evidence/versions.txt"
+          node "$RUNNER_TEMP/agentrc-source/dist/index.js" --version > "$RUNNER_TEMP/eval-evidence/versions.txt"
           copilot --version >> "$RUNNER_TEMP/eval-evidence/versions.txt"
           printf 'AgentRC source: %s\n' "$AGENTRC_REVISION" >> "$RUNNER_TEMP/eval-evidence/versions.txt"
-          agentrc eval --help > "$RUNNER_TEMP/eval-evidence/eval-help.txt"
+          node "$RUNNER_TEMP/agentrc-source/dist/index.js" eval --help > "$RUNNER_TEMP/eval-evidence/eval-help.txt"
           for flag in --repo --model --judge-model --output --fail-level; do
             grep -F -- "$flag" "$RUNNER_TEMP/eval-evidence/eval-help.txt" >/dev/null
           done
@@ -87,7 +98,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          agentrc eval evaluation/agentrc.eval.jsonc --repo "$GITHUB_WORKSPACE" \
+          node "$RUNNER_TEMP/agentrc-source/dist/index.js" eval evaluation/agentrc.eval.jsonc --repo "$GITHUB_WORKSPACE" \
             --model "$RESPONSE_MODEL" --judge-model "$JUDGE_MODEL" \
             --output "$RUNNER_TEMP/native-results.json" --fail-level 100 --json \
             > "$RUNNER_TEMP/native-summary.json"
