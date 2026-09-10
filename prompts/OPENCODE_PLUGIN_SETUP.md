@@ -1,287 +1,62 @@
 # OpenCode Tooling Setup Prompt
 
-Set up or reconcile the recommended OpenCode development-tool stack for the current user environment. This is an environment/configuration task, not an application implementation task.
+Set up or reconcile the approved OpenCode V1 development-tool stack on the target host. This is explicit environment/configuration work, not application implementation. The historical filename remains valid; it now covers approved MCPs and CLI capabilities as well as plugins.
 
-Do not modify application source, tests, schemas, migrations, deployment configuration, or project business logic. Preserve existing OpenCode, OMO Slim, provider, model, MCP, permission, agent, Skill, prompt, shell, and companion settings unless a change is strictly required for the tooling work below.
+Read [CONTRACT.md](../templates/setup/CONTRACT.md) and [INSTALLATION.md](../templates/setup/INSTALLATION.md). Resolve `catalog/tooling.json` and `catalog/agent-capabilities.json` from this prompt's source root. The runtime registry and capability registry are policy, not proof of installation or health. If either is missing, inventory read-only and report BLOCKED. Do not promote pilot tools or modify catalog policy during setup.
 
-## Goal
+## Boundaries
 
-Produce a small, role-separated, compatibility-aware stack that can be re-run after OpenCode, OMO Slim, the OS/runtime, or tool versions change.
+Preserve user providers/models/variants, MCPs, agents, prompts, permissions, presets, companion settings, shell preferences and unrelated files. Do not modify application source/tests/schemas/migrations/deployment behavior, upgrade OpenCode to V2, commit or push. Inspect existing settings and review current upstream stable compatibility before installing missing approved tools. Missing tools are normal; missing authorization is not implicit permission.
 
-Do not blindly install versions recorded in documentation or prior smoke evidence. Verify current stable upstream releases and the actual local install method before mutation.
+The shared contract owns inventory, supported installation channels, mutation checkpoint, local recovery copy, surgical merge, status semantics and rollback. Do not duplicate it or silently replace a config file. Honor actual config directory and file overrides, JSON/JSONC precedence and managed settings. Never put credentials in committed config examples or reports.
 
-## Current policy
+## Preserve the existing runtime baseline
 
-Resolve `catalog/tooling.json` from this prompt's agent-reference source root before proposing tool changes. It is the canonical tool ID, upstream, role, and policy registry; do not infer approval from popularity, an installed package, or historical smoke evidence. If the registry is unavailable, continue inventory read-only and report reconciliation `BLOCKED` rather than guessing policy.
+Reconcile only necessary changes to OMO Slim, cc-safety-net, RTK, Notifier, opencode-mem and Plannotator. Keep AgentsView an external companion, not a runtime hook. Hold/rejected tools remain excluded; opencode-pty remains explicit pilot. Preserve healthy supported versions and installation owners. Do not change unrelated host runtimes to force an optional tool to work.
 
-- `baseline`: preserve/reconcile the role, subject to current compatibility checks.
-- `external`: standalone companion; do not register it as a runtime plugin.
-- `pilot`: explicit experiment only, never an automatic baseline installation.
-- `hold`: do not install without a separate review changing the policy.
-- `retired`: remove only proven plugin-specific registrations with rollback and migration-data preservation.
+- OMO Slim: preserve models, variants, MCP/Skill access, presets, prompts, companion and multiplexer choices; validate real delegation after change.
+- cc-safety-net: preserve destructive-command protection; test one safe and one destructive command *analysis* without performing destructive actions. It is not a sandbox and may not cover PTY or other execution paths.
+- RTK: verify both CLI and actual OpenCode rewrite/integration semantics, not just installation.
+- Notifier: preserve deliberate disabled/noisy event choices; startup success is not proof a user observed a notification.
+- Plannotator: local/manual plan or document review with feedback returned to the agent; code review when relevant. Do not force review for trivial edits or enable remote sharing/AI review without approval.
+- AgentsView: verify session discovery and one usage/statistics read outside OpenCode; do not alter session source data. Stop a daemon started only for validation unless persistence was requested.
 
-Registry policy and runtime health are independent. An approved tool can still be `BLOCKED` in the actual environment. Do not promote a tool or update the registry as a side effect of setup. Keep legacy Simple Memory data until replacement persistence/injection is proven; cleanup remains separately authorized.
+## Memory and retirement
 
-## Mutation boundary
+opencode-mem owns routine persistent project memory. Preserve a working supported provider/model rather than installing a new one. Default scope is project; UI is loopback; auto-capture and bounded relevant injection are the normal path. Local storage does not imply local-only extraction: the provider may receive work context. Never store secrets.
 
-Before changing anything:
+Do not create `.opencode-mem-project` unless nested repositories intentionally share one memory domain. Do not recreate `.opencode/history/`, Simple Memory `.opencode/memory/`, `remember`/branch-handoff ceremony or synthetic NOOP tracking. Recalled memory never overrides current source/config/contracts/tests.
 
-1. locate the effective OpenCode config directory, honoring supported overrides such as `OPENCODE_CONFIG_DIR`;
-2. inspect the actual OpenCode config file(s), plugin registry/cache state, OMO Slim configuration, RTK integration, installed binaries, commands, and external companions;
-3. record current versions and installation channels when discoverable;
-4. preserve unrelated user settings exactly;
-5. identify retired Simple Memory/TokenScope entries by their actual paths/specs rather than guessing;
-6. preserve a recoverable diff/copy before materially rewriting a user-managed config;
-7. if an existing dirty/user-managed config requires a broad rewrite rather than a surgical merge, show one concise mutation checkpoint before replacing it.
+When retiring Simple Memory/TokenScope, remove only positively identified registrations and tool-specific wrappers/cache. Preserve legacy data until replacement persistence and injection are proven. Do not clear the entire OpenCode cache or delete unrelated plugins.
 
-Do not upgrade/downgrade OpenCode, providers, models, unrelated MCPs, or host runtimes merely to make one optional tool fit. Mark that tool `BLOCKED`/`HOLD` instead.
+## Add approved capabilities
 
-Do not commit or push any repository as part of this environment setup.
+GitHub MCP: inventory an existing connection first. Prefer a reviewed remote read-only connection or official local binary/container, limited to needed toolsets. Keep minimum credential scope. A read-only connection cannot execute writes; writing requires separate explicit authority and a reviewed connection/credential change, never a permission bypass.
 
-## 1. Inventory the environment
+Context7: OMO may already provide it. Reuse one healthy instance. Only replace it after checking the installed OMO merge/disable contract; never register a second duplicate under another ID. Use for version-sensitive external documentation, not every local edit. Library version, source and returned documentation still need verification.
 
-Determine at minimum:
+ast-grep: install only if missing and selected; distinguish `ast-grep` from unrelated `sg`. Use text search for literal text and AST patterns for structure. Preview matches and diffs before a bounded rewrite; tool availability is not permission for bulk mutation.
 
-- OS and architecture;
-- shell/terminal host when relevant;
-- OpenCode version and active plugin contract/runtime;
-- Bun/Node versions when relevant;
-- effective OpenCode config directory and config format;
-- configured plugins and resolved package versions;
-- OMO Slim version/configuration;
-- cc-safety-net version/status;
-- RTK version/integration status;
-- Notifier version/configuration;
-- opencode-mem version/configuration/state directory;
-- Plannotator binary/plugin/commands;
-- AgentsView binary/configuration/daemon status;
-- relevant OpenCode permission policy.
+Serena: explicit pilot only. Pin the selected revision/release, inspect upstream security notes and target language prerequisites, and constrain to navigation. Do not create a second memory system or expose unreviewed shell/edit tools. Verify the actual exposed tools and call rejection, not only a `read_only` setting. It stays pilot until multi-project host evidence supports a separate promotion decision.
 
-Never expose credentials, provider keys, tokens, or private config values in the report.
+Playwright MCP: explicit browser task only. Keep disabled otherwise; when selected use an isolated test profile and target environment with no personal cookies/account bridge. Browser isolation and origin filters are not a security boundary. Close test contexts/processes afterward and restore temporary enablement. Do not permit concurrent agents to drive the same browser state.
 
-## 2. Re-verify upstreams before install/update
+## Configuration ownership
 
-For every tool that may change:
+External MCP server transport, command/URL, authentication reference and enabled state belong to OpenCode `mcp` configuration, not `plugin`. OMO defines which agents can access those MCPs; do not duplicate server endpoints there. CLI binaries need PATH visibility, not invented MCP entries. Models/providers remain unchanged.
 
-1. open its canonical repository and current official install/configuration documentation;
-2. identify the latest stable release/package compatible with the active environment;
-3. inspect material current compatibility issues for OpenCode, OMO/background agents, Bun/Node, OS, permissions, and native dependencies;
-4. distinguish fixes on `main` from fixes shipped in the selected stable release;
-5. preserve the current healthy version when a newer release has an unresolved regression;
-6. use the upstream-supported installation/update channel rather than inventing one.
+Compose actual effective allowlists, preserving wildcards, explicit exclusions and unrelated MCPs/Skills. Do not blindly replace arrays with examples. Verify root vs active-preset behavior for the installed OMO version and test after `/preset` switching when used. Newly installed tools must not silently expand wildcard agents' operational access. Apply explicit permissions at the actual tool boundary; routing alone is not a sandbox.
 
-Recorded smoke versions are evidence snapshots, not permanent version locks.
+## Required checks
 
-## 3. Remove retired Simple Memory and TokenScope safely
+After preserving active work, restart the affected OpenCode process. Use `evaluation/README.md` for existing runtime smoke requirements. At minimum check clean config/startup, real OMO delegation, retained safety/RTK/notification behavior, absence of retired plugins, Plannotator feedback and AgentsView discovery when those surfaces changed.
 
-If present, identify the exact installed entries first.
+Memory PASS requires safe persistence from session A to fully restarted session B, automatic capture during a normal interactive idle lifecycle, relevant injection into a fresh session, and repository authority over stale context. One-shot CLI execution is insufficient proof of idle capture.
 
-### Simple Memory
+For new capabilities separately record: installed/resolved version, server initialize/tools-list, authentication, direct representative operation, delegated access and denied/unwanted operations. A config parse or server handshake alone is not useful-operation or host behavior PASS. Confirm unrelated settings/source are unchanged. Run a second reconciliation and record NOOP only when actually observed.
 
-- remove only its OpenCode plugin registration and plugin-specific configuration/cache entries;
-- do not delete unrelated `.opencode/` content;
-- do not recreate `.opencode/history/`;
-- retain existing legacy `.opencode/memory/` data during migration unless the user explicitly authorizes cleanup after `opencode-mem` persistence is proven.
+## Failure isolation and report
 
-### TokenScope
+For startup failures isolate plain terminal vs background host, a clean project vs the affected project, plugins disabled vs active, and macOS TCC/filesystem access vs true descriptor exhaustion. Do not respond to a generic descriptor error with extreme system-wide `ulimit`/`launchctl` changes.
 
-- remove only its plugin registration, command wrapper(s), and plugin-specific cache/state that can be identified safely;
-- preserve unrelated commands and OpenCode cache packages.
-
-After removal, restart/smoke later to prove neither retired plugin is loading.
-
-## 4. Preserve/reconcile OMO Slim, cc-safety-net, RTK, and Notifier
-
-Keep these working unless current upstream evidence requires a bounded update.
-
-### OMO Slim
-
-Preserve user-owned models, variants, MCPs, agents, companion settings, prompts, permissions, and project routing. After a version change, validate at least one real Orchestrator-to-specialist delegation rather than treating config parsing as proof.
-
-### cc-safety-net
-
-Use the upstream-supported OpenCode installation/configuration path. Do not weaken protection for convenience. Validate a safe/read-only command and a representative destructive command shape without damaging repository state. Do not describe it as a sandbox; native OpenCode permissions still apply.
-
-### RTK
-
-Preserve the existing OpenCode integration and update through the actual supported channel. Validate both the CLI version and one representative OpenCode command-rewrite/integration path.
-
-### Notifier
-
-Preserve deliberate event enable/disable choices. In OMO/background-agent workflows, avoid enabling noisy lifecycle or subagent-completion events merely because they exist. Validate startup and one safe notification path when practical; command success is not proof that a desktop notification was visually observed.
-
-## 5. Install/reconcile opencode-mem
-
-Use the official plugin entry and current upstream configuration schema.
-
-Default policy:
-
-- default memory scope: `project`;
-- auto-capture: enabled;
-- relevant-memory injection: enabled with a small bounded result count;
-- web UI: loopback/localhost only unless the user intentionally configures authenticated remote access;
-- storage: plugin-owned local state, not project-local `.opencode/memory/`;
-- capture provider/model: preserve a healthy existing supported OpenCode/provider configuration rather than adding a new provider without need.
-
-Do not hardcode a shared provider/model into every machine. If the current environment already has a validated capture provider (for example an OpenCode-connected Z.AI model), preserve it unless the user asks to change it.
-
-Auto-capture/profile learning can send relevant conversation/work context to the configured AI provider. Local memory storage therefore does not automatically mean local-only extraction. Never put secrets in memory or print provider credentials.
-
-Do not create `.opencode-mem-project` by default. Create/use that marker only when multiple nested repositories are intentionally meant to share one memory identity.
-
-Do not restore the retired manual branch-handoff protocol. Normal use is:
-
-```text
-work normally -> session idle -> auto-capture -> later fresh session -> relevant memory injection
-```
-
-Use the manual `memory` tool only for immediate add/search/list/correction/migration needs.
-
-### Required opencode-mem smoke
-
-A final PASS requires runtime evidence, not config presence:
-
-1. OpenCode starts and the plugin loads;
-2. basic memory operation(s) work when exercised;
-3. create/use safe project memory in session A;
-4. fully end session A/OpenCode;
-5. start a fresh session B for the same project and prove persistence/retrieval;
-6. in a normal long-lived interactive session, allow idle auto-capture and prove that an automatic record is created;
-7. start another fresh session and prove relevant memory can be injected automatically;
-8. confirm current repository evidence still overrides stale memory.
-
-One-shot CLI sessions are not sufficient evidence for auto-capture if the plugin's idle lifecycle never occurs.
-
-## 6. Install/reconcile Plannotator
-
-Use current upstream OpenCode installation guidance. The OpenCode integration currently uses the Plannotator binary plus OpenCode plugin/commands, but re-verify the exact package/config before mutation.
-
-Baseline workflow is manual/local review:
-
-```text
-important plan or diff -> Plannotator review -> human feedback/approval -> implementation/continuation
-```
-
-Do not force Plannotator UI for every trivial task.
-
-Validate:
-
-- OpenCode integration/commands load;
-- a local/manual plan or document review opens;
-- approval/feedback returns to the OpenCode agent;
-- a local code-review flow works when relevant;
-- OMO Slim still delegates normally after integration.
-
-Plans, diffs, annotations, and configuration are local by default according to upstream behavior, but network features can intentionally transmit content. Do not invoke share/workspace/AI-review network features unless the user wants them. If strict no-sharing behavior is desired and the current upstream still supports it, prefer its explicit share-disable setting rather than relying on convention.
-
-## 7. Install/reconcile AgentsView as an external companion
-
-Keep AgentsView outside the OpenCode plugin list.
-
-Use it for:
-
-- OpenCode session discovery/search;
-- session/history browsing;
-- token usage;
-- cost estimates/analytics;
-- broader cross-agent usage statistics.
-
-Prefer local/loopback operation. A permanently running daemon is not a baseline requirement: read-only one-off commands may use the local archive directly, while freshness/write commands may start a daemon as required by current upstream behavior.
-
-Smoke-test at least:
-
-- `agentsview session list` or equivalent current session discovery;
-- an OpenCode session is visible;
-- one usage/statistics command returns data when available;
-- any daemon started only for validation is stopped afterward unless the user explicitly wants it persistent.
-
-Do not modify OpenCode session source data merely to make AgentsView discover it.
-
-## 8. Evaluate opencode-pty only as a pilot
-
-Do not promote/install it by default until the current published release loads cleanly in the active OpenCode/runtime/platform.
-
-If explicitly piloted, use bounded local processes and validate spawn, read, input when safe, terminate/cleanup, interruption behavior, and permission handling. Do not assume cc-safety-net protects every command running inside a PTY.
-
-## 9. Integrated restart and smoke
-
-After changes, restart OpenCode and verify the whole stack together:
-
-- OpenCode startup is clean;
-- OMO Slim loads and one delegated task completes;
-- cc-safety-net is active;
-- RTK integration remains active;
-- Notifier loads with intended event policy;
-- Simple Memory no longer loads;
-- TokenScope no longer loads;
-- opencode-mem load/persistence/auto-capture/fresh-session injection meet the evidence above;
-- Plannotator local/manual approval feedback works;
-- AgentsView discovers OpenCode sessions outside the runtime plugin stack;
-- no Hold/Rejected tool was installed silently;
-- no unrelated global/project configuration changed.
-
-### Startup-failure isolation
-
-Do not respond to a generic low-file-descriptor message by immediately applying extreme system-wide `ulimit`/`launchctl` values.
-
-First isolate the failure:
-
-1. reproduce in a plain terminal outside terminal multiplexers/background-session hosts;
-2. compare a clean temporary repository with the affected repository;
-3. compare normal OpenCode with external plugins disabled when the host supports that escape hatch;
-4. on macOS protected folders, distinguish filesystem/TCC `Operation not permitted` from real descriptor exhaustion;
-5. inspect the terminal/background-server process context before changing OS-wide limits.
-
-A terminal host or stale background server can be the fault boundary even when OpenCode surfaces the error.
-
-## 10. Rollback discipline
-
-Before declaring completion, know how to undo every changed component:
-
-- restore the previous OpenCode config entry/options;
-- remove only tool-specific cache/package state when necessary;
-- preserve unrelated packages and settings;
-- stop standalone daemons started for smoke tests;
-- restart OpenCode and confirm rollback if a runtime plugin prevents startup.
-
-Do not clear the entire OpenCode cache as a first-line fix.
-
-## Final report
-
-Report only:
-
-### Versions
-- OpenCode
-- OMO Slim
-- cc-safety-net
-- RTK
-- Notifier
-- opencode-mem
-- Plannotator
-- AgentsView
-
-### Validation
-- OpenCode startup
-- OMO Slim delegation
-- cc-safety-net
-- RTK
-- Notifier
-- Simple Memory removal
-- TokenScope removal
-- opencode-mem load
-- opencode-mem fresh-session persistence
-- opencode-mem automatic capture
-- opencode-mem fresh-session injection
-- Plannotator
-- AgentsView OpenCode discovery
-
-Use `PASS`, `PARTIAL`, `FAIL`, `BLOCKED`, or `NOT RUN` honestly.
-
-### Changed
-List only configuration/binary/state paths actually changed, without secrets.
-
-### Retained
-List intentionally retained migration/legacy data.
-
-### Issues
-List only material remaining issues. Do not claim the environment is healthy when a required smoke failed, was blocked, or was not run.
+Restore only affected owned entries after failure; preserve data and stop test-only processes. Final report: Result / Changed / Validation / Needs attention, exact versions and sanitized paths. Distinguish PASS, FAIL, BLOCKED and NOT RUN for installation, routing, direct operations and full host behavior. No completion claim for required failed/unexecuted checks; no trailing optional-cleanup menu.
