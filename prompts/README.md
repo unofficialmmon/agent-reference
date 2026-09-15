@@ -14,6 +14,8 @@ Keep Serena pilot and Playwright/OpenRewrite disabled unless I explicitly select
 
 Default scope is preferred agent capabilities plus rg/jq. Optional human UX tools require selection; project configuration requires a named/scoped repository. Actual credentials or administrator grants must be supplied through the supported host flow, never pasted into chat or committed. A GitHub-only execution cannot install the user's computer.
 
+The same explicit workstation setup also reconciles one user-global bootstrap command: canonical `APM_SETUP.md` is copied to the effective OpenCode user commands directory as `commands/apm-setup.md`. This makes `/apm-setup` available before a repository has adopted APM without globally activating any Skill. `/agent-sync` and `/test-setup` remain project-local APM package commands and are not installed globally. Existing customized same-name global commands are preserved unless safe ownership/update is established by the shared merge contract.
+
 ## Narrow setup entries
 
 | Entry | Scope |
@@ -35,7 +37,7 @@ Bootstrap owns factual project AGENTS, relevant Skill selection and minimal rout
 
 `PROJECT_REFRESH.md` reconciles stale guidance/Skill/routing facts; healthy state is NOOP. It does not restore removed Spec Kit or replace native build/runtime conventions.
 
-`APM_SETUP.md` (`apm-setup`) performs first APM adoption and selected-content deployment. `AGENT_SYNC.md` (`agent-sync`) performs routine updates only after healthy adoption. Neither updates user-global tool installations. Canonical prompts and APM command mirrors retain their existing ownership.
+`APM_SETUP.md` (`apm-setup`) performs first APM adoption and selected-content deployment. After first-workstation setup, `/apm-setup` may be invoked through the user-global bootstrap even in a fresh repository; once adoption succeeds, APM deploys the project-local package command and selected Skills, and the project-local command owns subsequent project behavior. `AGENT_SYNC.md` (`agent-sync`) performs routine updates only after healthy adoption. Neither flow updates user-global tool installations or turns project Skills into global Skills.
 
 `TEST_SETUP.md` (`test-setup`) establishes a real testing portfolio and may modify test infrastructure/tests/test CI, but not production behavior merely to pass checks. Do not substitute lint or security scanning for actual application tests.
 
