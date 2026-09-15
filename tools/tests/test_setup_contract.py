@@ -23,6 +23,21 @@ class SetupContractTests(unittest.TestCase):
     def test_missing_installation_supported(self):
         self.assertIn('Missing tools are a normal initial state', self.read('prompts/TOOLING_SETUP.md'))
 
+    def test_global_apm_bootstrap_contract(self):
+        merge = self.read('templates/setup/GLOBAL_REFERENCE_MERGE.md')
+        tooling = self.read('prompts/TOOLING_SETUP.md')
+        self.assertIn('prompts/APM_SETUP.md', merge)
+        self.assertIn('commands/apm-setup.md', merge)
+        self.assertIn('only agent-reference package command intended for user-global discovery', merge)
+        self.assertIn('Do not install `/agent-sync` or `/test-setup` globally', merge)
+        self.assertIn('default global active Skill count remains zero', merge)
+        self.assertIn('global `/apm-setup` bootstrap', tooling)
+
+    def test_global_bootstrap_is_documented_for_fresh_projects(self):
+        index = self.read('prompts/README.md')
+        self.assertIn('before a repository has adopted APM', index)
+        self.assertIn('`/agent-sync` and `/test-setup` remain project-local', index)
+
     def test_no_blanket_config_replacement(self):
         self.assertIn('Never parse JSONC through jq/yq', self.read('templates/setup/CONTRACT.md'))
 
