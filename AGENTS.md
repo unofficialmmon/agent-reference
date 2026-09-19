@@ -52,6 +52,7 @@ Keep local Skills narrow and evidence-based. Current local Skills exist only for
 - `api-contract`
 - `generated-code`
 - `java-style`
+- `translation-review`
 
 Before adding another local Skill, check whether a maintained upstream/vendor Skill already solves the same problem.
 

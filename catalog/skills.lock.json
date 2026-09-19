@@ -1,6 +1,6 @@
 {
   "version": 5,
-  "generated": "2026-09-03",
+  "generated": "2026-09-19",
   "policy": "Catalog inclusion is not activation. Reviewed upstream snapshots remain unmodified; lock metadata separates provenance, integrity, host compatibility, behavior evidence, activation guidance, operational risk, known issues, and redistribution evidence.",
   "skills": {
     "api-contract": {
@@ -3540,6 +3540,40 @@
       "knownIssues": [],
       "redistributionStatus": "license-evidence-preserved-or-local",
       "activationGuidance": "project-stack-only"
+    },
+    "translation-review": {
+      "trust": "LOCAL",
+      "source": "agent-reference translation and review policy",
+      "sourceType": "local-derived",
+      "upstreamPath": null,
+      "revision": "agent-reference-2026-09-19",
+      "reviewed": "2026-09-19",
+      "license": "MIT",
+      "licenseEvidence": "local authored content based on the user-requested translation and review workflow",
+      "placement": "catalog",
+      "files": {
+        "SKILL.md": "sha256:520889596a7e138de48681f873f911950d57f81dece89769dfc9933041613536"
+      },
+      "review": {
+        "installHooks": false,
+        "mcpDependency": false,
+        "networkOperations": false,
+        "credentialOrCookieAccess": false,
+        "destructiveOrDeploymentOperations": false,
+        "executables": [],
+        "symlinks": [],
+        "scripts": []
+      },
+      "sideEffects": "documentation-only",
+      "notes": "Local cross-project translation and review Skill preserving meaning, tone, certainty, terminology, and target-language clarity with a source-versus-target QA pass.",
+      "sourceTrust": "local-derived",
+      "integrity": "local-hash-verified",
+      "hostCompatibility": "opencode-static-pass-runtime-smoke-not-run",
+      "behaviorStatus": "local-static-review",
+      "operationalRisk": "documentation-only-or-bounded-guidance",
+      "knownIssues": [],
+      "redistributionStatus": "license-evidence-preserved-or-local",
+      "activationGuidance": "translation-or-translation-review-task"
     }
   }
 }
