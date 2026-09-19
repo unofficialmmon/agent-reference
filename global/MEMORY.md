@@ -32,15 +32,21 @@ When memory and current repository evidence differ:
 
 Stable normative rules belong in `AGENTS.md`, maintained contracts, configuration, or another authoritative project document. Memory is better suited to project-specific decisions, prior failed approaches, temporary blockers, useful work context, and preferences discovered across sessions.
 
+Memory is not a task-progress ledger. Do not use it as the canonical owner for current changed-file lists, percent complete, current diffs, branch state, test status, or a step-by-step journal. Reconstruct mutable task state from Git, current source/configuration/tests, and the authoritative PR/issue or maintained project plan when one exists. Store only durable historical context when it remains useful after those artifacts change.
+
 ## Resume and continue requests
 
 For an explicit resume/continue request:
 
-1. read the project-root `AGENTS.md` when present and inspect the current repository state;
-2. use already injected memory when relevant;
-3. search memory only when the injected context is insufficient or a specific prior fact is needed;
-4. reconcile material recalled facts with current Git/source/configuration/contracts/tests;
-5. continue from repository evidence even when no useful memory exists.
+1. read the project-root `AGENTS.md` when present;
+2. inspect current Git state, including branch/status/diff as relevant;
+3. inspect the authoritative PR/issue or maintained project plan when it owns the active task state;
+4. inspect current source/configuration/contracts/tests needed to establish what is actually implemented;
+5. use already injected memory when relevant, and search memory only when a specific prior decision or failed approach is still missing;
+6. reconcile material recalled facts with current repository/task evidence;
+7. continue from current evidence even when no useful memory exists.
+
+Conversation history can help explain the request, but do not prefer an older conversational progress claim over newer Git, PR/issue, or repository evidence.
 
 Persistent memory is optional continuity. Missing or unavailable memory must not block ordinary repository work when current evidence is sufficient.
 
