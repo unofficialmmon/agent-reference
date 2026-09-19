@@ -23,6 +23,8 @@ Use this order when sources conflict:
 
 Injected or recalled memory is contextual evidence only. It may explain prior work, but it never outranks the authorities above and must be reconciled with the current repository before it drives a material change.
 
+Keep durable project rules here or in the maintained contract that owns them; do not rely on a prior chat turn as their only copy. Put reusable generic procedures in Skills instead of expanding this file into a workflow manual. Keep mutable progress such as changed files, current test status, and completion percentage in Git/PR/issue/project-plan evidence rather than memory or duplicated prose here.
+
 List any project document that must be read before substantive changes:
 
 - `<path>` — `<why/when>`

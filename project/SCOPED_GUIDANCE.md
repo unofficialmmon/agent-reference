@@ -22,6 +22,12 @@ Inspect actual dependencies, configuration, source usage, and task scope. A `pom
 
 Check `activationGuidance`, source risk, and producer availability. Recommend only the narrowest justified IDs. Recommendations do not install, auto-route, or delete Skills. Apply approved changes through existing APM ownership; preserve documented overrides and never enable operational Skills by inference. Do not create a persistent parallel selection manifest.
 
+## Durable rules and mutable task state
+
+When bootstrap or refresh discovers a rule that must survive future sessions, place it in the narrowest maintained owner: project/scoped AGENTS for project norms, a project contract for domain/API/data rules, or a Skill for reusable HOW. Do not preserve a durable requirement only in the current conversation or in memory.
+
+Do not turn project AGENTS into a progress journal. Mutable work state such as the active branch, changed files, completed checklist items, current CI results, and remaining PR work should be reconstructed from Git and the authoritative PR/issue or maintained project plan. Memory may explain prior decisions or failed approaches, but it must not become a second task tracker.
+
 ## Concurrent changes
 
 Read-only exploration may run in parallel. Before any parallel writes, identify each writer's files and shared contracts. Overlapping files, lockfiles, generated outputs, migrations, and shared test fixtures require a single writer or serialization. Disjoint filenames do not prove semantic independence.
