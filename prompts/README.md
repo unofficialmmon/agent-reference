@@ -46,6 +46,9 @@ Bootstrap owns factual project AGENTS, relevant Skill selection and minimal rout
 - `PROJECT_AUDIT.md`: configuration health; do not install or repair during audit.
 - `CODEBASE_ONBOARD.md`: current repository map; no files changed.
 - `CHANGE_AUDIT.md`: acceptance review of the working-tree change; no files changed.
+- `TASK_RESUME.md`: reconstruct interrupted/long-running task state from current AGENTS, Git, relevant PR/issue/CI and repository evidence; memory and conversation remain secondary context and no task-state file is created.
+
+Use `TASK_RESUME.md` when the question is "continue/resume what we were doing" and current state may have drifted since the earlier conversation. It is reconstruction, not a handoff journal: it does not write memory, update the PR, or mutate the worktree.
 
 Use `/speckit.*` only for explicitly selected specification work. Do not chain all setup/audit prompts by default.
 
