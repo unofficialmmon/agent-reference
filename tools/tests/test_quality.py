@@ -285,9 +285,9 @@ class EvalTests(unittest.TestCase):
     def test_timezone_required(self):
         with self.assertRaises(ValueError): e.timestamp("2026-09-09T00:00:00")
 
-    def test_repository_suite_is_17_and_explicit(self):
+    def test_repository_suite_is_23_and_explicit(self):
         d = e.load_suite(ROOT / "evaluation/agentrc.eval.jsonc")
-        self.assertEqual(len(d["cases"]), 17)
+        self.assertEqual(len(d["cases"]), 23)
         self.assertEqual(d["instructionFile"], "global/AGENTS.md")
 
     def test_missing_instruction_fails(self):
