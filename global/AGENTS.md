@@ -25,6 +25,19 @@ Do not preload every reference or Skill. Missing optional tool guidance does not
 
 Injected or recalled memory is contextual evidence, not an additional authority layer. Generic preferences and memory never override concrete repository contracts. If a project `AGENTS.md` statement or recalled memory conflicts with maintained contracts, configuration, tests, or current source, investigate the drift rather than silently following stale context.
 
+## Durable instruction ownership
+
+Do not rely on conversation history as the sole durable owner of a workflow requirement. Put durable information in the narrowest maintained owner that matches its semantics:
+
+- project-specific normative rules belong in project `AGENTS.md` or maintained project contracts;
+- reusable multi-step HOW belongs in a selected Skill;
+- current implementation and task facts belong in current source/configuration/tests/Git and, when applicable, the authoritative PR or issue;
+- external current state belongs to its authoritative tool or MCP surface;
+- historical decisions, prior failed approaches, and continuity hints may live in memory;
+- transient one-off details may remain in the active conversation.
+
+Do not copy the same rule into every layer. When a conversational instruction becomes a repeated cross-session workflow requirement, preserve it in the appropriate durable owner instead of assuming the model will remember earlier turns. When the instruction is project-specific, do not promote it to a user-global rule merely for persistence.
+
 ## Startup and reference loading
 
 - Read the project-root `AGENTS.md` first when present, then applicable scoped/ancestor instructions before changing files. Read only the affected scope; investigate conflicting contracts instead of silently overriding them. Do not assume untested nested auto-injection.
