@@ -204,7 +204,7 @@ AgentsView replaces TokenScope in the recommended stack when standalone analytic
 
 `skills/<category>/<id>/` is the canonical reviewed source. `catalog/skills.lock.json` records provenance, hashes, activation guidance, operational risk, known issues, and redistribution evidence.
 
-`.apm/skills/<id>/` is the APM producer surface. It contains byte-identical mirrors of every **non-operational** catalog Skill. The current catalog contains 78 Skills: 59 non-operational IDs are APM-selectable and the 19 IDs under `skills/operational/` remain intentionally catalog-only.
+`.apm/skills/<id>/` is the APM producer surface. It contains byte-identical mirrors of every **non-operational** catalog Skill. The current catalog contains 79 Skills: 60 non-operational IDs are APM-selectable and the 19 IDs under `skills/operational/` remain intentionally catalog-only.
 
 The maintainer audit fails if:
 
@@ -219,6 +219,7 @@ Do not edit `.apm/skills/` independently.
 
 - `api-contract` — HTTP/OpenAPI authority, wire compatibility, breaking changes, and layered validation.
 - `generated-code` — generator ownership, safe regeneration, and generated-vs-human boundaries.
+- `translation-review` — meaning-preserving translation, natural target-language delivery, tone/certainty preservation, and source-versus-target review.
 
 ### Java/Spring
 
