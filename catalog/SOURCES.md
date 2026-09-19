@@ -22,6 +22,7 @@ Current activation values are intentionally coarse and auditable:
 - `project-stack-only` — install only in a repository that actually uses the matching stack;
 - `conditional-api-contract-work` — select only when an HTTP/API contract boundary is in scope;
 - `conditional-generated-source-work` — select only when generator/tool-owned source exists;
+- `translation-or-translation-review-task` — select for substantive translation or source-versus-target translation review;
 - `explicit-reproduction-only`, `explicit-plan-only`, `explicit-completion-gate` — invoke only for that bounded workflow;
 - `explicit-opt-in-operational` — requires explicit task-specific review/authorization.
 
@@ -87,6 +88,7 @@ Repository-authored Skills:
 - `api-contract`
 - `generated-code`
 - `java-style`
+- `translation-review`
 
 They are intentionally marked local and must not be presented as upstream behavior-validated content.
 
