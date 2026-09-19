@@ -97,7 +97,7 @@ Keep reusable prompts under `prompts/` as plain Markdown. They may coordinate ex
 - Environment setup prompts such as `OPENCODE_PLUGIN_SETUP.md` may modify user-level OpenCode configuration only within their declared scope; they must inventory the current environment first, preserve unrelated settings, re-verify upstream compatibility, define rollback, and treat incompatible tools as blocked/held instead of changing unrelated host versions.
 - Runtime plugins and standalone companions must be distinguished. Do not install an analytics companion as an OpenCode hook merely for convenience.
 - A convenience prompt must not bypass a destructive or overwrite confirmation merely to remain one-shot; require one concise checkpoint when an existing dirty/managed path is at risk.
-- `PROJECT_AUDIT.md`, `CODEBASE_ONBOARD.md`, and `CHANGE_AUDIT.md` are read-only by default; do not let convenience prompts silently become mutation workflows.
+- `PROJECT_AUDIT.md`, `CODEBASE_ONBOARD.md`, `CHANGE_AUDIT.md`, and `TASK_RESUME.md` are read-only by default; do not let convenience prompts silently become mutation workflows. `TASK_RESUME.md` reconstructs mutable state from current owners and must not recreate a handoff journal.
 - Keep the prompt set small. Prefer an upstream Skill or Spec Kit command when it already owns a task-specific workflow.
 - Keep canonical reusable prompts under `prompts/`. `.apm/prompts/` contains synchronized APM packaging mirrors, not a second source of truth; generated target output is native APM-owned.
 - APM setup/sync examples must use the installed APM schema, including `dependencies.apm` for package dependencies, and must distinguish package primitive availability from catalog presence.
