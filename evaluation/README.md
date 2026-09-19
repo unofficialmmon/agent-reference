@@ -100,7 +100,13 @@ Use the cases in `agentrc.eval.jsonc` as a small reusable rubric. They cover:
 - relevant Skill selection;
 - validation truthfulness;
 - repository authority over stale memory;
-- one-shot bootstrap and refresh/no-op behavior.
+- one-shot bootstrap and refresh/no-op behavior;
+- durable instruction placement versus conversation-only guidance;
+- long-task resume from current Git/PR/repository state;
+- mutable task state versus persistent memory;
+- authoritative current-state tool use without permission widening;
+- specialized-tool non-interference when local evidence is sufficient;
+- translation strength/certainty preservation through the selected `translation-review` Skill.
 
 The cases may be evaluated manually or with AgentRC. AgentRC compares responses with and without instructions using a judge model; it is optional cross-agent evidence, not OpenCode/OMO runtime certification or a required release gate.
 
@@ -147,7 +153,7 @@ Known limitations:
 
 The suite explicitly sets `instructionFile` to `global/AGENTS.md`. Native AgentRC otherwise defaults to a Copilot instructions path and may silently compare against empty instructions when that file is absent. The maintainer gate rejects missing/empty instructions before a model is invoked.
 
-The 17 cases are non-mutating policy-response assessments, not 17 proven host behaviors. Five cases cover scoped instructions, concurrent ownership, evidence-backed recommendations, absent optional Spec Kit, and audit evidence boundaries. These cross-agent results do not establish OpenCode V1 nested discovery, actual Skill loading, editing correctness, or plugin behavior.
+The 23 cases are non-mutating policy-response assessments, not 23 proven host behaviors. Five earlier cases cover scoped instructions, concurrent ownership, evidence-backed recommendations, absent optional Spec Kit, and audit evidence boundaries. Six additional cases cover durable instruction placement, current-state task resume, task-state-versus-memory ownership, authoritative tool retrieval, tool non-interference, and translation strength preservation. These cross-agent results do not establish OpenCode V1 nested discovery, actual Skill loading, editing correctness, or plugin behavior.
 
 ### Native optional assessment
 
